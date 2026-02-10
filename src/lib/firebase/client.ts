@@ -1,8 +1,8 @@
 
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { getAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
+import { getStorage, FirebaseStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,10 +14,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase with defensive check for build environments
-let app;
-let auth;
-let db;
-let storage;
+let app: FirebaseApp | undefined;
+let auth: Auth | undefined;
+let db: Firestore | undefined;
+let storage: FirebaseStorage | undefined;
 
 try {
     if (getApps().length > 0) {
@@ -29,16 +29,16 @@ try {
         app = initializeApp(firebaseConfig);
     }
 
-    auth = getAuth(app);
-    db = getFirestore(app);
-    storage = getStorage(app);
+    // Explicitly cast or check if app is valid before getting services
+    // but getAuth throws if app is not valid. 
+    // If initializeApp succeeded, app is valid.
+    if (app) {
+        auth = getAuth(app);
+        db = getFirestore(app);
+        storage = getStorage(app);
+    }
 } catch (error) {
     console.warn("Firebase initialization failed (likely due to missing env vars during build):", error);
-    // We don't export dummy objects here to avoid type masking issues, 
-    // but the build should at least pass the import stage if logic allows.
-    // However, exports 'auth', 'db' etc will be undefined if this fails.
-    // To prevent "cannot read property of undefined" in other files, we should probably check existence there 
-    // OR create a dummy mock for the build.
 }
 
 export { app, auth, db, storage };
