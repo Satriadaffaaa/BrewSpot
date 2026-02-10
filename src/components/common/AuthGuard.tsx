@@ -5,16 +5,16 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-    const { user, isLoading } = useAuth()
+    const { user, loading } = useAuth()
     const router = useRouter()
 
     useEffect(() => {
-        if (!isLoading && !user) {
+        if (!loading && !user) {
             router.push('/login?next=/add-brewspot')
         }
-    }, [user, isLoading, router])
+    }, [user, loading, router])
 
-    if (isLoading) {
+    if (loading) {
         return <div className="h-64 flex items-center justify-center">Loading...</div>
     }
 
