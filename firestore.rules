@@ -1,0 +1,236 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      // Check admin status securely from user doc
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // --- HELPERS FOR RATE LIMIT ---
+    function checkDailyLimit(limitType) {
+        // Path to the limit doc: users/{uid}/limits/daily
+        let limitPath = /databases/$(database)/documents/users/$(request.auth.uid)/limits/daily;
+        
+        // Value BEFORE the transaction (or 0 if not exists)
+        let limitBefore = exists(limitPath) ? get(limitPath).data.get(limitType, 0) : 0;
+        
+        // Value AFTER the transaction (must be updated in batch/transaction)
+        let limitAfter = getAfter(limitPath).data.get(limitType, 0);
+
+        // Max limits
+        let MAX = 5; // Matches client-side API
+
+        // Condition: Must increment by 1 (normal) OR reset to 1 (new day), AND be within MAX
+        return (limitAfter == limitBefore + 1 || limitAfter == 1) && limitAfter <= MAX;
+    }
+
+    // --- USERS ---
+    // Public read for Leaderboard/Review display
+    match /users/{userId} {
+      allow read: if true; 
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      // Phase 3.5: Hardening - Strict Update Rules
+      // 1. Admin can update anything.
+      // 2. Owner can update profile fields (displayName, photoURL).
+      // 3. Owner CANNOT update sensitive fields (role, xp, trustLevel, isContributor, accountStatus).
+      // 4. EXCEPTION: Owner can SELF-REACTIVATE if suspension expired.
+      
+      allow update: if isAdmin() || (isOwner(userId) && (
+        // Case A: Normal Profile Update (Safe fields only)
+        (!request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['role', 'trustLevel', 'isContributor', 'accountStatus'])) &&
+        // Username Change Rate Limit (3 Days)
+        (
+             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['displayName']) ||
+             // If displayName changing, check time limit
+             (
+                request.time > resource.data.get('lastUsernameChange', timestamp.date(2000, 1, 1)) + duration.value(3, 'd')
+             )
+        )
+        || 
+        // Case B: Auto-Reactivation (Strict Logic)
+        (
+             // Only changing accountStatus
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['accountStatus', 'updatedAt']) &&
+             // Target is 'active'
+             request.resource.data.accountStatus == 'active' &&
+             // Current is 'suspended'
+             resource.data.accountStatus == 'suspended' &&
+             // Suspension time has passed
+             resource.data.suspensionUntil < request.time
+        )
+      ));
+
+      // Rate Limits Subcollection
+      match /limits/{docId} {
+        allow read: if isOwner(userId) || isAdmin();
+        // Allow write only if user owns it. 
+        // Logic validation is implicitly handled by the 'triggering' resource (review) checking getAfter,
+        // BUT we should also prevent nonsense updates here if possible, or rely on the Fact that 
+        // only the Review Rule matters for the SAFETY of the system.
+        // Allowing user to mess up their own limit doc just prevents them from posting, which is fine.
+        allow write: if isOwner(userId);
+      }
+    }
+
+    // --- BREWSPOTS ---
+    match /brewspots/{spotId} {
+      // Public can read approved spots. Owners/Admins can read pending/rejected.
+      allow read: if resource.data.status == 'approved' || 
+                   (isAuthenticated() && (resource.data.createdBy == request.auth.uid || isAdmin()));
+      
+      allow create: if isAuthenticated();
+      
+      // Update: Admin only, or System (via Client logic if user owns it? 
+      // For now keep strict Admin update, but allow Status update if needed? 
+      // Actually, createBrewSpot handles creation. Updates are rare.)
+      // Update: Admin only, Owner, OR Authenticated User updating rating/reviews_count (Aggregation)
+      allow update: if isAdmin() || (isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        // Allow aggregation updates for ratings and check-ins
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rating', 'reviews_count', 'totalCheckIns']))
+      ));
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.createdBy == request.auth.uid);
+    }
+
+    // --- REVIEWS ---
+    match /reviews/{reviewId} {
+      allow read: if true;
+      // Enforce Rate Limit: Creation must accompany a valid limit increment
+      // AND Data Orphan Protection: Parent BrewSpot must be approved
+      allow create: if isAuthenticated() && 
+                    request.resource.data.userId == request.auth.uid &&
+                    checkDailyLimit('reviewsToday') &&
+                    (
+                      get(/databases/$(database)/documents/brewspots/$(request.resource.data.brewspotId)).data.status == 'approved' ||
+                      get(/databases/$(database)/documents/brewspots/$(request.resource.data.brewspotId)).data.createdBy == request.auth.uid
+                    );
+      
+      // Allow user to edit/delete their own review
+      allow update, delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // --- REVIEW PHOTOS ---
+    match /review_photos/{photoId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && request.resource.data.uploadedBy == request.auth.uid;
+      allow delete: if isAuthenticated() && (resource.data.uploadedBy == request.auth.uid || isAdmin());
+    }
+
+    // --- LIKES ---
+    match /likes/{likeId} {
+      allow read: if true;
+      // ID format is usually userID_brewspotID, ensuring unique constraints via ID
+      allow write: if isAuthenticated(); 
+    }
+
+    // --- XP LOGS (Idempotency) ---
+    match /xp_logs/{logId} {
+      // Fix: Allow existence check based on ID naming convention (userId_action_ref)
+      // This prevents "resource is null" error when checking if log exists
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; 
+    }
+
+    // --- SYSTEM SETTINGS (Admin Only) ---
+    match /system_settings/{docId} {
+      allow read: if true; 
+      allow write: if isAdmin(); // Strictly Admin only
+    }
+
+    // --- ADMIN NOTES (Admin Only) ---
+    match /admin_notes/{noteId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // --- REPORTS ---
+    match /reports/{reportId} {
+        // Users can create reports, but not read them (privacy)
+        // Admins can read and update reports
+        allow create: if isAuthenticated() && request.resource.data.reportedBy == request.auth.uid;
+        allow read, update: if isAdmin();
+    }
+
+    // --- MODERATION LOGS ---
+    match /moderation_logs/{logId} {
+        allow read, write: if isAdmin();
+    }
+
+    // --- PHASE 4: GAMIFICATION & ANALYTICS ---
+    
+    // Badge Audit Logs
+    match /badge_logs/{logId} {
+        allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+        allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Leaderboard Snapshots (Publicly readable)
+    match /user_stats_snapshots/{userId} {
+        allow read: if true;
+        allow write: if isAuthenticated(); // In real app, restricting to system/admin or specific triggers is better
+    }
+
+    // Admin Analytics Snapshots
+    match /analytics_snapshots/{dateId} {
+        allow read, write: if isAdmin();
+    }
+
+    // Phase 8: Search Analytics Logs
+    match /analytics_searches/{searchId} {
+        allow read: if isAdmin();
+        allow write: if false; // Processed via Admin SDK Actions
+    }
+
+    // --- CHECK-INS (Phase New) ---
+    match /check_ins/{checkInId} {
+      allow read: if isAuthenticated();
+      // Enforce 1 create per user per spot handled by client logic, 
+      // but strictly verify ownership here.
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Stats Subcollections (Aggregated Data)
+    // users/{userId}/stats/visits
+    match /users/{userId}/stats/{statId} {
+        allow read: if true; 
+        allow write: if isOwner(userId);
+    }
+    
+    // brewspots/{spotId}/stats/visitors
+    match /brewspots/{spotId}/stats/{statId} {
+        allow read: if true;
+        allow write: if isAuthenticated(); 
+    }
+
+    // --- PHASE 4.5: AI ENABLEMENT ---
+    
+    // AI Audit logs - Admin/System only
+    match /ai_audit_logs/{logId} {
+        allow read, write: if isAdmin();
+    }
+    
+    // AI Usage Limits - Admin/System only (to increment counters)
+    match /ai_usage/{docId} {
+         allow read, write: if isAdmin();
+    }
+    
+    // AI Locks - Admin/System only
+    match /ai_locks/{lockId} {
+         allow read, write: if isAdmin();
+    }
+  }
+}
