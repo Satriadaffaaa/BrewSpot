@@ -1,0 +1,211 @@
+LAPORAN PROGRESS PENGEMBANGAN BREWSPOT (PHASE 0 - PHASE 6)
+
+PHASE 0: INITIALIZATION & FOUNDATION
+-----------------------------------
+Tujuan: Membangun fondasi teknis proyek yang kokoh.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Setup Project Next.js 14 dengan TypeScript dan App Router.
+2.  Konfigurasi Tailwind CSS untuk styling.
+3.  Integrasi Firebase (Firestore & Authentication).
+4.  Pembuatan Struktur Folder Modular (`features/`, `components/`, `lib/`).
+5.  Implementasi `AuthProvider` untuk manajemen state user login/logout.
+6.  Setup aset dasar dan layout global (Navbar, Footer).
+
+PHASE 1: CORE FUNCTIONALITY (MVP)
+---------------------------------
+Tujuan: Menyediakan fitur utama agar user bisa mencari dan melihat tempat kopi.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Landing Page / Explore Page: Menampilkan daftar BrewSpot dengan layout grid responsif.
+2.  BrewSpot Detail Page: Halaman detail lengkap (Foto, Deskripsi, Fasilitas, Rating).
+3.  Add BrewSpot Form: User bisa menambahkan tempat kopi baru (default status: pending).
+4.  Mapbox Integration: Peta statis untuk lokasi setiap BrewSpot.
+5.  Search & Filter: Pencarian berdasarkan nama dan filter berdasarkan kota.
+6.  Review System V1: User bisa memberikan rating dan komentar teks sederhana.
+
+PHASE 2: GAMIFICATION & QUALITY CONTROL
+---------------------------------------
+Tujuan: Meningkatkan engagement user dan kualitas konten dengan gamifikasi.
+Status: SELESAI
+Fitur & Implementasi:
+1.  XP & Leveling System:
+    - User mendapat XP untuk setiap kontribusi (Review, Add Spot, Upload Photo).
+    - Kalkulasi Level otomatis berdasarkan XP.
+2.  Trust Level & Contributor Status:
+    - Trust Score meningkat jika kontribusi disetujui Admin.
+    - Contributor Status: User terpercaya bisa auto-approve tempat baru tanpa moderasi manual.
+3.  Enhanced Media (Cloudinary):
+    - Integrasi upload foto ke Cloudinary dengan folder dinamis per-BrewSpot.
+    - Support upload multiple foto pada Review.
+4.  Admin Dashboard V1:
+    - Halaman moderasi untuk approve/reject BrewSpot baru.
+    - Insight dasar statistik user.
+
+PHASE 3: SAFETY & ABUSE PREVENTION (CURRENT)
+--------------------------------------------
+Tujuan: Menjamin keamanan platform dan menyediakan tools moderasi untuk admin.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Reporting System:
+    - User bisa melaporkan BrewSpot, Review, atau User lain.
+    - Dialog pelaporan dengan pilihan alasan (Spam, Harassment, dll).
+2.  Admin Moderation Dashboard:
+    - Halaman khusus `/admin/reports` untuk melihat dan menindaklanjuti laporan.
+    - Filter laporan (Open vs Resolved).
+3.  Enforcement Actions:
+    - Admin Panel di halaman detail user untuk memberikan Sanksi:
+      * Warning (Peringatan): Mengurangi Trust Level.
+      * Suspension (Suspend): Blokir akses sementara & cabut status Contributor.
+      * Ban (Permanen): Blokir akses selamanya.
+4.  Safety Guards:
+    - `BannedUserGuard`: Mencegah user yang di-ban/suspend mengakses sistem.
+    - Integrasi otomatis: User ter-suspend tidak bisa menggunakan fitur auto-approval.
+5.  Moderation Logs:
+    - Pencatatan otomatis semua tindakan admin ke database (`moderation_logs`) untuk audit trail.
+
+RINGKASAN TEKNIS
+----------------
+- Frontend: Next.js 14, Tailwind CSS, Headless UI.
+- Backend/DB: Firebase Firestore, Firebase Auth.
+- Storage: Cloudinary.
+- Maps: Mapbox Static API.
+- Security: Firestore Rules (Updated for Phase 3).
+
+
+PHASE 3.5: SYSTEM HARDENING & CONSISTENCY
+-----------------------------------------
+Tujuan: Memperkuat keamanan sistem dan memastikan konsistensi data sebelum scaling.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Rate Limit Backstop: Pembatasan jumlah review per hari di sisi server (Firestore Rules).
+2.  Data Orphan Protection: Mencegah interaksi pada konten yang sudah dihapus/rejected.
+3.  Suspension Safety: Auto-reactivate user setelah masa suspend habis tanpa mengembalikan status Contributor.
+4.  Admin Tool Guard: Proteksi akses route admin dan audit log penggunaan tools.
+5.  Global Read Consistency: Sentralisasi logic query di `shared/queries.ts`.
+6.  Operational Visibility: Penambahan System Status Health di Admin Dashboard.
+
+PHASE 4: UI POLISH & EXPERIENCE (CURRENT)
+-----------------------------------------
+Tujuan: Meningkatkan kualitas visual admin panel agar terasa premium dan modern.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Premium Admin Theme:
+    - Implementasi palet warna "Coffee" (#2c1e16) yang konsisten.
+    - Penggunaan Glassmorphism pada Header.
+    - Redesign Sidebar dengan gradient dan typografi modern.
+2.  Enhanced Data Presentation:
+    - Redesign Tabel User, Reviews, dan BrewSpots dengan spacing yang lebih lega dan rounded style.
+    - Visualisasi status dengan badge animasi.
+    - Empty states yang lebih informatif dan menarik.
+3.  Unified Alert System:
+    - Kustomisasi SweetAlert2 agar selaras dengan tema aplikasi (Rounded corners, custom colors).
+
+PHASE 5: ADVANCED INPUT & UX IMPROVEMENTS (CURRENT)
+---------------------------------------------------
+Tujuan: Meningkatkan kemudahan penginputan data dan kelengkapan informasi BrewSpot.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Facilities Input System:
+    - Penambahan field "Facilities" pada form Add BrewSpot.
+    - Pilihan fasilitas standar (Wifi, AC, Parking, dll) dengan UI pill selection.
+    - Menampilkan fasilitas pada halaman Detail BrewSpot.
+2.  Auto-Address Geocoding:
+    - Integrasi OpenStreetMap Nominatim API.
+    - Otomatis mengisi alamat dan kota saat user memilih lokasi di peta (Pin/Geolocation).
+    - Loading state visual pada field address saat fetching data.
+
+PHASE 6: SOCIAL PROOF & DISCOVERY (CURRENT)
+-------------------------------------------
+Tujuan: Meningkatkan engagement sosial dan kemudahan menemukan lokasi terbaik.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Dynamic Ratings & Reviews:
+    - Implementasi agregasi rating real-time pada dokumen BrewSpot.
+    - Kalkulasi otomatis Average Rating + Total Reviews saat review baru masuk.
+    - Update UI BrewSpot Card untuk menampilkan Rating Bintang & jumlah review (contoh: 4.5 (12)).
+2.  Enhanced Explore Experience:
+    - Penambahan Filter "Minimum Rating" (e.g., 4+ Stars) pada halaman Explore.
+    - Smart Map Auto-Centering: Peta otomatis zoom/center ke hasil pencarian atau filter yang aktif.
+3.  Premium Contributor Badge:
+    - Redesign badge kontributor dari "Blue Check" standar menjadi "Gold Sparkle" icon yang unik.
+    - Implementasi animasi "pulse" halus untuk kesan premium pada user profile dan admin list.
+4.  Admin Role Management:
+    - UI baru untuk mengubah role user (User/Admin) dengan audit log wajib (alasan perubahan).
+    - Validasi keamanan di sisi API dan tampilan role badge yang distinktif.
+
+PHASE 7: AI INTEGRATION (COMPLETED)
+---------------------------------
+Tujuan: Mengintegrasikan kecerdasan buatan untuk fitur cerdas dalam aplikasi.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Gemini AI Configuration & Service:
+    - Setup integrasi dengan Google Gemini API (Model: `gemini-1.5-flash` / `gemini-2.5-flash`).
+    - Standardisasi config di `aiConfig.ts` dengan rate limiting & safe execution guards.
+    - Implementasi `aiService.ts` untuk Text Generation & Review Analysis dengan Robust JSON Parsing.
+2.  Backend Automation Strategy (Replaces Client UI):
+    - Penghapusan tombol manual user "Auto-Generate" untuk efisiensi UI.
+    - Implementasi **Hybrid Strategy**: AI otomatis memilih sumber data terbaik (Reviews jika >3, atau Deskripsi sebagai fallback) untuk hasil akurat.
+3.  System Hardening & Security:
+    - **Admin SDK Migration**: Penggunaan `firebase-admin` untuk fitur AI (Logging, Locking, Batch Job) untuk bypass limitasi client-side rules.
+    - **Server Actions**: Pembungkusan logika AI ke dalam Server Actions untuk keamanan penuh.
+    - Permission Fixes: Perbaikan `firestore.rules` untuk Rate Limit Reset dan izin Creator-Review-Pending-Spot.
+4.  Social Proof Automation:
+    - Trigger Otomatis: System otomatis menganalisis ulang tags setiap 5 review baru.
+    - Transparan: Menampilkan tag hasil "Community Highlights" secara terpisah.
+5.  AI Display Integration:
+    - Hero Section (Detail Page): Menampilkan Tags (AI priority).
+    - Community Insights Card (Detail Page): Penjelasan detil highlight komunitas.
+    - **Explore Page**: Kartu BrewSpot kini menampilkan AI Tags (✨) dengan style distinktif.
+6.  Admin AI Tools:
+    - Dashboard Control: Halaman `/admin/ai-tools` untuk monitoring kuota & status.
+    - Batch Operations: Fitur "Regenerate ALL Tags" yang cerdas dan aman terhadap throttling.
+7.  Review Summarization (The Vibe Check):
+    - **AI Summary Engine**: Automatisasi ringkasan ulasan menjadi 3 bagian: Verdict, Pros, & Cons.
+    - **Hybrid Trigger**: Trigger manual via Admin atau otomatis saat review bertambah.
+    - **Frontend Integration**: Komponen `VibeCheckCard` eksklusif yang menampilkan ringkasan AI di atas list review.
+    - **Admin Batch Tool**: Kemampuan "Summarize ALL Reviews" untuk memproses massal seluruh data lama.
+
+PHASE 8: GAMIFICATION & SOCIAL ENGAGEMENT (COMPLETED)
+---------------------------------------------
+Tujuan: Meningkatkan retensi user melalui sistem rewards, leaderboard, dan konten interaktif.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Check-in System:
+    -   Validasi Geolocation (< 10m) untuk memastikan user fisik di lokasi.
+    -   Cooldown System untuk mencegah spam check-in.
+    -   XP Reward otomatis saat check-in berhasil.
+2.  Global Leaderboard:
+    -   Ranking user berdasarkan Total XP dan Level.
+    -   Halaman `/leaderboard` dengan update real-time.
+    -   Badge visual untuk Top 3 user.
+3.  Trending BrewSpots:
+    -   Algoritma trending berdasarkan total check-ins.
+    -   Section "Trending Now" di halaman Explore.
+4.  Social Media Integration:
+    -   Video Embeds: Support YouTube Shorts, Instagram Reels, dan TikTok secara inline.
+    -   Player interaktif di Detail Page dan Review Card tanpa redirect keluar aplikasi.
+5.  Advanced Filtering:
+    -   Tag Filtering di halaman Explore untuk pencarian spesifik (e.g., "Cozy", "Wifi").
+
+PHASE 9: ADVANCED GAMIFICATION & UI CONSISTENCY (COMPLETED)
+-----------------------------------------------
+Tujuan: Menyempurnakan sistem achievement dan konsistensi visual aplikasi.
+Status: SELESAI
+Fitur & Implementasi:
+1.  Comprehensive Badge System:
+    -   Implementasi tier badge bertingkat (e.g., Guide, Sage, Legend) untuk Review, Approved Spots, dan Likes.
+    -   Kategori badge: Community, Contribution, Excellence.
+2.  Visual Progress Tracking:
+    -   UI tracking progress badge real-time.
+    -   Preview badge yang sudah terbuka di Profile Page.
+    -   Halaman dedikasi `/profile/badges` untuk melihat status lengkap semua lock/unlocked badges.
+3.  UI Standardization:
+    -   Standardisasi ukuran kartu "Trending BrewSpot" agar konsisten dan responsif (Mobile/Desktop).
+    -   Penyempurnaan layout dan spacing pada komponen list.
+
+NEXT STEPS
+----------
+- Advanced Analytics Dashboard for Owners.
+- Push Notifications System.
+- User-to-User Messaging / Community Chat.
