@@ -14,10 +14,12 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase with defensive check for build environments
-let app: FirebaseApp | undefined;
-let auth: Auth | undefined;
-let db: Firestore | undefined;
-let storage: FirebaseStorage | undefined;
+// We cast to the expected type to satisfy TypeScript (avoiding widespread changes in the app),
+// but at runtime during build (if vars are missing), these might remain undefined.
+let app = undefined as unknown as FirebaseApp;
+let auth = undefined as unknown as Auth;
+let db = undefined as unknown as Firestore;
+let storage = undefined as unknown as FirebaseStorage;
 
 try {
     if (getApps().length > 0) {
@@ -30,8 +32,6 @@ try {
     }
 
     // Explicitly cast or check if app is valid before getting services
-    // but getAuth throws if app is not valid. 
-    // If initializeApp succeeded, app is valid.
     if (app) {
         auth = getAuth(app);
         db = getFirestore(app);
