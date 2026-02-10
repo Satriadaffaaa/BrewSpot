@@ -40,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (user) {
         // Subscribe to user profile changes (real-time updates for bans/suspensions)
+        if (!db) return;
         const userRef = doc(db, 'users', user.uid)
         const unsubProfile = onSnapshot(userRef, (doc) => {
           if (doc.exists()) {
@@ -82,6 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signOut = async () => {
+    if (!auth) return;
     await firebaseSignOut(auth);
     setProfile(null)
   }
