@@ -11,9 +11,10 @@ import { BrewSpot } from '@/features/brewspot/types'
 interface BrewSpotListProps {
     spots?: BrewSpot[]
     isLoading?: boolean
+    viewMode?: 'grid' | 'list'
 }
 
-export function BrewSpotList({ spots, isLoading }: BrewSpotListProps) {
+export function BrewSpotList({ spots, isLoading, viewMode = 'grid' }: BrewSpotListProps) {
     const { brewSpots: fetchedSpots, loading: fetchLoading, error, refetch } = useBrewSpots()
 
     // Use passed props if available, otherwise fall back to internal fetch
@@ -22,9 +23,9 @@ export function BrewSpotList({ spots, isLoading }: BrewSpotListProps) {
 
     if (loading) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
                 {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-[350px] bg-gray-100 rounded-xl animate-pulse" />
+                    <div key={i} className={`${viewMode === 'grid' ? 'h-[350px]' : 'h-[200px]'} bg-neutral/5 rounded-xl animate-pulse`} />
                 ))}
             </div>
         )
@@ -34,7 +35,7 @@ export function BrewSpotList({ spots, isLoading }: BrewSpotListProps) {
         return (
             <div className="text-center py-12 bg-red-50 rounded-xl">
                 <p className="text-red-600 mb-4">{error}</p>
-                <Button onClick={() => refetch()} variant="outline" className="border-red-200 text-red-700 hover:bg-red-50">
+                <Button onClick={() => refetch()} variant="danger" className="border-red-200 text-white hover:bg-red-700">
                     Try Again
                 </Button>
             </div>
@@ -60,9 +61,16 @@ export function BrewSpotList({ spots, isLoading }: BrewSpotListProps) {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
             {brewSpots.map((spot) => (
-                <BrewSpotCard key={spot.id} brewSpot={spot} />
+                <div key={spot.id} className={viewMode === 'list' ? 'flex flex-row h-full' : ''}>
+                    {/* 
+                      Note: BrewSpotCard needs to support list view styling internally or we wrap it.
+                      For now, we'll keep it simple and just change the grid columns.
+                      Refining Card for true list view would require modifying BrewSpotCard to accept a 'variant' prop.
+                    */}
+                    <BrewSpotCard brewSpot={spot} />
+                </div>
             ))}
         </div>
     )

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { BannedUserGuard } from "@/components/common/BannedUserGuard";
 
@@ -36,9 +37,10 @@ export default function RootLayout({
         <AuthProvider>
           <BannedUserGuard>
             <Header />
-            <main className="min-h-screen bg-base-100 pb-20">
+            <main className="flex-grow bg-background">
               {children}
             </main>
+            <Footer />
           </BannedUserGuard>
         </AuthProvider>
       </body>

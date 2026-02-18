@@ -32,7 +32,8 @@ function mapToBrewSpot(id: string, data: any): BrewSpot {
         authorAvatar: data.authorAvatar,
         authorIsContributor: data.authorIsContributor,
         aiMeta: data.aiMeta,
-        ai_summary: data.ai_summary
+        ai_summary: data.ai_summary,
+        videoUrl: data.videoUrl
     }
 }
 
@@ -120,6 +121,7 @@ export async function createBrewSpot(input: AddBrewSpotInput): Promise<BrewSpot>
         photos: input.photos,
         description: input.description,
         tags: input.tags,
+        videoUrl: input.videoUrl || null,
         createdBy: user.uid,
         status: status,
         autoApproved: autoApproved,

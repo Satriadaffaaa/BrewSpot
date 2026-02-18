@@ -62,7 +62,7 @@ export function BrewSpotCard({ brewSpot }: BrewSpotCardProps) {
     if (isDeleting) return null // Hide card immediately on delete start/success for better UX
 
     return (
-        <Card className="hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col h-full bg-white group/card relative">
+        <Card className="hover:shadow-xl transition-all duration-300 hover:translate-y-[-4px] overflow-hidden flex flex-col h-full bg-white group/card relative border border-primary/5">
 
             {/* Owner Actions Overlay */}
             {isOwner && (

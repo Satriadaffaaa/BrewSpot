@@ -10,6 +10,8 @@ import { Card } from '@/components/common/Card'
 import Link from 'next/link'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
+import { TurnstileWidget } from '@/components/common/TurnstileWidget'
+
 export function LoginForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -17,6 +19,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,23 +44,24 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md p-8 shadow-lg">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold font-heading text-primary">Welcome Back</h1>
-        <p className="text-sm text-neutral/70 mt-2">Sign in to continue your coffee journey</p>
+    <Card className="w-full max-w-md p-8 md:p-10 shadow-card border-none bg-surface/80 backdrop-blur-sm mx-auto animate-fade-in-up">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold font-heading text-primary">Welcome Back</h1>
+        <p className="text-neutral/60 mt-2">Sign in to continue your coffee journey</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <Input
           id="email"
           type="email"
-          label="Email"
+          label="Email Address"
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="bg-background"
         />
-        <div className="space-y-1">
+        <div className="space-y-2">
           <Input
             id="password"
             type={showPassword ? 'text' : 'password'}
@@ -65,11 +69,12 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="bg-background"
             endIcon={
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="focus:outline-none hover:text-gray-700"
+                className="focus:outline-none text-neutral/40 hover:text-primary transition-colors"
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -83,7 +88,7 @@ export function LoginForm() {
           <div className="flex justify-end">
             <Link
               href="/forgot-password"
-              className="text-xs text-primary hover:underline font-medium"
+              className="text-sm text-primary hover:text-primary-light hover:underline font-medium transition-colors"
             >
               Forgot password?
             </Link>
@@ -91,20 +96,34 @@ export function LoginForm() {
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 text-red-600 text-sm rounded-md">
-            {error}
+          <div className="p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 flex items-center gap-2">
+            <span className="text-lg">⚠️</span> {error}
           </div>
         )}
 
-        <Button type="submit" className="w-full" isLoading={loading}>
-          Sign In
+        <div className="flex justify-center">
+          <TurnstileWidget
+            onVerify={(token) => setCaptchaToken(token)}
+            onExpire={() => setCaptchaToken(null)}
+            onError={() => setCaptchaToken(null)}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full shadow-lg shadow-primary/20"
+          size="lg"
+          isLoading={loading}
+          disabled={!captchaToken}
+        >
+          {captchaToken ? 'Sign In' : 'Complete Verification'}
         </Button>
       </form>
 
-      <div className="mt-6 text-center text-sm">
-        <span className="text-neutral/70">Don&apos;t have an account? </span>
-        <Link href="/register" className="text-primary font-medium hover:underline">
-          Sign up
+      <div className="mt-8 text-center text-sm text-neutral/60">
+        Don&apos;t have an account?{' '}
+        <Link href="/register" className="text-primary font-bold hover:underline transition-colors">
+          Sign up now
         </Link>
       </div>
     </Card>

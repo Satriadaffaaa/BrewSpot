@@ -100,7 +100,7 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                             leaveFrom="translate-x-0"
                             leaveTo="-translate-x-full"
                         >
-                            <DialogPanel className="relative mr-16 flex w-full max-w-xs flex-1 flex-col bg-[#2c1e16] text-secondary/90">
+                            <DialogPanel className="relative mr-16 flex w-full max-w-xs flex-1 flex-col bg-neutral-900/95 backdrop-blur-xl text-secondary/90 border-r border-white/10">
                                 <TransitionChild
                                     as={Fragment}
                                     enter="ease-in-out duration-300"
@@ -125,7 +125,7 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
             </Transition>
 
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex md:w-72 md:flex-col fixed inset-y-0 z-50 bg-[#2c1e16] text-secondary/90 border-r border-[#3d2b20] shadow-2xl">
+            <aside className="hidden md:flex md:w-72 md:flex-col fixed inset-y-0 z-50 bg-neutral-900 text-secondary/90 border-r border-white/5 shadow-2xl">
                 <NavContent />
             </aside>
         </>
