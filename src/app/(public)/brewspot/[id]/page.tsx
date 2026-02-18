@@ -6,7 +6,7 @@ import { deleteBrewSpot } from '@/features/brewspot/api'
 import { Container } from '@/components/common/Container'
 import { Button } from '@/components/common/Button'
 import { Card } from '@/components/common/Card'
-import { MapPinIcon, StarIcon, ArrowLeftIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, StarIcon, ArrowLeftIcon, PencilSquareIcon, TrashIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { LikeButton } from '@/components/common/LikeButton'
@@ -94,24 +94,24 @@ export default function BrewSpotDetailPage() {
                 </Link>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-4xl font-heading font-bold text-primary">{brewSpot.name}</h1>
+                        <h1 className="text-2xl md:text-4xl font-heading font-bold text-primary">{brewSpot.name}</h1>
                         {/* Hero Tags (Top 3) */}
                         <div className="flex flex-wrap gap-2 mt-2">
                             {(brewSpot.aiMeta?.tags || brewSpot.tags).slice(0, 3).map((tag, i) => (
-                                <span key={i} className="text-sm font-medium text-primary/80 bg-primary/5 px-2 py-0.5 rounded-md border border-primary/10">
+                                <span key={i} className="text-xs md:text-sm font-medium text-primary/80 bg-primary/5 px-2 py-0.5 rounded-md border border-primary/10">
                                     ✨ {tag}
                                 </span>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 self-start md:self-auto">
+                    <div className="flex flex-wrap items-center gap-2 self-start md:self-auto mt-4 md:mt-0">
                         {/* Rating Badge */}
                         {brewSpot.rating && (
-                            <div className="flex items-center gap-2 bg-accent/10 text-accent-content px-3 py-1.5 rounded-full">
-                                <StarIcon className="w-5 h-5 fill-current" />
-                                <span className="font-bold text-lg">{brewSpot.rating.toFixed(1)}</span>
-                                <span className="text-sm opacity-75">({brewSpot.reviews_count} reviews)</span>
+                            <div className="flex items-center gap-1.5 bg-accent/10 text-accent-content px-2 py-1 md:px-3 md:py-1.5 rounded-full">
+                                <StarIcon className="w-4 h-4 md:w-5 md:h-5 fill-current" />
+                                <span className="font-bold text-base md:text-lg">{brewSpot.rating.toFixed(1)}</span>
+                                <span className="text-xs md:text-sm opacity-75">({brewSpot.reviews_count})</span>
                             </div>
                         )}
                         <LikeButton brewspotId={brewSpot.id} />
@@ -125,7 +125,7 @@ export default function BrewSpotDetailPage() {
                             <>
                                 <Link href={`/edit-brewspot/${brewSpot.id}`}>
                                     <button className="p-2 text-gray-400 hover:text-primary transition-colors rounded-full hover:bg-primary/10" title="Edit Spot">
-                                        <PencilSquareIcon className="w-6 h-6" />
+                                        <PencilSquareIcon className="w-5 h-5 md:w-6 md:h-6" />
                                     </button>
                                 </Link>
                                 <button
@@ -156,7 +156,7 @@ export default function BrewSpotDetailPage() {
                                     className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
                                     title="Delete Spot"
                                 >
-                                    <TrashIcon className="w-6 h-6" />
+                                    <TrashIcon className="w-5 h-5 md:w-6 md:h-6" />
                                 </button>
                             </>
                         )}
@@ -168,7 +168,7 @@ export default function BrewSpotDetailPage() {
                                 className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
                                 title="Report this place"
                             >
-                                <FlagIcon className="w-6 h-6" />
+                                <FlagIcon className="w-5 h-5 md:w-6 md:h-6" />
                             </button>
                         )}
                     </div>
@@ -192,94 +192,114 @@ export default function BrewSpotDetailPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    {/* Photo Gallery */}
+                    {/* Photo Gallery - Mosaic Layout */}
                     <div className="space-y-4">
-                        {/* Main Hero Image */}
-                        <div className="h-[400px] bg-gray-100 rounded-2xl overflow-hidden relative shadow-sm">
-                            {displayPhotos.length > 0 ? (
-                                <img src={displayPhotos[0]} alt={brewSpot.name} className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                    <span className="text-6xl opacity-30">☕</span>
-                                </div>
-                            )}
-                        </div>
-                        {/* Thumbnails Grid */}
-                        {displayPhotos.length > 1 && (
-                            <div className="grid grid-cols-4 gap-4">
-                                {displayPhotos.slice(1, 5).map((photo, idx) => (
-                                    <div key={idx} className="aspect-square rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
-                                        <img src={photo} alt={`${brewSpot.name} ${idx + 2}`} className="w-full h-full object-cover" />
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 h-[300px] md:h-[450px]">
+                            {/* Main Image - Takes 3/4 width on desktop */}
+                            <div className="md:col-span-3 h-full relative group overflow-hidden rounded-2xl shadow-sm">
+                                {displayPhotos.length > 0 ? (
+                                    <img src={displayPhotos[0]} alt={brewSpot.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                ) : (
+                                    <div className="w-full h-full bg-secondary/20 flex items-center justify-center text-neutral/30">
+                                        <span className="text-6xl">☕</span>
                                     </div>
-                                ))}
+                                )}
                             </div>
-                        )}
+
+                            {/* Side Images - Vertical Stack */}
+                            <div className="hidden md:flex flex-col gap-2 md:gap-4 h-full">
+                                <div className="flex-1 relative overflow-hidden rounded-2xl shadow-sm group">
+                                    {displayPhotos[1] ? (
+                                        <img src={displayPhotos[1]} alt={brewSpot.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                    ) : (
+                                        <div className="w-full h-full bg-secondary/20" />
+                                    )}
+                                </div>
+                                <div className="flex-1 relative overflow-hidden rounded-2xl shadow-sm group">
+                                    {displayPhotos[2] ? (
+                                        <img src={displayPhotos[2]} alt={brewSpot.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                    ) : (
+                                        <div className="w-full h-full bg-secondary/20" />
+                                    )}
+                                    {displayPhotos.length > 3 && (
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-lg backdrop-blur-[2px]">
+                                            +{displayPhotos.length - 3}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Social Video */}
                     {brewSpot.videoUrl && (
-                        <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                        <div className="rounded-2xl overflow-hidden border-4 border-white shadow-lg rotate-1 hover:rotate-0 transition-transform duration-300">
                             <SocialVideoEmbed url={brewSpot.videoUrl} />
                         </div>
                     )}
 
                     {/* About / Facilities */}
-                    <Card className="p-6 space-y-6">
+                    <Card className="p-8 space-y-8 bg-surface/50 backdrop-blur-sm border-none shadow-card">
                         {/* Description / Founder's Note */}
                         {brewSpot.description && (
-                            <div>
-                                <h3 className="text-lg font-bold font-heading mb-2">Founder's Note</h3>
-                                <p className="text-neutral/80 leading-relaxed whitespace-pre-wrap">
-                                    {brewSpot.description}
+                            <div className="relative pl-6 border-l-4 border-accent/30">
+                                <h3 className="text-xl font-bold font-heading mb-3 text-primary">Founder's Note</h3>
+                                <p className="text-neutral/80 leading-loose text-lg font-light">
+                                    "{brewSpot.description}"
                                 </p>
                             </div>
                         )}
 
                         {/* Community Insights (AI) */}
                         {brewSpot.aiMeta?.tags && brewSpot.aiMeta.tags.length > 0 && (
-                            <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-blue-100">
-                                <h3 className="text-sm font-bold font-heading text-blue-800 mb-3 uppercase tracking-wider flex items-center gap-2">
-                                    <span className="text-lg">✨</span> Community Highlights
-                                </h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {brewSpot.aiMeta.tags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-white text-blue-700 border border-blue-200 rounded-full text-sm font-medium shadow-sm">
-                                            {tag}
-                                        </span>
-                                    ))}
+                            <div className="mb-8 p-6 bg-white rounded-2xl border border-indigo-100 shadow-sm relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 opacity-50" />
+                                <div className="relative z-10">
+                                    <h3 className="text-sm font-bold font-heading text-indigo-900 mb-4 uppercase tracking-widest flex items-center gap-2">
+                                        <SparklesIcon className="w-4 h-4 text-indigo-500" /> Community Highlights
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {brewSpot.aiMeta.tags.map(tag => (
+                                            <span key={tag} className="px-4 py-1.5 bg-white text-indigo-600 border border-indigo-100 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-default">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <p className="text-[10px] text-indigo-400 mt-3 font-medium uppercase tracking-wider">
+                                        AI-Generated based on user reviews
+                                    </p>
                                 </div>
-                                <p className="text-xs text-blue-400 mt-2 italic">
-                                    *Generated by AI based on reviews & description
-                                </p>
                             </div>
                         )}
 
-                        {/* Standard Highlights (Tags from Creator) */}
-                        {(brewSpot.tags && brewSpot.tags.length > 0) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-dashed border-neutral/10">
+                            {/* Standard Highlights (Tags from Creator) */}
+                            {(brewSpot.tags && brewSpot.tags.length > 0) && (
+                                <div>
+                                    <h3 className="text-xs font-bold font-heading text-neutral/40 mb-4 uppercase tracking-widest">Vibe Tags</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {brewSpot.tags.map(tag => (
+                                            <span key={tag} className="px-3 py-1 bg-neutral/5 text-neutral-600 border border-neutral/10 rounded-lg text-sm font-medium">
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Facilities & Price */}
                             <div>
-                                <h3 className="text-sm font-bold font-heading text-neutral/50 mb-3 uppercase tracking-wider">Creator Tags</h3>
+                                <h3 className="text-xs font-bold font-heading text-neutral/40 mb-4 uppercase tracking-widest">Amenities</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {brewSpot.tags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-neutral/5 text-neutral border border-neutral/10 rounded-full text-sm font-medium">
-                                            {tag}
+                                    <span className="px-3 py-1 bg-green-50 text-green-700 border border-green-100 rounded-lg text-sm font-bold capitalize">
+                                        {brewSpot.price_range} price
+                                    </span>
+                                    {brewSpot.facilities?.map(facility => (
+                                        <span key={facility} className="px-3 py-1 bg-secondary/30 text-primary-dark border border-secondary/50 rounded-lg text-sm font-medium capitalize flex items-center gap-1.5">
+                                            <span>✓</span> {facility}
                                         </span>
                                     ))}
                                 </div>
-                            </div>
-                        )}
-
-                        {/* Facilities & Price */}
-                        <div>
-                            <h3 className="text-sm font-bold font-heading text-neutral/50 mb-3 uppercase tracking-wider">Amenities & Price</h3>
-                            <div className="flex flex-wrap gap-2">
-                                <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium capitalize text-neutral">
-                                    {brewSpot.price_range} price
-                                </span>
-                                {brewSpot.facilities?.map(facility => (
-                                    <span key={facility} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium capitalize">
-                                        {facility}
-                                    </span>
-                                ))}
                             </div>
                         </div>
                     </Card>

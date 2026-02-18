@@ -11,6 +11,8 @@ import { Card } from '@/components/common/Card'
 import Link from 'next/link'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
+import { TurnstileWidget } from '@/components/common/TurnstileWidget'
+
 export function RegisterForm() {
   const router = useRouter()
   const [username, setUsername] = useState('')
@@ -20,6 +22,7 @@ export function RegisterForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -88,13 +91,13 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-md p-8 shadow-lg">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold font-heading text-primary">Join BrewSpot</h1>
-        <p className="text-sm text-neutral/70 mt-2">Start discovering amazing coffee spots</p>
+    <Card className="w-full max-w-md p-8 md:p-10 shadow-card border-none bg-surface/80 backdrop-blur-sm mx-auto animate-fade-in-up">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold font-heading text-primary">Join BrewSpot</h1>
+        <p className="text-neutral/60 mt-2">Start discovering amazing coffee spots</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <Input
           id="username"
           type="text"
@@ -103,53 +106,73 @@ export function RegisterForm() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          className="bg-background"
         />
         <Input
           id="email"
           type="email"
-          label="Email"
+          label="Email Address"
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="bg-background"
         />
-        <Input
-          id="password"
-          type={showPassword ? 'text' : 'password'}
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          endIcon={
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="focus:outline-none hover:text-gray-700"
-              tabIndex={-1}
-            >
-              {showPassword ? (
-                <EyeSlashIcon className="h-5 w-5" />
-              ) : (
-                <EyeIcon className="h-5 w-5" />
-              )}
-            </button>
-          }
-        />
+        <div className="space-y-2">
+          <Input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="bg-background"
+            endIcon={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="focus:outline-none text-neutral/40 hover:text-primary transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeSlashIcon className="h-5 w-5" />
+                ) : (
+                  <EyeIcon className="h-5 w-5" />
+                )}
+              </button>
+            }
+          />
+          <p className="text-xs text-neutral/50 px-1">Must be at least 6 characters long</p>
+        </div>
 
         {error && (
-          <div className="p-3 bg-red-50 text-red-600 text-sm rounded-md">
-            {error}
+          <div className="p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 flex items-center gap-2">
+            <span className="text-lg">⚠️</span> {error}
           </div>
         )}
 
-        <Button type="submit" className="w-full" isLoading={loading}>
-          Create Account
+        <div className="flex justify-center">
+          <TurnstileWidget
+            onVerify={(token) => setCaptchaToken(token)}
+            onExpire={() => setCaptchaToken(null)}
+            onError={() => setCaptchaToken(null)}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full shadow-lg shadow-primary/20"
+          size="lg"
+          isLoading={loading}
+          disabled={!captchaToken}
+        >
+          {captchaToken ? 'Create Account' : 'Complete Verification'}
         </Button>
       </form>
 
-      <div className="mt-6 text-center text-sm">
-        <span className="text-neutral/70">Already have an account? </span>
-        <Link href="/login" className="text-primary font-medium hover:underline">
+      <div className="mt-8 text-center text-sm text-neutral/60">
+        Already have an account?{' '}
+        <Link href="/login" className="text-primary font-bold hover:underline transition-colors">
           Log in
         </Link>
       </div>

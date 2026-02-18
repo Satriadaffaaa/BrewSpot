@@ -10,24 +10,24 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, children, ...props }, ref) => {
     const variants = {
-      primary: 'bg-primary text-white hover:bg-primary/90 shadow-sm',
-      secondary: 'bg-secondary text-primary hover:bg-secondary/80',
-      outline: 'border border-gray-300 bg-transparent text-neutral hover:bg-gray-50',
-      ghost: 'bg-transparent text-neutral hover:bg-gray-100',
-      danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+      primary: 'bg-primary text-white hover:bg-primary-light shadow-md hover:shadow-lg',
+      secondary: 'bg-secondary text-primary hover:bg-[#E8DCC6] shadow-sm',
+      outline: 'border-2 border-primary text-primary hover:bg-primary/5',
+      ghost: 'bg-transparent text-neutral hover:bg-neutral/5',
+      danger: 'bg-[var(--color-danger)] text-white hover:opacity-90 shadow-sm',
     }
 
     const sizes = {
-      sm: 'h-8 px-3 text-xs',
-      md: 'h-10 px-4 py-2',
-      lg: 'h-12 px-8 text-lg',
+      sm: 'h-9 px-4 text-xs',
+      md: 'h-11 px-6 text-sm',
+      lg: 'h-14 px-8 text-base',
     }
 
     return (
       <button
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:pointer-events-none disabled:opacity-50',
+          'inline-flex items-center justify-center rounded-full font-heading font-semibold transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
           variants[variant],
           sizes[size],
           className

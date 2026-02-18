@@ -10,6 +10,7 @@ import { AddBrewSpotInput, BrewSpot } from '@/features/brewspot/types'
 import { BREWSPOT_FACILITIES } from '@/features/brewspot/constants'
 import { MapPinIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { uploadToCloudinary } from '@/lib/cloudinary'
+import { SocialVideoEmbed } from '@/components/common/SocialVideoEmbed'
 
 // Dynamic import for Map to avoid SSR issues
 const BrewSpotMap = dynamic(() => import('./BrewSpotMap'), {
@@ -300,13 +301,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                             />
                         </div>
 
-                        {/* Social Video */}
-                        <Input
-                            label="Social Media Video (Optional)"
-                            value={formData.videoUrl || ''}
-                            onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
-                            placeholder="e.g. TikTok, Instagram Reel, or YouTube link"
-                        />
+
 
                         <div className="grid grid-cols-2 gap-4">
                             <Input
@@ -377,39 +372,60 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     </div>
                 </Card>
 
-                {/* Photos Section */}
+                {/* Media Section (Photos & Video) */}
                 <Card className="p-6">
-                    <h2 className="text-xl font-heading font-bold mb-4 text-primary">Photos</h2>
-                    <div className="space-y-4">
-                        <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
-                            <input
-                                type="file"
-                                multiple
-                                accept="image/*"
-                                onChange={handleFileSelect}
-                                className="absolute inset-0 opacity-0 cursor-pointer"
+                    <h2 className="text-xl font-heading font-bold mb-4 text-primary">Media</h2>
+                    <div className="space-y-6">
+                        {/* Video Input */}
+                        <div className="space-y-3">
+                            <Input
+                                label="Social Media Video (Optional)"
+                                value={formData.videoUrl || ''}
+                                onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
+                                placeholder="Paste link from TikTok, Instagram Reels, or YouTube"
                             />
-                            <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                            <p className="text-sm text-gray-500">Click to upload photos</p>
-                            <p className="text-xs text-gray-400 mt-1">JPG, PNG supported</p>
+                            {formData.videoUrl && (
+                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                    <label className="text-xs font-medium text-gray-400 mb-2 block uppercase tracking-wider">Preview</label>
+                                    <SocialVideoEmbed url={formData.videoUrl} />
+                                </div>
+                            )}
                         </div>
 
-                        {previewUrls.length > 0 && (
-                            <div className="grid grid-cols-3 gap-4">
-                                {previewUrls.map((url, idx) => (
-                                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group">
-                                        <img src={url} alt="Preview" className="w-full h-full object-cover" />
-                                        <button
-                                            type="button"
-                                            onClick={() => removeFile(idx)}
-                                            className="absolute top-1 right-1 bg-white/90 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-red-500"
-                                        >
-                                            <XMarkIcon className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                ))}
+                        <div className="h-px bg-gray-100" />
+
+                        <div className="space-y-4">
+                            <label className="text-sm font-medium text-neutral">Photos</label>
+                            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
+                                <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleFileSelect}
+                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                />
+                                <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                                <p className="text-sm text-gray-500">Click to upload photos</p>
+                                <p className="text-xs text-gray-400 mt-1">JPG, PNG supported</p>
                             </div>
-                        )}
+
+                            {previewUrls.length > 0 && (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    {previewUrls.map((url, idx) => (
+                                        <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group">
+                                            <img src={url} alt="Preview" className="w-full h-full object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFile(idx)}
+                                                className="absolute top-1 right-1 bg-white/90 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-red-500"
+                                            >
+                                                <XMarkIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </Card>
 

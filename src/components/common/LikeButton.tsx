@@ -38,7 +38,7 @@ export function LikeButton({ brewspotId, initialLiked = false }: LikeButtonProps
     return (
         <button
             onClick={handleToggle}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${liked
+            className={`flex items-center gap-2 px-3 py-2 sm:px-4 rounded-full border transition-all ${liked
                 ? 'bg-red-50 border-red-200 text-red-500'
                 : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                 }`}
@@ -50,7 +50,7 @@ export function LikeButton({ brewspotId, initialLiked = false }: LikeButtonProps
                     <HeartIcon className="w-5 h-5" />
                 )}
             </div>
-            <span className="font-medium text-sm">
+            <span className="font-medium text-sm hidden sm:inline">
                 {liked ? 'Liked' : 'Like'}
                 {/* Note: Total likes count requires reading from spot stats or separate query, optional for now */}
             </span>

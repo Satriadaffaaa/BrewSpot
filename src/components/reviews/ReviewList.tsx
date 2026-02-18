@@ -74,8 +74,8 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
 
     if (reviews.length === 0) {
         return (
-            <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                <p className="text-gray-500">Belum ada review. Jadilah yang pertama!</p>
+            <div className="text-center py-10 bg-neutral/5 rounded-xl border border-dashed border-neutral/20">
+                <p className="text-neutral/50">Belum ada review. Jadilah yang pertama!</p>
             </div>
         )
     }
@@ -106,7 +106,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                                 )}
                             </div>
                             <div>
-                                <h4 className="font-bold text-neutral">
+                                <h4 className="font-bold text-neutral truncate max-w-[120px] sm:max-w-none">
                                     {variant === 'user'
                                         ? (review.brewspotName || 'Unknown Spot')
                                         : (review.userName || 'Pengguna BrewSpot')
@@ -116,11 +116,11 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                                     {[...Array(5)].map((_, i) => (
                                         <CoffeeBeanCustom
                                             key={i}
-                                            className={`w-4 h-4 ${i < review.rating ? 'text-amber-700' : 'text-gray-200'}`}
+                                            className={`w-4 h-4 ${i < review.rating ? 'text-amber-700' : 'text-neutral/20'}`}
                                             filled={i < review.rating}
                                         />
                                     ))}
-                                    <span className="ml-2 text-gray-400 text-xs text-medium">
+                                    <span className="ml-2 text-neutral/40 text-xs text-medium">
                                         {new Date(review.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
@@ -175,7 +175,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                         )}
                     </div>
 
-                    <div className="mt-4 text-neutral/80 leading-relaxed">
+                    <div className="mt-4 text-neutral/80 leading-relaxed break-words">
                         {review.opinion}
                     </div>
 

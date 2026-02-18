@@ -1,14 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6F4E37;
-  --color-secondary: #F5EBDD;
-  --color-accent: #8B9A46;
-  --color-neutral: #2E2E2E;
-  --color-background: #FAFAF8;
-
+  --color-primary: #4B3832; /* Dark Roast */
+  --color-primary-light: #6F4E37; /* Medium Roast */
+  --color-secondary: #F5EBDD; /* Cream/Foam */
+  --color-accent: #8B9A46; /* Matcha/Sage */
+  --color-accent-dark: #556B2F;
+  --color-neutral: #2E2E2E; /* Text Black */
+  --color-neutral-light: #8D8D8D; /* Text Gray */
+  --color-background: #FFFAF0; /* Floral White/Warm Paper */
+  --color-surface: #FFFFFF;
+  
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-heading: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --color-danger: #DC2626;
+  --color-success: #16A34A;
+  --color-warning: #CA8A04;
+  
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-card: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
 }
 
 :root {
@@ -20,8 +30,26 @@ body {
   background-color: var(--color-background);
   color: var(--color-neutral);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* Custom Utilities */
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }

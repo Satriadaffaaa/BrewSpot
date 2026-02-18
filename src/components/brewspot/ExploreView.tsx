@@ -14,12 +14,13 @@ import { TrendingSection } from '@/components/brewspot/TrendingSection'
 
 const BrewSpotMap = dynamic(() => import('@/components/brewspot/BrewSpotMap'), {
     ssr: false,
-    loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-xl flex items-center justify-center text-gray-400">Loading Map...</div>
+    loading: () => <div className="h-[400px] w-full bg-neutral/10 animate-pulse rounded-xl flex items-center justify-center text-neutral/40">Loading Map...</div>
 })
 
 export function ExploreView() {
     const { brewSpots, loading } = useBrewSpots()
     const [filteredSpots, setFilteredSpots] = useState<BrewSpot[]>([])
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
     // Filter States
     const [searchQuery, setSearchQuery] = useState('')
@@ -167,16 +168,36 @@ export function ExploreView() {
                     <h2 className="text-2xl font-heading font-bold text-primary">
                         {loading ? 'Loading...' : `${filteredSpots.length} BrewSpots Found`}
                     </h2>
-                    <Link href="/add-brewspot">
-                        <Button>
-                            <PlusIcon className="w-4 h-4 mr-2" />
-                            Add BrewSpot
-                        </Button>
-                    </Link>
+
+                    <div className="flex gap-4">
+                        <div className="flex bg-gray-100 p-1 rounded-lg">
+                            <button
+                                onClick={() => setViewMode('grid')}
+                                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={() => setViewMode('list')}
+                                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            </button>
+                        </div>
+                        <Link href="/add-brewspot">
+                            <Button>
+                                <PlusIcon className="w-4 h-4 mr-2" />
+                                Add BrewSpot
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
 
-                {/* We need to update BrewSpotList to accept spots as props or filter internally */}
-                <BrewSpotList spots={filteredSpots} isLoading={loading} />
+                <BrewSpotList spots={filteredSpots} isLoading={loading} viewMode={viewMode} />
             </div>
         </div>
     )

@@ -47,9 +47,9 @@ export const LeaderboardTable = ({ users, type, loading }: LeaderboardTableProps
                         <div className="flex items-center gap-4">
                             {/* Rank */}
                             <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold rounded-full ${index === 0 ? 'bg-yellow-100 text-yellow-700' :
-                                    index === 1 ? 'bg-gray-100 text-gray-700' :
-                                        index === 2 ? 'bg-orange-100 text-orange-700' :
-                                            'text-neutral/50'
+                                index === 1 ? 'bg-gray-100 text-gray-700' :
+                                    index === 2 ? 'bg-orange-100 text-orange-700' :
+                                        'text-neutral/50'
                                 }`}>
                                 #{index + 1}
                             </div>
@@ -66,8 +66,8 @@ export const LeaderboardTable = ({ users, type, loading }: LeaderboardTableProps
                             </div>
 
                             {/* Info */}
-                            <div className="min-w-0">
-                                <h4 className="font-bold text-neutral-800 truncate">{displayName}</h4>
+                            <div className="min-w-0 flex-1">
+                                <h4 className="font-bold text-neutral-800 truncate max-w-[100px] sm:max-w-none">{displayName}</h4>
                                 {type === 'contributors' && user.level && (
                                     <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                                         Level {user.level}

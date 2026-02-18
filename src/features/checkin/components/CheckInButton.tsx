@@ -69,11 +69,13 @@ export const CheckInButton = ({ brewSpotId, brewSpotLocation, className }: { bre
                 const userLng = position.coords.longitude;
                 const distance = calculateDistance(userLat, userLng, brewSpotLocation.lat, brewSpotLocation.lng);
 
-                // Check distance (10 meters tolerance)
-                if (distance > 10) {
+            // Check distance (50 meters tolerance - Best Scenario)
+                const MAX_CHECKIN_RADIUS = 50;
+                
+                if (distance > MAX_CHECKIN_RADIUS) {
                     await AdminSwal.fire({
                         title: 'Too Far Away!',
-                        text: `You are ${Math.round(distance)} meters away. You need to be within 10 meters to check in.`,
+                        text: `You are ${Math.round(distance)} meters away. You need to be within ${MAX_CHECKIN_RADIUS} meters to check in.`,
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });
@@ -130,11 +132,11 @@ export const CheckInButton = ({ brewSpotId, brewSpotLocation, className }: { bre
             onClick={handleCheckIn}
             disabled={loading}
             variant="primary"
-            className={`flex items-center gap-2 ${className}`}
+            className={`flex items-center gap-2 px-3 py-2 sm:px-4 ${className}`}
             title="Check In here"
         >
             <MapPinIcon className={`w-5 h-5 ${loading ? 'animate-bounce' : ''}`} />
-            <span>{loading ? 'Checking Location...' : 'Check In'}</span>
+            <span className="hidden sm:inline">{loading ? 'Checking Location...' : 'Check In'}</span>
         </Button>
     )
 }

@@ -43,6 +43,7 @@ export default function BrewSpotMap({
     // Helper ref to trigger geolocation automatically
     // Using any because generic Ref type is not exported easily
     const geoControlRef = useRef<any>(null)
+    const [isMapLoaded, setIsMapLoaded] = useState(false)
 
     const [viewState, setViewState] = useState({
         longitude: center[1],
@@ -52,13 +53,13 @@ export default function BrewSpotMap({
 
     // Attempt to auto-locate on mount if interactive
     useEffect(() => {
-        if (interactive && geoControlRef.current) {
+        if (interactive && geoControlRef.current && isMapLoaded) {
             // Short delay to ensure map is ready
             setTimeout(() => {
                 geoControlRef.current?.trigger()
             }, 1000)
         }
-    }, [interactive])
+    }, [interactive, isMapLoaded])
 
     // Update view state when center or zoom props change (External Control)
     useEffect(() => {
@@ -96,6 +97,7 @@ export default function BrewSpotMap({
                 dragPan={interactive}
                 dragRotate={interactive}
                 doubleClickZoom={interactive}
+                onLoad={() => setIsMapLoaded(true)}
                 onClick={(e) => {
                     if (interactive && onLocationSelect) {
                         onLocationSelect(e.lngLat.lat, e.lngLat.lng)
@@ -111,8 +113,8 @@ export default function BrewSpotMap({
                 />
                 <NavigationControl position="bottom-right" />
 
-                {/* Existing Spots */}
-                {spots.map((spot) => (
+                {/* Existing Spots - Only render after map load to prevent crashes */}
+                {isMapLoaded && spots.map((spot) => (
                     <Marker
                         key={spot.id}
                         longitude={spot.longitude}
@@ -131,7 +133,7 @@ export default function BrewSpotMap({
                 ))}
 
                 {/* Selected Location (for Adding Spot) */}
-                {selectedLocation && (
+                {isMapLoaded && selectedLocation && (
                     <Marker
                         longitude={selectedLocation[1]}
                         latitude={selectedLocation[0]}
