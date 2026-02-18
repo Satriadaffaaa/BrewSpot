@@ -74,7 +74,9 @@ export const TurnstileWidget = ({
                 if (script) {
                     const prevOnLoad = script.onload;
                     script.onload = (e) => {
-                        if (typeof prevOnLoad === 'function') prevOnLoad(e as Event);
+                        if (typeof prevOnLoad === 'function') {
+                            prevOnLoad.call(script, e as Event);
+                        }
                         renderWidget();
                     }
                 }
