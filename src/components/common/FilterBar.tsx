@@ -12,6 +12,7 @@ interface FilterBarProps {
     onFacilitiesChange: (facility: string) => void
     onRatingChange: (rating: string) => void
     onTagChange: (tag: string) => void
+    onSortChange: (sort: string) => void
     availableCities: string[]
     availableFacilities: string[]
     availableTags?: string[]
@@ -22,6 +23,7 @@ interface FilterBarProps {
         rating: string
         facilities: string[]
         tag?: string
+        sort: string
     }
     onClearFilters: () => void
 }
@@ -119,6 +121,18 @@ export function FilterBar({
                             {availableCities.map(city => (
                                 <option key={city} value={city}>{city}</option>
                             ))}
+                        </select>
+                    </div>
+
+                    <div className="space-y-3">
+                        <label className="text-sm font-bold text-neutral font-heading">Sort By</label>
+                        <select
+                            value={activeFilters.sort}
+                            onChange={(e) => onSortChange(e.target.value)}
+                            className="w-full h-11 px-4 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer hover:border-primary/50"
+                        >
+                            <option value="default">Default</option>
+                            <option value="nearest">Nearest to Me</option>
                         </select>
                     </div>
 

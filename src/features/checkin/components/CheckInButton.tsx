@@ -8,21 +8,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import { AdminSwal, Toast } from '@/components/common/SweetAlert'
 import { useRouter } from 'next/navigation'
 
-// Utility to calculate distance between two coordinates in meters (Haversine formula)
-const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371e3; // Earth's radius in meters
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // Distance in meters
-}
+import { calculateDistance } from '@/lib/locationUtils'
 
 export const CheckInButton = ({ brewSpotId, brewSpotLocation, className }: { brewSpotId: string, brewSpotLocation?: { lat: number, lng: number }, className?: string }) => {
     const { user } = useAuth()
@@ -69,9 +55,9 @@ export const CheckInButton = ({ brewSpotId, brewSpotLocation, className }: { bre
                 const userLng = position.coords.longitude;
                 const distance = calculateDistance(userLat, userLng, brewSpotLocation.lat, brewSpotLocation.lng);
 
-            // Check distance (50 meters tolerance - Best Scenario)
+                // Check distance (50 meters tolerance - Best Scenario)
                 const MAX_CHECKIN_RADIUS = 50;
-                
+
                 if (distance > MAX_CHECKIN_RADIUS) {
                     await AdminSwal.fire({
                         title: 'Too Far Away!',

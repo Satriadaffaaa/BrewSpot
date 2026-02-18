@@ -141,57 +141,26 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
     }
 
     const removeFile = (index: number) => {
-        // Check if removing existing photo or new file
         const totalExisting = initialData?.photos?.length || 0;
 
-        // This logic is tricky with mixed existing/new. 
-        // Ideally we separate them. But primarily for edit, we might just append new for now.
-        // For simplicity: If editing, we rely on previewUrls as source of truth for display, 
-        // but removing an "existing" photo needs to update formData.photos too.
-
-        // Let's simplify: 
-        // 1. Remove from Preview
         const urlToRemove = previewUrls[index];
         setPreviewUrls(prev => prev.filter((_, i) => i !== index));
 
-        // 2. If it was a file (blob:), remove from selectedFiles
         if (urlToRemove.startsWith('blob:')) {
-            // We need to find which file corresponds to this index in the MIXED list.
-            // This is hard. Better strategy:
-            // Store `newFiles` separately from `existingPhotos`.
-            // But here we mixed them in UI.
-
-            // Re-implementing removal for mixed state is complex in 5 mins.
-            // Let's just remove from selectedFiles if we can match it, or filter formData.photos.
-
-            URL.revokeObjectURL(urlToRemove) // Cleanup if blob
-            // This is imprecise. Let's block removal of existing photos for MVP iteration 1 if acceptable?
-            // Or allow removal but assume user re-uploads if they mess up? 
-            // Actually, if we just remove from `previewUrls`, we can reconstruct `formData.photos` on submit?
-            // No, file uploads happen on submit.
-
-            // Simple approach: 
-            // If index < (formData.photos?.length || 0) -> It's an existing photo. Remove from formData.photos
-            // If index >= (formData.photos?.length || 0) -> It's a new file. Remove from selectedFiles.
-
-            // Wait, initialData.photos is static. formData.photos tracks current state?
-            // Yes, setFormData initialized with initialData.
+            URL.revokeObjectURL(urlToRemove)
 
             const currentExistingCount = formData.photos.length;
 
             if (index < currentExistingCount) {
-                // Removing existing
                 setFormData(prev => ({
                     ...prev,
                     photos: prev.photos.filter((_, i) => i !== index)
                 }))
             } else {
-                // Removing new file
                 const fileIndex = index - currentExistingCount;
                 setSelectedFiles(prev => prev.filter((_, i) => i !== fileIndex));
             }
         } else {
-            // It's a URL, so removal from formData.photos
             setFormData(prev => ({
                 ...prev,
                 photos: prev.photos.filter((p) => p !== urlToRemove)
@@ -274,9 +243,18 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
         )
     }
 
+    // Helper to apply one day's schedule to all days
+    const applyToAll = (sourceDaySchedule: { isOpen: boolean; openTime: string; closeTime: string }) => {
+        const newHours: any = { ...formData.weekly_hours };
+        (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).forEach(d => {
+            newHours[d] = { ...sourceDaySchedule };
+        });
+        setFormData(prev => ({ ...prev, weekly_hours: newHours }));
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 min-w-0">
                 <Card className="p-6">
                     <h2 className="text-xl font-heading font-bold mb-4 text-primary">
                         {mode === 'create' ? 'Details' : 'Edit Details'}
@@ -292,7 +270,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
 
                         {/* Description / Founder's Note */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-neutral">Founder's Note / Description</label>
+                            <label className="text-sm font-medium text-neutral">Founder&apos;s Note / Description</label>
                             <textarea
                                 className="w-full min-h-[100px] rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                                 placeholder="Tell us what makes this spot special..."
@@ -429,6 +407,99 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     </div>
                 </Card>
 
+                {/* Operational Hours Section */}
+                <Card className="p-4 sm:p-6 overflow-hidden">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+                        <h2 className="text-lg sm:text-xl font-heading font-bold text-primary">Operational Hours</h2>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                                const defaultSchedule = { isOpen: true, openTime: '08:00', closeTime: '22:00' };
+                                const newHours: any = {};
+                                (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).forEach(day => {
+                                    newHours[day] = { ...defaultSchedule };
+                                });
+                                setFormData(prev => ({ ...prev, weekly_hours: newHours }));
+                            }}
+                            className="self-start text-xs"
+                        >
+                            Set Standard (8AM - 10PM)
+                        </Button>
+                    </div>
+
+                    <div className="space-y-2">
+                        {(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).map((day) => {
+                            const daySchedule = formData.weekly_hours?.[day] || { isOpen: false, openTime: '09:00', closeTime: '21:00' };
+
+                            return (
+                                <div
+                                    key={day}
+                                    className={`rounded-lg border p-3 transition-all ${daySchedule.isOpen ? 'bg-white border-gray-200 shadow-sm' : 'bg-gray-50/80 border-transparent'}`}
+                                >
+                                    {/* Row 1: Day name + toggle (always) */}
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="font-medium capitalize text-sm text-neutral-700">{day}</span>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                className="sr-only peer"
+                                                checked={daySchedule.isOpen}
+                                                onChange={(e) => {
+                                                    const newHours = { ...formData.weekly_hours };
+                                                    newHours[day] = { ...daySchedule, isOpen: e.target.checked };
+                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
+                                                }}
+                                            />
+                                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+
+                                    {/* Row 2: Time inputs OR "Closed" label */}
+                                    {daySchedule.isOpen ? (
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="time"
+                                                value={daySchedule.openTime}
+                                                onChange={(e) => {
+                                                    const newHours = { ...formData.weekly_hours };
+                                                    newHours[day] = { ...daySchedule, openTime: e.target.value };
+                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
+                                                }}
+                                                className="flex-1 min-w-0 border border-gray-300 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none bg-white"
+                                            />
+                                            <span className="text-gray-400 text-xs shrink-0">–</span>
+                                            <input
+                                                type="time"
+                                                value={daySchedule.closeTime}
+                                                onChange={(e) => {
+                                                    const newHours = { ...formData.weekly_hours };
+                                                    newHours[day] = { ...daySchedule, closeTime: e.target.value };
+                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
+                                                }}
+                                                className="flex-1 min-w-0 border border-gray-300 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none bg-white"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => applyToAll(daySchedule)}
+                                                className="p-1.5 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-colors shrink-0"
+                                                title="Apply to all days"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <span className="text-xs text-neutral/40 italic">Closed</span>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </Card>
+
                 <Button type="submit" className="w-full" isLoading={isLoading || uploading}>
                     {uploading ? 'Uploading Photos...' : (mode === 'create' ? 'Submit for Approval' : 'Save Changes')}
                 </Button>
@@ -475,6 +546,6 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     </div>
                 </Card>
             </div>
-        </div>
+        </div >
     )
 }

@@ -26,6 +26,7 @@ function mapToBrewSpot(id: string, data: any): BrewSpot {
         image_url: data.imageUrl,
         rating: data.rating,
         reviews_count: data.reviewsCount,
+        weekly_hours: data.weekly_hours, // Added mapping
         autoApproved: data.autoApproved,
         approvedBy: data.approvedBy,
         authorName: data.authorName,
@@ -122,6 +123,7 @@ export async function createBrewSpot(input: AddBrewSpotInput): Promise<BrewSpot>
         description: input.description,
         tags: input.tags,
         videoUrl: input.videoUrl || null,
+        weekly_hours: input.weekly_hours || null, // Added saving
         createdBy: user.uid,
         status: status,
         autoApproved: autoApproved,

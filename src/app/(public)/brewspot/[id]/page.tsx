@@ -312,6 +312,53 @@ export default function BrewSpotDetailPage() {
                 </div>
 
                 <div className="space-y-6">
+                    {/* Operational Hours */}
+                    {brewSpot.weekly_hours && (
+                        <Card className="p-5 border border-dashed border-primary/20 relative overflow-hidden bg-white/60 backdrop-blur-sm group hover:border-primary/40 transition-colors">
+                            <h3 className="font-heading font-bold text-primary mb-3 flex items-center justify-between relative z-10">
+                                <span className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Opening Hours
+                                </span>
+                                {/* Add status badge in header */}
+                                {(() => {
+                                    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
+                                    const day = days[new Date().getDay()];
+                                    const schedule = brewSpot.weekly_hours[day];
+                                    if (schedule?.isOpen) {
+                                        const now = new Date();
+                                        const current = now.getHours() * 60 + now.getMinutes();
+                                        const [h1, m1] = schedule.openTime.split(':').map(Number);
+                                        const [h2, m2] = schedule.closeTime.split(':').map(Number);
+                                        const start = h1 * 60 + m1;
+                                        const end = h2 * 60 + m2;
+                                        if (current >= start && current < end) return <span className="text-[10px] uppercase font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full tracking-wider animate-pulse">Open Now</span>
+                                    }
+                                    return <span className="text-[10px] uppercase font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full tracking-wider">Closed</span>
+                                })()}
+                            </h3>
+                            <div className="space-y-2 relative z-10 mt-4">
+                                {(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).map((day) => {
+                                    const schedule = brewSpot.weekly_hours![day];
+                                    const isToday = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase() === day;
+
+                                    return (
+                                        <div key={day} className={`flex justify-between items-center text-sm ${isToday ? 'font-bold text-primary bg-primary/5 -mx-2 px-2 py-1 rounded' : 'text-neutral/70'}`}>
+                                            <span className="capitalize w-24">{day.slice(0, 3)}</span>
+                                            {schedule?.isOpen ? (
+                                                <span className="font-mono">{schedule.openTime} - {schedule.closeTime}</span>
+                                            ) : (
+                                                <span className="text-red-400 font-medium text-xs">Closed</span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </Card>
+                    )}
+
                     {/* Map Widget */}
                     <Card className="p-0 overflow-hidden h-[300px] relative">
                         <BrewSpotMap
