@@ -35,6 +35,7 @@ export function FilterBar({
     onFacilitiesChange,
     onRatingChange,
     onTagChange,
+    onSortChange,
     availableCities,
     availableFacilities,
     availableTags = [],
