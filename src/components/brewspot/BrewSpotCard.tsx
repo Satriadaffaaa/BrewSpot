@@ -10,16 +10,26 @@ import { deleteBrewSpot } from '@/features/brewspot/api'
 import { useState } from 'react'
 import { AdminSwal, Toast } from '@/components/common/SweetAlert'
 
+import { calculateDistance, formatDistance } from '@/lib/locationUtils'
+
 interface BrewSpotCardProps {
     brewSpot: BrewSpot
+    userLocation?: { latitude: number, longitude: number } | null
 }
 
-export function BrewSpotCard({ brewSpot }: BrewSpotCardProps) {
+export function BrewSpotCard({ brewSpot, userLocation }: BrewSpotCardProps) {
     const { user } = useAuth()
     const router = useRouter()
     const [isDeleting, setIsDeleting] = useState(false)
     const displayImage = brewSpot.photos?.[0] || brewSpot.image_url
     const isOwner = user?.uid === brewSpot.user_id
+
+    const distance = userLocation ? calculateDistance(
+        userLocation.latitude,
+        userLocation.longitude,
+        brewSpot.latitude,
+        brewSpot.longitude
+    ) : null
 
 
 
@@ -122,7 +132,56 @@ export function BrewSpotCard({ brewSpot }: BrewSpotCardProps) {
                         <Link href={`/brewspot/${brewSpot.id}`}>
                             <h3 className="font-heading font-bold text-lg text-primary line-clamp-1 hover:text-primary/80 transition-colors">{brewSpot.name}</h3>
                         </Link>
+                        {distance && (
+                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 mt-1">
+                                {formatDistance(distance)} away
+                            </span>
+                        )}
                         {/* Tags */}
+                        <div className="flex flex-wrap gap-1 mt-1 mb-1">
+                            {/* Status Badge */}
+                            {(() => {
+                                if (!brewSpot.weekly_hours) return (
+                                    <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full border border-gray-200">
+                                        ⚪ Hours Unknown
+                                    </span>
+                                );
+
+                                const days: (keyof typeof brewSpot.weekly_hours)[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                                const now = new Date();
+                                const currentDay = days[now.getDay()];
+                                const todaySchedule = brewSpot.weekly_hours[currentDay];
+
+                                if (!todaySchedule?.isOpen) {
+                                    return (
+                                        <span className="text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full border border-red-100 font-medium">
+                                            🔴 Closed
+                                        </span>
+                                    );
+                                }
+
+                                const currentTime = now.getHours() * 60 + now.getMinutes();
+                                const [openH, openM] = todaySchedule.openTime.split(':').map(Number);
+                                const [closeH, closeM] = todaySchedule.closeTime.split(':').map(Number);
+                                const openTime = openH * 60 + openM;
+                                const closeTime = closeH * 60 + closeM;
+
+                                if (currentTime >= openTime && currentTime < closeTime) {
+                                    return (
+                                        <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full border border-green-100 font-medium">
+                                            🟢 Open Now
+                                        </span>
+                                    );
+                                } else {
+                                    return (
+                                        <span className="text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full border border-red-100 font-medium">
+                                            🔴 Closed
+                                        </span>
+                                    );
+                                }
+                            })()}
+                        </div>
+
                         {/* Tags or AI Highlights */}
                         <div className="flex flex-wrap gap-1 mt-1">
                             {/* Priority: AI Highlights */}

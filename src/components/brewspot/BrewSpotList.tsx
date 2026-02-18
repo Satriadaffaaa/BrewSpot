@@ -12,9 +12,10 @@ interface BrewSpotListProps {
     spots?: BrewSpot[]
     isLoading?: boolean
     viewMode?: 'grid' | 'list'
+    userLocation?: { latitude: number, longitude: number } | null
 }
 
-export function BrewSpotList({ spots, isLoading, viewMode = 'grid' }: BrewSpotListProps) {
+export function BrewSpotList({ spots, isLoading, viewMode = 'grid', userLocation }: BrewSpotListProps) {
     const { brewSpots: fetchedSpots, loading: fetchLoading, error, refetch } = useBrewSpots()
 
     // Use passed props if available, otherwise fall back to internal fetch
@@ -69,7 +70,7 @@ export function BrewSpotList({ spots, isLoading, viewMode = 'grid' }: BrewSpotLi
                       For now, we'll keep it simple and just change the grid columns.
                       Refining Card for true list view would require modifying BrewSpotCard to accept a 'variant' prop.
                     */}
-                    <BrewSpotCard brewSpot={spot} />
+                    <BrewSpotCard brewSpot={spot} userLocation={userLocation} />
                 </div>
             ))}
         </div>

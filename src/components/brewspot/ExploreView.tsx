@@ -11,6 +11,8 @@ import { Button } from '@/components/common/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { BrewSpotCard } from '@/components/brewspot/BrewSpotCard'
 import { TrendingSection } from '@/components/brewspot/TrendingSection'
+import { calculateDistance } from '@/lib/locationUtils'
+import { useUserLocation } from '@/hooks/useUserLocation'
 
 const BrewSpotMap = dynamic(() => import('@/components/brewspot/BrewSpotMap'), {
     ssr: false,
@@ -19,6 +21,9 @@ const BrewSpotMap = dynamic(() => import('@/components/brewspot/BrewSpotMap'), {
 
 export function ExploreView() {
     const { brewSpots, loading } = useBrewSpots()
+    const { latitude, longitude } = useUserLocation()
+    const userLocation = latitude && longitude ? { latitude, longitude } : null
+
     const [filteredSpots, setFilteredSpots] = useState<BrewSpot[]>([])
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
@@ -29,6 +34,7 @@ export function ExploreView() {
     const [ratingFilter, setRatingFilter] = useState('')
     const [facilityFilters, setFacilityFilters] = useState<string[]>([])
     const [tagFilter, setTagFilter] = useState('')
+    const [sortOption, setSortOption] = useState('default')
 
     // Derived Lists
     const availableCities = Array.from(new Set(brewSpots.map(spot => spot.city))).sort()
@@ -47,6 +53,8 @@ export function ExploreView() {
 
     useEffect(() => {
         let result = brewSpots
+
+        // ... existing filters
 
         if (searchQuery) {
             const query = searchQuery.toLowerCase()
@@ -82,21 +90,19 @@ export function ExploreView() {
             });
         }
 
+        // Sorting Logic
+        if (sortOption === 'nearest' && userLocation) {
+            result = [...result].sort((a, b) => {
+                const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+                const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+                return distA - distB;
+            });
+        }
+
         setFilteredSpots(result)
-    }, [brewSpots, searchQuery, cityFilter, priceFilter, ratingFilter, facilityFilters, tagFilter])
+    }, [brewSpots, searchQuery, cityFilter, priceFilter, ratingFilter, facilityFilters, tagFilter, sortOption, userLocation])
 
-    // Phase 8: Search Analytics (2s Debounce)
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (searchQuery.length >= 3) {
-                import('@/features/analytics/actions').then(({ logSearchAction }) => {
-                    logSearchAction(searchQuery, cityFilter);
-                });
-            }
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery, cityFilter]);
+    // ... analytics effect
 
     const handleFacilityChange = (facility: string) => {
         setFacilityFilters(prev =>
@@ -113,6 +119,7 @@ export function ExploreView() {
         setRatingFilter('')
         setFacilityFilters([])
         setTagFilter('')
+        setSortOption('default')
     }
 
     // Calculate Map Center logic
@@ -140,6 +147,7 @@ export function ExploreView() {
                 onFacilitiesChange={handleFacilityChange}
                 onRatingChange={setRatingFilter}
                 onTagChange={setTagFilter}
+                onSortChange={setSortOption}
                 availableCities={availableCities}
                 availableFacilities={availableFacilities}
                 availableTags={availableTags}
@@ -149,7 +157,8 @@ export function ExploreView() {
                     price: priceFilter,
                     rating: ratingFilter,
                     facilities: facilityFilters,
-                    tag: tagFilter
+                    tag: tagFilter,
+                    sort: sortOption
                 }}
                 onClearFilters={clearFilters}
             />
@@ -196,8 +205,12 @@ export function ExploreView() {
                         </Link>
                     </div>
                 </div>
-
-                <BrewSpotList spots={filteredSpots} isLoading={loading} viewMode={viewMode} />
+                <BrewSpotList
+                    spots={filteredSpots}
+                    isLoading={loading}
+                    viewMode={viewMode}
+                    userLocation={userLocation}
+                />
             </div>
         </div>
     )

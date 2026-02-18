@@ -121,14 +121,16 @@ export default function BrewSpotMap({
                         latitude={spot.latitude}
                         anchor="bottom"
                     >
-                        <Link href={`/brewspot/${spot.id}`} className="group relative">
-                            <MapPinIcon className="w-8 h-8 text-primary drop-shadow-md transition-transform group-hover:scale-110" />
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block whitespace-nowrap z-50">
-                                <Card className="px-2 py-1 text-xs font-bold shadow-lg">
-                                    {spot.name}
-                                </Card>
-                            </div>
-                        </Link>
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <Link href={`/brewspot/${spot.id}`} className="group relative block">
+                                <MapPinIcon className="w-8 h-8 text-primary drop-shadow-md transition-transform group-hover:scale-110" />
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block whitespace-nowrap z-50">
+                                    <div className="px-2 py-1 text-xs font-bold shadow-lg bg-white rounded-md">
+                                        {spot.name}
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
                     </Marker>
                 ))}
 

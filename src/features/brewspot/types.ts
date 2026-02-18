@@ -49,6 +49,19 @@ export interface BrewSpot {
     viewsCount?: number
     totalCheckIns?: number // Trending Feature
     videoUrl?: string // Social Media Embed
+    weekly_hours?: WeeklyHours
+}
+
+export interface DailySchedule {
+    isOpen: boolean
+    openTime: string // Format "HH:mm"
+    closeTime: string // Format "HH:mm"
+}
+
+export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+
+export type WeeklyHours = {
+    [key in DayOfWeek]?: DailySchedule
 }
 
 export interface AddBrewSpotInput {
@@ -63,6 +76,7 @@ export interface AddBrewSpotInput {
     description: string
     tags: string[]
     videoUrl?: string
+    weekly_hours?: WeeklyHours
 }
 
 export interface BrewSpotFilters {
