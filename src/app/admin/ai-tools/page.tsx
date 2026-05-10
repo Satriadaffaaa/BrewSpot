@@ -155,13 +155,13 @@ export default function AdminAITools() {
 
                 {/* 1. Select Target */}
                 <Card className="p-6">
-                    <h2 className="text-lg font-bold mb-4">1. Select Target BrewSpot</h2>
+                    <h2 className="text-lg font-bold mb-4">1. Select Target Spot</h2>
                     <select
-                        className="w-full border p-3 rounded-lg mb-4 bg-white"
+                        className="w-full border p-3 rounded-lg mb-4 bg-surface"
                         value={selectedSpotId}
                         onChange={e => setSelectedSpotId(e.target.value)}
                     >
-                        <option value="">-- Choose a BrewSpot --</option>
+                        <option value="">-- Choose a Spot --</option>
                         {brewspots.map(spot => (
                             <option key={spot.id} value={spot.id}>{spot.name}</option>
                         ))}
@@ -186,7 +186,7 @@ export default function AdminAITools() {
                 <Card className="p-6">
                     <h2 className="text-lg font-bold mb-4">2. Manage Reviews</h2>
                     {!selectedSpotId ? (
-                        <p className="text-gray-400 italic">Select a BrewSpot to see reviews.</p>
+                        <p className="text-gray-400 italic">Select a Spot to see reviews.</p>
                     ) : (
                         <div className="space-y-3 max-h-[400px] overflow-y-auto">
                             {reviews.length === 0 && <p>No reviews found.</p>}
@@ -220,7 +220,7 @@ export default function AdminAITools() {
                         <span>⚡</span> Batch Operations
                     </h2>
                     <p className="text-sm text-gray-600 mb-4">
-                        Process all BrewSpots sequentially. This may take a while depending on the number of spots.
+                        Process all Spots sequentially. This may take a while depending on the number of spots.
                     </p>
 
                     <div className="flex items-center gap-4">
@@ -300,3 +300,4 @@ export default function AdminAITools() {
         </Container>
     )
 }
+

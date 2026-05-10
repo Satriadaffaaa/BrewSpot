@@ -64,7 +64,7 @@ export function BadgeList({ badgeIds, userStats, variant = 'full' }: BadgeListPr
 
     const renderCategory = (title: string, badges: Badge[]) => (
         <div className="mb-8 last:mb-0">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-100 pb-2">
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 border-b border-border pb-2">
                 {title}
             </h3>
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-6">
@@ -93,3 +93,4 @@ export function BadgeList({ badgeIds, userStats, variant = 'full' }: BadgeListPr
         </div>
     );
 }
+

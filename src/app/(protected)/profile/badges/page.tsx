@@ -56,7 +56,7 @@ export default function BadgesPage() {
                     Your Achievements
                 </h1>
                 <p className="text-neutral/60">
-                    Track your progress towards becoming a BrewSpot legend.
+                    Track your progress towards becoming a Lokali legend.
                 </p>
             </div>
 

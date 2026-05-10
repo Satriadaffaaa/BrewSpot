@@ -157,7 +157,7 @@ function RealTimeViewsSection() {
                                     {idx + 1}
                                 </span>
                                 <div className="truncate max-w-[200px]">
-                                    <p className="font-bold text-neutral-800 truncate">{spot.name}</p>
+                                    <p className="font-bold text-primary truncate">{spot.name}</p>
                                     <p className="text-xs text-neutral-500 truncate">{spot.city}</p>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@ function RecentSearchesSection() {
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                    <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-100">
+                    <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-border">
                         <tr>
                             <th className="px-4 py-3">Query</th>
                             <th className="px-4 py-3 text-right">Time</th>
@@ -206,7 +206,7 @@ function RecentSearchesSection() {
                         ) : searches.length > 0 ? (
                             searches.map(log => (
                                 <tr key={log.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 font-medium text-neutral-800">
+                                    <td className="px-4 py-3 font-medium text-primary">
                                         "{log.query}"
                                         {log.city !== 'all' && <span className="ml-2 text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">{log.city}</span>}
                                     </td>
@@ -224,3 +224,4 @@ function RecentSearchesSection() {
         </Card>
     )
 }
+

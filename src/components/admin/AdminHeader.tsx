@@ -1,6 +1,7 @@
 
 'use client'
 
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { Button } from '@/components/common/Button';
 import { BellIcon, Bars3Icon } from '@heroicons/react/24/outline';
@@ -11,10 +12,14 @@ interface AdminHeaderProps {
 
 export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
     const { signOut, user } = useAuth();
-    const date = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const [date, setDate] = useState('');
+
+    useEffect(() => {
+        setDate(new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+    }, []);
 
     return (
-        <header className="fixed top-0 right-0 left-0 md:left-72 z-40 bg-white/80 backdrop-blur-md border-b border-neutral-200/60 sticky-header-shadow transition-all duration-300">
+        <header className="fixed top-0 right-0 left-0 md:left-80 z-40 bg-[#F5E6D3]/80 backdrop-blur-md border-b border-[#2c1e16]/10 sticky-header-shadow transition-colors transition-transform duration-300">
             <div className="flex-1 px-4 md:px-8 flex justify-between h-16 items-center">
                 <div className="flex items-center gap-4">
                     <button
@@ -26,7 +31,7 @@ export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
                         <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                     </button>
                     <div className="flex flex-col justify-center">
-                        <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-widest hidden sm:block">{date}</h2>
+                        <h2 className="text-sm font-medium text-mid uppercase tracking-widest hidden sm:block">{date}</h2>
                     </div>
                 </div>
 
@@ -41,8 +46,8 @@ export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
 
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-end hidden sm:flex">
-                            <span className="text-sm font-bold text-neutral-800">{user?.displayName || 'Administrator'}</span>
-                            <span className="text-xs text-neutral-500">{user?.email}</span>
+                            <span className="text-sm font-bold text-primary">{user?.displayName || 'Administrator'}</span>
+                            <span className="text-xs text-mid">{user?.email}</span>
                         </div>
                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20">
                             {user?.email?.[0].toUpperCase() || 'A'}
@@ -50,10 +55,11 @@ export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
                     </div>
 
                     <Button variant="ghost" className="text-red-600 hover:bg-red-50 hover:text-red-700 ml-2 hidden sm:flex" size="sm" onClick={() => signOut()}>
-                        Logout
+                        Keluar
                     </Button>
                 </div>
             </div>
         </header>
     );
 }
+

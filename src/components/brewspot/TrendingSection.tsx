@@ -24,7 +24,7 @@ export function TrendingSection() {
         <div className="space-y-4">
             <div className="flex items-center gap-2">
                 <span className="text-2xl">🔥</span>
-                <h2 className="text-2xl font-heading font-bold text-neutral-900">Trending Now</h2>
+                <h2 className="text-2xl font-heading font-black text-primary tracking-tight">Lagi Rame</h2>
             </div>
 
             <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">

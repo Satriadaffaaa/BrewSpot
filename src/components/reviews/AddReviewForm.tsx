@@ -6,7 +6,7 @@ import { Button } from '@/components/common/Button'
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '@/providers/AuthProvider'
 import { useAddReview, useUpdateReview } from '@/features/reviews/hooks'
-import { CoffeeBeanIcon, CoffeeBeanCustom } from '@/components/common/CoffeeBeanIcon'
+import { StarIcon } from '@heroicons/react/24/solid'
 import { Review } from '@/features/brewspot/types'
 
 interface AddReviewFormProps {
@@ -238,12 +238,11 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
                                 onMouseLeave={() => setHoverRating(0)}
                                 className="focus:outline-none transition-all hover:scale-110 duration-200"
                             >
-                                <CoffeeBeanCustom
+                                <StarIcon
                                     className={`w-10 h-10 transition-colors ${star <= currentRating
-                                        ? 'text-amber-700 drop-shadow-sm'
+                                        ? 'text-amber-500 drop-shadow-sm'
                                         : 'text-gray-200'
                                         }`}
-                                    filled={star <= currentRating}
                                 />
                             </button>
                         ))}
@@ -256,7 +255,7 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
 
                 {/* Opinion */}
                 <textarea
-                    className="w-full min-h-[100px] p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/50 outline-none resize-none"
+                    className="w-full min-h-[100px] p-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/50 outline-none resize-none"
                     placeholder="Bagikan pengalaman ngopi kamu di sini..."
                     value={opinion}
                     onChange={(e) => setOpinion(e.target.value)}
@@ -266,7 +265,7 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
                 {/* Video URL */}
                 <input
                     type="url"
-                    className="w-full p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/50 outline-none"
+                    className="w-full p-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/50 outline-none"
                     placeholder="Link Video (TikTok/IG/YouTube) - Optional"
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
@@ -291,7 +290,7 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
                     {previews.length > 0 && (
                         <div className="flex gap-2">
                             {previews.map((src, i) => (
-                                <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 group">
+                                <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border group">
                                     <img src={src} className="w-full h-full object-cover" />
                                     <button
                                         type="button"
@@ -320,3 +319,4 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
         </Card>
     )
 }
+

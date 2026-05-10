@@ -26,7 +26,7 @@ export function BadgeItem({ badge, size = 'md', isUnlocked = true, progress }: B
                 transition-all duration-300 cursor-help
                 ${isUnlocked
                     ? 'bg-yellow-50 border-yellow-200 hover:scale-110 hover:shadow-md'
-                    : 'bg-gray-100 border-gray-200 grayscale opacity-60'
+                    : 'bg-gray-100 border-border grayscale opacity-60'
                 }
             `}>
                 <span className={!isUnlocked ? 'filter grayscale contrast-50' : ''}>
@@ -46,7 +46,7 @@ export function BadgeItem({ badge, size = 'md', isUnlocked = true, progress }: B
                             <span>Progress</span>
                             <span>{Math.floor(progress.percentage)}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-surface/20 rounded-full overflow-hidden">
                             <div
                                 className="h-full bg-yellow-400 transition-all duration-1000"
                                 style={{ width: `${progress.percentage}%` }}
@@ -69,3 +69,4 @@ export function BadgeItem({ badge, size = 'md', isUnlocked = true, progress }: B
         </div>
     );
 }
+

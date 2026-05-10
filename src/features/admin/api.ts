@@ -205,28 +205,118 @@ export async function getDashboardStats() {
         const spotsRef = collection(db, 'brewspots');
         const reportsRef = collection(db, 'reports');
         const usersRef = collection(db, 'users');
+        const verifRef = collection(db, 'business_verification_requests');
 
         const pendingQuery = query(spotsRef, where('status', '==', 'pending'));
         const openReportsQuery = query(reportsRef, where('status', '==', 'open'));
         const suspendedQuery = query(usersRef, where('accountStatus', '==', 'suspended'));
         const bannedQuery = query(usersRef, where('accountStatus', '==', 'banned'));
+        const pendingVerifQuery = query(verifRef, where('status', '==', 'pending'));
+        const pendingClaimsQuery = query(collection(db, 'spot_claim_requests'), where('status', '==', 'pending'));
 
-        const [pendingSnap, reportsSnap, suspendedSnap, bannedSnap] = await Promise.all([
+        const [pendingSnap, reportsSnap, suspendedSnap, bannedSnap, verifSnap, claimsSnap] = await Promise.all([
             getCountFromServer(pendingQuery),
             getCountFromServer(openReportsQuery),
             getCountFromServer(suspendedQuery),
-            getCountFromServer(bannedQuery)
+            getCountFromServer(bannedQuery),
+            getCountFromServer(pendingVerifQuery),
+            getCountFromServer(pendingClaimsQuery)
         ]);
 
         return {
             pendingSpots: pendingSnap.data().count,
             openReports: reportsSnap.data().count,
-            suspendedUsers: suspendedSnap.data().count + bannedSnap.data().count
+            suspendedUsers: suspendedSnap.data().count + bannedSnap.data().count,
+            pendingVerifications: verifSnap.data().count,
+            pendingClaims: claimsSnap.data().count
         };
     } catch (error) {
         console.error("Error fetching stats:", error);
-        return { pendingSpots: 0, openReports: 0, suspendedUsers: 0 };
+        return { pendingSpots: 0, openReports: 0, suspendedUsers: 0, pendingVerifications: 0 };
     }
+}
+// Business Verification Requests
+import { BusinessVerificationRequest } from '../brewspot/types';
+
+export async function getPendingVerifications(): Promise<BusinessVerificationRequest[]> {
+    const q = query(
+        collection(db, 'business_verification_requests'),
+        where('status', '==', 'pending'),
+        orderBy('createdAt', 'desc')
+    );
+
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({
+        id: d.id,
+        ...d.data(),
+        createdAt: d.data().createdAt?.toDate?.().toISOString() || new Date().toISOString()
+    } as BusinessVerificationRequest));
+}
+
+export async function approveBusinessVerification(requestId: string, userId: string): Promise<void> {
+    const batch = async () => {
+        // Update request status
+        await updateDoc(doc(db, 'business_verification_requests', requestId), {
+            status: 'approved',
+            updatedAt: serverTimestamp()
+        });
+        
+        // Upgrade user role to owner
+        await updateDoc(doc(db, 'users', userId), {
+            role: 'owner',
+            updatedAt: serverTimestamp()
+        });
+    };
+    await batch();
+}
+
+export async function rejectBusinessVerification(requestId: string, reason: string): Promise<void> {
+    await updateDoc(doc(db, 'business_verification_requests', requestId), {
+        status: 'rejected',
+        adminNotes: reason,
+        updatedAt: serverTimestamp()
+    });
+}
+// Spot Claim Requests
+import { ClaimRequest } from '../brewspot/types';
+
+export async function getPendingClaimRequests(): Promise<ClaimRequest[]> {
+    const q = query(
+        collection(db, 'spot_claim_requests'),
+        where('status', '==', 'pending'),
+        orderBy('createdAt', 'desc')
+    );
+
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({
+        id: d.id,
+        ...d.data(),
+        createdAt: d.data().createdAt?.toDate?.().toISOString() || new Date().toISOString()
+    } as ClaimRequest));
+}
+
+export async function approveSpotClaim(requestId: string, spotId: string, userId: string): Promise<void> {
+    const batch = async () => {
+        // Update request status
+        await updateDoc(doc(db, 'spot_claim_requests', requestId), {
+            status: 'approved'
+        });
+        
+        // Update spot ownership
+        await updateDoc(doc(db, 'brewspots', spotId), {
+            ownerId: userId,
+            isOfficial: true,
+            verificationStatus: 'verified'
+        });
+    };
+    await batch();
+}
+
+export async function rejectSpotClaim(requestId: string, reason: string): Promise<void> {
+    await updateDoc(doc(db, 'spot_claim_requests', requestId), {
+        status: 'rejected',
+        adminNotes: reason
+    });
 }
 // LOG ADMIN ACTION
 export async function logAdminAction(action: string, details: any): Promise<void> {

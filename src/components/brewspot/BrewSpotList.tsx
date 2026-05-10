@@ -37,7 +37,7 @@ export function BrewSpotList({ spots, isLoading, viewMode = 'grid', userLocation
             <div className="text-center py-12 bg-red-50 rounded-xl">
                 <p className="text-red-600 mb-4">{error}</p>
                 <Button onClick={() => refetch()} variant="danger" className="border-red-200 text-white hover:bg-red-700">
-                    Try Again
+                    Coba Lagi
                 </Button>
             </div>
         )
@@ -47,14 +47,14 @@ export function BrewSpotList({ spots, isLoading, viewMode = 'grid', userLocation
         return (
             <div className="text-center py-16 px-4 bg-secondary/30 rounded-2xl border border-secondary dashed">
                 <span className="text-4xl mb-4 block">🧐</span>
-                <h3 className="text-xl font-heading font-bold text-neutral mb-2">No BrewSpots Found</h3>
+                <h3 className="text-xl font-heading font-bold text-neutral mb-2">Belum Ada Spot</h3>
                 <p className="text-neutral/70 max-w-sm mx-auto mb-6">
-                    Looks like there are no coffee shops matching your criteria. Be the first one to share a hidden gem!
+                    Sepertinya belum ada tempat yang cocok dengan kriteriamu. Jadilah yang pertama membagikan hidden gem!
                 </p>
-                <Link href="/add-brewspot">
+                <Link href="/add-spot">
                     <Button>
                         <PlusIcon className="w-4 h-4 mr-2" />
-                        Add a BrewSpot
+                        Tambah Spot
                     </Button>
                 </Link>
             </div>

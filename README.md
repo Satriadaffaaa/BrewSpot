@@ -1,16 +1,16 @@
-# BrewSpot ☕
+# Lokali 📍
 
-**BrewSpot** is a modern, community-driven platform for discovering and sharing the best coffee spots. Built with **Next.js 14**, **TypeScript**, and **Firebase**, it combines robust location-based features with gamification and AI-powered insights to create an engaging experience for coffee lovers.
+**Lokali** is a modern, community-driven platform for discovering and sharing the best local destinations. From viral culinary spots and **hidden gems** to cozy hangouts and tourist attractions, Lokali combines robust location-based features with gamification and AI-powered insights to create an engaging exploration experience.
 
 ![BrewSpot Banner](https://img.shields.io/badge/Status-Active_Development-success) ![License](https://img.shields.io/badge/License-Private-blue)
 
 ## 🚀 Key Features
 
 ### 🌍 Discovery & Exploration
-*   **Interactive Map**: Explore coffee spots on a Mapbox-powered map.
-*   **Advanced Filtering**: Filter by city, rating, and tags (e.g., "Cozy", "Wifi").
-*   **Smart Search**: Find spots by name or location with auto-centering map.
-*   **Trending Spots**: Real-time trending list based on community check-ins.
+*   **Interactive Map**: Full Mapbox integration with custom markers, clustering, and routing visualization (without ETA) to help users find their way.
+*   **Advanced Filtering**: Filter by category (e.g., "Hidden Gem", "Viral"), city, rating, and facilities.
+*   **Smart Search**: Find any destination by name or location with auto-centering map.
+*   **Trending Spots**: Real-time trending list based on community check-ins at hot locations.
 
 ### 🎮 Gamification & Community
 *   **XP & Leveling System**: Earn XP for reviews, adding spots, and check-ins.
@@ -26,9 +26,14 @@
 
 ### 🛡️ Safety & Moderation
 *   **Admin Dashboard**: Comprehensive tools for approving spots, managing reports, and moderating users.
-*   **Role-Based Access**: Granular permissions for Users, Contributors, and Admins.
+*   **Role-Based Access**: Granular permissions for Users, Contributors, Business Owners, and Admins.
 *   **Report System**: User-led reporting for spam or harassment.
 *   **Automated Guards**: Rate limiting, orphan data protection, and ban enforcement.
+
+### 💼 Business Ownership & Verification
+*   **Business Accounts**: Multi-step verification process for legitimate business owners.
+*   **Spot Claiming**: Owners can claim existing spots with proof of ownership, verified by admins.
+*   **Official Content**: Verified owners get exclusive rights to manage menus (preventing DMCA/Copyright issues) and upload official photos.
 
 ## 🛠️ Tech Stack
 

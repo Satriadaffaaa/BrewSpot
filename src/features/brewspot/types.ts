@@ -1,3 +1,22 @@
+// Lokali Category System
+export const SPOT_CATEGORIES = {
+    viral: { label: 'Sedang Viral', icon: '🔥', color: '#FF4500' },
+    hidden_gem: { label: 'Hidden Gem', icon: '💎', color: '#00BFFF' },
+    cafe: { label: 'Kafe & Kopi', icon: '☕', color: '#A0967F' },
+    kuliner: { label: 'Kuliner & Warung', icon: '🍜', color: '#D85A30' },
+    bar: { label: 'Bar & Hiburan', icon: '🍹', color: '#1a1a2e' },
+    outdoor: { label: 'Outdoor & Wisata', icon: '🌿', color: '#3B6D11' },
+    creative: { label: 'Ruang Kreatif', icon: '🎨', color: '#534AB7' },
+    popup: { label: 'Pop-up & Pasar', icon: '🛍️', color: '#993556' },
+    wellness: { label: 'Wellness & Spa', icon: '💆', color: '#0F6E56' },
+} as const
+
+export type SpotCategory = keyof typeof SPOT_CATEGORIES
+
+export function getCategoryOrDefault(spot: { category?: SpotCategory }): SpotCategory {
+    return spot.category || 'cafe'
+}
+
 // AI Meta Schema (Phase 4 Preparation)
 export interface AIMeta {
     tags?: string[]
@@ -22,6 +41,7 @@ export interface BrewSpot {
     photos: string[]
     description: string
     tags: string[]
+    menuUrl?: string // New: Link to menu image/pdf
     status: 'pending' | 'approved' | 'rejected'
     user_id: string
     created_at: string
@@ -50,6 +70,17 @@ export interface BrewSpot {
     totalCheckIns?: number // Trending Feature
     videoUrl?: string // Social Media Embed
     weekly_hours?: WeeklyHours
+
+    // Lokali: Category System
+    category?: SpotCategory
+    subcategory?: string
+
+    // Phase 10: Ownership & Verification
+    ownerId?: string
+    isOfficial?: boolean
+    verificationStatus?: 'unclaimed' | 'pending' | 'verified'
+    officialMenuUrl?: string
+    officialPhotos?: string[]
 }
 
 export interface DailySchedule {
@@ -75,8 +106,11 @@ export interface AddBrewSpotInput {
     photos: string[]
     description: string
     tags: string[]
+    menuUrl?: string
     videoUrl?: string
     weekly_hours?: WeeklyHours
+    category?: SpotCategory
+    subcategory?: string
 }
 
 export interface BrewSpotFilters {
@@ -132,4 +166,44 @@ export interface ReviewInput {
     opinion: string
     photos?: File[]
     videoUrl?: string
+}
+
+// Phase 10: Business Onboarding & Verification
+
+export interface BusinessVerificationRequest {
+    id: string
+    userId: string
+    userName: string
+    userEmail: string
+    
+    // Legal Details
+    legalName: string
+    idNumber: string
+    businessName: string
+    businessType: string
+    phone: string
+    
+    // Support Documents (URLs)
+    idProofUrl: string
+    businessProofUrl: string
+    
+    status: 'pending' | 'approved' | 'rejected'
+    adminNotes?: string
+    createdAt: string
+    updatedAt: string
+}
+
+export interface ClaimRequest {
+    id: string
+    spotId: string
+    spotName: string
+    userId: string
+    
+    // Proof of specific spot control
+    proofUrl: string 
+    description: string
+    
+    status: 'pending' | 'approved' | 'rejected'
+    adminNotes?: string
+    createdAt: string
 }

@@ -47,7 +47,7 @@ export function LoginForm() {
     <Card className="w-full max-w-md p-8 md:p-10 shadow-card border-none bg-surface/80 backdrop-blur-sm mx-auto animate-fade-in-up">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold font-heading text-primary">Welcome Back</h1>
-        <p className="text-neutral/60 mt-2">Sign in to continue your coffee journey</p>
+        <p className="text-neutral/60 mt-2">Sign in to continue exploring</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

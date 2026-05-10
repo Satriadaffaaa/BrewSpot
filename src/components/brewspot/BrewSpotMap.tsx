@@ -1,33 +1,25 @@
 'use client'
 
-import Map, { Marker, NavigationControl, GeolocateControl } from 'react-map-gl/mapbox'
-import * as mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls, MapRoute } from '@/components/ui/map'
 import { BrewSpot } from '@/features/brewspot/types'
 import { MapPinIcon } from '@heroicons/react/24/solid'
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useState, useRef, useEffect } from 'react'
-import { Card } from '@/components/common/Card'
-
-// Disable Mapbox telemetry to prevent blocked request errors
-try {
-    // @ts-ignore
-    if (mapboxgl.config) {
-        // @ts-ignore
-        mapboxgl.config.EVENTS_URL = null;
-    }
-} catch (e) {
-    // Ignore error if property is missing
-}
+import { useState, useEffect, useRef } from 'react'
+import { Toast } from '@/components/common/SweetAlert'
+import { cn } from '@/lib/utils'
+import { useMap } from '@/components/ui/map'
 
 interface BrewSpotMapProps {
     spots: BrewSpot[]
-    center?: [number, number]
+    center?: [number, number] // [Lat, Lng]
     zoom?: number
     className?: string
     interactive?: boolean
-    selectedLocation?: [number, number] | null
+    selectedLocation?: [number, number] | null // [Lat, Lng]
     onLocationSelect?: (lat: number, lng: number) => void
+    routeCoordinates?: [number, number][] // [[Lng, Lat], ...]
+    userLocation?: [number, number] | null // [Lat, Lng]
 }
 
 export default function BrewSpotMap({
@@ -37,114 +29,184 @@ export default function BrewSpotMap({
     className = "h-[400px] w-full rounded-xl z-0 overflow-hidden",
     interactive = true,
     selectedLocation,
-    onLocationSelect
+    onLocationSelect,
+    routeCoordinates,
+    userLocation
 }: BrewSpotMapProps) {
+    const [isMounted, setIsMounted] = useState(false)
+    const [mapTheme, setMapTheme] = useState<'light' | 'dark'>('dark')
+    const mapRef = useRef<any>(null)
 
-    // Helper ref to trigger geolocation automatically
-    // Using any because generic Ref type is not exported easily
-    const geoControlRef = useRef<any>(null)
-    const [isMapLoaded, setIsMapLoaded] = useState(false)
-
-    const [viewState, setViewState] = useState({
-        longitude: center[1],
-        latitude: center[0],
-        zoom: zoom
-    })
-
-    // Attempt to auto-locate on mount if interactive
     useEffect(() => {
-        if (interactive && geoControlRef.current && isMapLoaded) {
-            // Short delay to ensure map is ready
-            setTimeout(() => {
-                geoControlRef.current?.trigger()
-            }, 1000)
+        setIsMounted(true)
+    }, [])
+
+    // Effect to center map on selected location when it changes (from geolocation)
+    useEffect(() => {
+        if (selectedLocation && mapRef.current) {
+            mapRef.current.flyTo({
+                center: [selectedLocation[1], selectedLocation[0]],
+                zoom: 15,
+                duration: 1000
+            })
         }
-    }, [interactive, isMapLoaded])
+    }, [selectedLocation])
 
-    // Update view state when center or zoom props change (External Control)
+    // Effect to handle cursor change
     useEffect(() => {
-        setViewState(prev => ({
-            ...prev,
-            longitude: center[1],
-            latitude: center[0],
-            zoom: zoom
-        }))
-    }, [center[0], center[1], zoom])
+        if (!mapRef.current) return;
+        const canvas = mapRef.current.getCanvas();
+        if (interactive) {
+            canvas.style.cursor = 'crosshair';
+        } else {
+            canvas.style.cursor = '';
+        }
+    }, [interactive]);
 
-    // Mapbox requires Lng, Lat order for coordinates in some places, 
-    // but Marker uses longitude={...} and latitude={...}.
-    const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+    // Effect to fit map bounds when route is shown
+    useEffect(() => {
+        if (routeCoordinates && routeCoordinates.length > 1 && mapRef.current) {
+            try {
+                // Manually calculate bounds to avoid dependency on LngLatBounds class
+                const minLng = Math.min(...routeCoordinates.map(c => c[0]));
+                const minLat = Math.min(...routeCoordinates.map(c => c[1]));
+                const maxLng = Math.max(...routeCoordinates.map(c => c[0]));
+                const maxLat = Math.max(...routeCoordinates.map(c => c[1]));
 
-    if (!mapboxToken) {
-        return (
-            <div className={`bg-gray-100 flex items-center justify-center flex-col p-4 text-center ${className}`}>
-                <p className="text-red-500 font-bold mb-2">Map Configuration Missing</p>
-                <p className="text-sm text-gray-500">Please add NEXT_PUBLIC_MAPBOX_TOKEN to your .env.local file.</p>
-            </div>
-        )
-    }
+                mapRef.current.fitBounds(
+                    [[minLng, minLat], [maxLng, maxLat]], 
+                    { padding: 50, duration: 1000 }
+                );
+            } catch (err) {
+                console.error("Error fitting bounds:", err);
+            }
+        }
+    }, [routeCoordinates]);
+
+
+
+    // Pre-filter spots with valid coordinates
+    const validSpots = spots.filter(spot =>
+        spot &&
+        typeof spot.latitude === 'number' && !isNaN(spot.latitude) && isFinite(spot.latitude) &&
+        typeof spot.longitude === 'number' && !isNaN(spot.longitude) && isFinite(spot.longitude)
+    )
+
+    if (!isMounted) return <div className={className} />
 
     return (
-        <div className={className}>
+        <div className={className + " relative group/map"}>
+            {/* Map Theme Toggle */}
+            <div className="absolute top-4 left-4 z-10">
+                <button
+                    onClick={() => setMapTheme(prev => prev === 'light' ? 'dark' : 'light')}
+                    className="p-2 bg-surface/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-border hover:bg-surface transition-all active:scale-95 group"
+                    title={`Switch to ${mapTheme === 'light' ? 'dark' : 'light'} mode`}
+                >
+                    {mapTheme === 'light' ? (
+                        <MoonIcon className="w-5 h-5 text-primary group-hover:text-primary" />
+                    ) : (
+                        <SunIcon className="w-5 h-5 text-accent group-hover:rotate-12 transition-transform" />
+                    )}
+                </button>
+            </div>
+
             <Map
-                {...viewState}
-                onMove={evt => setViewState(evt.viewState)}
-                style={{ width: '100%', height: '100%' }}
-                mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxAccessToken={mapboxToken}
-                mapLib={mapboxgl}
+                ref={mapRef}
+                center={[center[1], center[0]]}
+                zoom={zoom}
+                theme={mapTheme}
+                className={cn("w-full h-full", interactive && "cursor-crosshair")}
                 scrollZoom={interactive}
                 dragPan={interactive}
                 dragRotate={interactive}
-                doubleClickZoom={interactive}
-                onLoad={() => setIsMapLoaded(true)}
+                // Mapcn now handles onClick via props
                 onClick={(e) => {
                     if (interactive && onLocationSelect) {
                         onLocationSelect(e.lngLat.lat, e.lngLat.lng)
                     }
                 }}
             >
-                <GeolocateControl
-                    ref={geoControlRef}
-                    position="top-right"
-                    positionOptions={{ enableHighAccuracy: true }}
-                    trackUserLocation={true}
-                    showUserHeading={true}
+                <MapControls 
+                    position="bottom-right" 
+                    showLocate={interactive} 
+                    showZoom={interactive} 
+                    onLocate={(coords) => {
+                        if (interactive && onLocationSelect) {
+                            onLocationSelect(coords.latitude, coords.longitude)
+                        }
+                    }}
+                    onError={(err) => {
+                        Toast.fire({
+                            icon: 'warning',
+                            title: err.message
+                        })
+                    }}
                 />
-                <NavigationControl position="bottom-right" />
 
-                {/* Existing Spots - Only render after map load to prevent crashes */}
-                {isMapLoaded && spots.map((spot) => (
-                    <Marker
+                {/* Existing Spots */}
+                {validSpots.map((spot) => (
+                    <MapMarker
                         key={spot.id}
                         longitude={spot.longitude}
                         latitude={spot.latitude}
                         anchor="bottom"
                     >
-                        <div onClick={(e) => e.stopPropagation()}>
-                            <Link href={`/brewspot/${spot.id}`} className="group relative block">
-                                <MapPinIcon className="w-8 h-8 text-primary drop-shadow-md transition-transform group-hover:scale-110" />
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block whitespace-nowrap z-50">
-                                    <div className="px-2 py-1 text-xs font-bold shadow-lg bg-white rounded-md">
-                                        {spot.name}
-                                    </div>
-                                </div>
+                        <MarkerContent>
+                            <Link href={`/spot/${spot.id}`} className="group relative block" onClick={(e) => e.stopPropagation()}>
+                                <MapPinIcon className="w-8 h-8 text-accent drop-shadow-md transition-all duration-300 group-hover:scale-110" />
                             </Link>
-                        </div>
-                    </Marker>
+                        </MarkerContent>
+                        <MarkerTooltip position="top" className="font-bold">
+                            {spot.name}
+                        </MarkerTooltip>
+                    </MapMarker>
                 ))}
 
                 {/* Selected Location (for Adding Spot) */}
-                {isMapLoaded && selectedLocation && (
-                    <Marker
+                {selectedLocation && (
+                    <MapMarker
                         longitude={selectedLocation[1]}
                         latitude={selectedLocation[0]}
                         anchor="bottom"
                     >
-                        <MapPinIcon className="w-8 h-8 text-accent animate-bounce drop-shadow-md" />
-                    </Marker>
+                        <MarkerContent>
+                            <div className="relative group/pin">
+                                <div className="absolute -inset-4 bg-accent/20 rounded-full animate-ping pointer-events-none" />
+                                <MapPinIcon className="w-10 h-10 text-accent animate-bounce drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)] relative z-10" />
+                            </div>
+                        </MarkerContent>
+                    </MapMarker>
+                )}
+
+                {/* Route Line */}
+                {routeCoordinates && routeCoordinates.length > 0 && (
+                    <MapRoute 
+                        coordinates={routeCoordinates} 
+                        color="#FF6B35" 
+                        width={5} 
+                        opacity={0.8}
+                    />
+                )}
+
+                {/* User Location Marker (Blue Dot) */}
+                {userLocation && (
+                    <MapMarker
+                        longitude={userLocation[1]}
+                        latitude={userLocation[0]}
+                        anchor="center"
+                    >
+                        <MarkerContent>
+                            <div className="relative">
+                                <div className="absolute -inset-2 bg-blue-500/30 rounded-full animate-ping" />
+                                <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-md relative z-10" />
+                            </div>
+                        </MarkerContent>
+                    </MapMarker>
                 )}
             </Map>
         </div>
     )
 }
+
+

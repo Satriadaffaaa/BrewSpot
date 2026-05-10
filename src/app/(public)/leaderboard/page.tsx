@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
     return (
         <Container className="py-12 max-w-4xl mx-auto">
             <div className="text-center mb-10">
-                <h1 className="text-4xl font-heading font-bold text-neutral-900 mb-2">
+                <h1 className="text-4xl font-heading font-bold text-primary mb-2">
                     Community Leaderboard
                 </h1>
                 <p className="text-neutral/60">
@@ -55,8 +55,8 @@ export default function LeaderboardPage() {
                     <button
                         onClick={() => setActiveTab('explorers')}
                         className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'explorers'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-neutral/60 hover:text-neutral-800'
+                                ? 'bg-surface text-primary shadow-sm'
+                                : 'text-neutral/60 hover:text-primary'
                             }`}
                     >
                         <MapIcon className="w-5 h-5" />
@@ -65,8 +65,8 @@ export default function LeaderboardPage() {
                     <button
                         onClick={() => setActiveTab('contributors')}
                         className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'contributors'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-neutral/60 hover:text-neutral-800'
+                                ? 'bg-surface text-primary shadow-sm'
+                                : 'text-neutral/60 hover:text-primary'
                             }`}
                     >
                         <StarIcon className="w-5 h-5" />
@@ -99,3 +99,4 @@ export default function LeaderboardPage() {
         </Container>
     )
 }
+

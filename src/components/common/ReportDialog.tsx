@@ -76,12 +76,12 @@ export function ReportDialog({ isOpen, onClose, targetType, targetId, targetName
 
             {/* Full-screen container to center the panel */}
             <div className="fixed inset-0 flex items-center justify-center p-4">
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-surface p-6 text-left align-middle shadow-xl transition-all">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-2 bg-red-100 rounded-full text-red-600">
                             <ExclamationTriangleIcon className="w-6 h-6" />
                         </div>
-                        <Dialog.Title as="h3" className="text-lg font-bold font-heading text-gray-900">
+                        <Dialog.Title as="h3" className="text-lg font-bold font-heading text-primary">
                             Report {targetType === 'brewspot' ? 'Place' : targetType === 'user' ? 'User' : 'Content'}
                         </Dialog.Title>
                     </div>
@@ -134,3 +134,4 @@ export function ReportDialog({ isOpen, onClose, targetType, targetId, targetName
         </Dialog>
     )
 }
+

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, ReactNode } from 'react'
+import { useState, useRef, useEffect, ReactNode, isValidElement, cloneElement } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/cn'
 
@@ -37,17 +37,31 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
 
     return (
         <div className="relative" ref={dropdownRef}>
-            <div
-                onClick={() => setIsOpen(!isOpen)}
-                className="cursor-pointer"
-            >
-                {trigger}
-            </div>
+            {isValidElement(trigger) ? cloneElement(trigger as React.ReactElement<any>, {
+                onClick: (e: any) => {
+                    setIsOpen(!isOpen)
+                    if ((trigger as React.ReactElement<any>).props.onClick) {
+                        (trigger as React.ReactElement<any>).props.onClick(e)
+                    }
+                },
+                'aria-expanded': isOpen,
+                'aria-haspopup': "true"
+            }) : (
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="cursor-pointer appearance-none bg-transparent border-none p-0 focus:outline-none"
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                >
+                    {trigger}
+                </button>
+            )}
 
             {isOpen && (
                 <div
                     className={cn(
-                        "absolute z-50 mt-2 w-48 rounded-md bg-white py-1 shadow-lg border border-gray-100 focus:outline-none",
+                        "absolute z-50 mt-2 w-48 rounded-md bg-surface py-1 shadow-lg border border-border focus:outline-none",
                         align === 'right' ? "right-0" : "left-0"
                     )}
                 >
@@ -95,3 +109,4 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
         </div>
     )
 }
+

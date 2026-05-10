@@ -67,13 +67,13 @@ export const UserVisitHistory = ({ userId }: UserVisitHistoryProps) => {
             </h3>
             <div className="space-y-3">
                 {stats.topSpots.slice(0, 5).map((spot, index) => (
-                    <Link href={`/brewspot/${spot.brewSpotId}`} key={spot.brewSpotId} className="block">
+                    <Link href={`/spot/${spot.brewSpotId}`} key={spot.brewSpotId} className="block">
                         <div className="flex items-center justify-between p-2 rounded-lg hover:bg-neutral/5 transition-colors group">
                             <div className="flex items-center gap-3">
                                 <MapPinIcon className="w-5 h-5 text-neutral/40 group-hover:text-primary transition-colors" />
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-medium text-neutral-800 group-hover:text-primary transition-colors">
-                                        {spotNames[spot.brewSpotId] || `BrewSpot ${spot.brewSpotId.slice(0, 6)}...`}
+                                    <span className="text-sm font-medium text-primary group-hover:text-primary transition-colors">
+                                        {spotNames[spot.brewSpotId] || `Spot ${spot.brewSpotId.slice(0, 6)}...`}
                                     </span>
                                     <span className="text-xs text-neutral/50">
                                         Last visited: {spot.lastVisit.toDate().toLocaleDateString()}
@@ -90,3 +90,4 @@ export const UserVisitHistory = ({ userId }: UserVisitHistoryProps) => {
         </Card>
     )
 }
+

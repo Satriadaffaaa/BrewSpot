@@ -84,9 +84,9 @@ export function SocialVideoEmbed({ url, className = "" }: SocialVideoEmbedProps)
                 href={embed.src}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors text-primary font-medium w-full ${className}`}
+                className={`flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-border hover:bg-gray-100 transition-colors text-primary font-medium w-full ${className}`}
             >
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center shadow-sm">
                     <PlayIcon className="w-4 h-4 text-primary" />
                 </div>
                 <div className="flex flex-col">
@@ -104,14 +104,14 @@ export function SocialVideoEmbed({ url, className = "" }: SocialVideoEmbedProps)
     if (!isPlaying) {
         return (
             <div
-                className={`relative bg-black/5 rounded-xl border border-gray-100 overflow-hidden cursor-pointer group flex items-center justify-center ${aspectRatioClass} ${className}`}
+                className={`relative bg-black/5 rounded-xl border border-border overflow-hidden cursor-pointer group flex items-center justify-center ${aspectRatioClass} ${className}`}
                 onClick={() => setIsPlaying(true)}
             >
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-surface rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                     <PlayIcon className="w-6 h-6 text-primary ml-1" />
                 </div>
-                <span className="absolute bottom-3 text-xs font-medium text-gray-500 bg-white/80 px-2 py-1 rounded backdrop-blur-sm">
+                <span className="absolute bottom-3 text-xs font-medium text-gray-500 bg-surface/80 px-2 py-1 rounded backdrop-blur-sm">
                     Click to Play Video
                 </span>
             </div>
@@ -119,7 +119,7 @@ export function SocialVideoEmbed({ url, className = "" }: SocialVideoEmbedProps)
     }
 
     return (
-        <div className={`rounded-xl overflow-hidden bg-black border border-gray-100 ${aspectRatioClass} ${className}`}>
+        <div className={`rounded-xl overflow-hidden bg-black border border-border ${aspectRatioClass} ${className}`}>
             <iframe
                 src={embed.src}
                 className="w-full h-full"
@@ -129,3 +129,4 @@ export function SocialVideoEmbed({ url, className = "" }: SocialVideoEmbedProps)
         </div>
     )
 }
+

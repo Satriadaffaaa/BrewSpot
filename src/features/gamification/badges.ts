@@ -54,35 +54,35 @@ export const BADGE_DEFINITIONS: Record<string, Badge> = {
     'first_approved_spot': {
         id: 'first_approved_spot',
         name: 'Pathfinder',
-        description: 'Had your first BrewSpot approved',
+        description: 'Had your first spot approved',
         icon: '🚩',
         category: 'contribution'
     },
     'five_approved_spots': {
         id: 'five_approved_spots',
         name: 'Cartographer',
-        description: 'Had 5 BrewSpots approved',
+        description: 'Had 5 spots approved',
         icon: '🗺️',
         category: 'contribution'
     },
     'ten_approved_spots': {
         id: 'ten_approved_spots',
         name: 'Explorer',
-        description: 'Had 10 BrewSpots approved',
+        description: 'Had 10 spots approved',
         icon: '🔭',
         category: 'contribution'
     },
     'twenty_five_approved_spots': {
         id: 'twenty_five_approved_spots',
         name: 'Pioneer',
-        description: 'Had 25 BrewSpots approved',
+        description: 'Had 25 spots approved',
         icon: '🚀',
         category: 'contribution'
     },
     'fifty_approved_spots': {
         id: 'fifty_approved_spots',
         name: 'Founder',
-        description: 'Had 50 BrewSpots approved',
+        description: 'Had 50 spots approved',
         icon: '🏛️',
         category: 'contribution'
     },

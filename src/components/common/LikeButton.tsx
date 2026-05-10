@@ -40,7 +40,7 @@ export function LikeButton({ brewspotId, initialLiked = false }: LikeButtonProps
             onClick={handleToggle}
             className={`flex items-center gap-2 px-3 py-2 sm:px-4 rounded-full border transition-all ${liked
                 ? 'bg-red-50 border-red-200 text-red-500'
-                : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                : 'bg-surface border-border text-gray-500 hover:bg-gray-50'
                 }`}
         >
             <div className={animate ? 'animate-ping duration-300' : ''}>
@@ -57,3 +57,4 @@ export function LikeButton({ brewspotId, initialLiked = false }: LikeButtonProps
         </button>
     )
 }
+

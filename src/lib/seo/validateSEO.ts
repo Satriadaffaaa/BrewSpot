@@ -24,13 +24,13 @@ export function getSafeSEOMetadata(spot: BrewSpot): SEOMetadata {
     const validation = validateSEO(spot);
 
     // Default / Fallback
-    const title = spot.name ? `${spot.name} - BrewSpot` : 'Local Coffee Shop - BrewSpot';
+    const title = spot.name ? `${spot.name} - Lokali` : 'Local Spot - Lokali';
     const description = spot.description
         ? spot.description.substring(0, 160)
-        : `Discover amazing coffee at ${spot.name || 'this spot'} in ${spot.city || 'your area'}.`;
+        : `Temukan spot keren di ${spot.name || 'tempat ini'} di ${spot.city || 'sekitarmu'}.`;
     const image = (spot.photos && spot.photos.length > 0)
         ? spot.photos[0]
-        : 'https://brewspot.app/og-default.jpg'; // Placeholder
+        : 'https://lokali.id/og-default.jpg'; // Placeholder
 
     return { title, description, image };
 }

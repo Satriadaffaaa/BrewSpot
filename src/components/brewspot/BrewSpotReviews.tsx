@@ -42,7 +42,7 @@ export function BrewSpotReviews({ brewspotId, brewspotName }: BrewSpotReviewsPro
         <div className="space-y-8" id="reviews">
             <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold font-heading text-primary">
-                    Reviews ({reviews.length})
+                    Ulasan ({reviews.length})
                 </h2>
                 {user && !userReview && !showForm && (
                     <Button onClick={() => setShowForm(true)} variant="outline">
@@ -54,7 +54,7 @@ export function BrewSpotReviews({ brewspotId, brewspotName }: BrewSpotReviewsPro
             {/* Error State */}
             {error && (
                 <div className="p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
-                    <p className="font-bold mb-1">Error fetching reviews</p>
+                    <p className="font-bold mb-1">Gagal mengambil ulasan</p>
                     <p className="text-sm">{error}</p>
                     <p className="text-xs mt-2 text-red-500">Ensure Firestore Index exists for 'reviews' collection.</p>
                 </div>

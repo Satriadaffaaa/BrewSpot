@@ -81,7 +81,7 @@ export function RegisterForm() {
   if (success) {
     return (
       <Card className="w-full max-w-md p-8 shadow-lg text-center">
-        <h1 className="text-2xl font-bold font-heading text-primary mb-4">Welcome to BrewSpot!</h1>
+        <h1 className="text-2xl font-bold font-heading text-primary mb-4">Welcome to Lokali!</h1>
         <p className="text-neutral mb-6">{success}</p>
         <Link href="/login">
           <Button className="w-full">Go to Login</Button>
@@ -93,8 +93,8 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-md p-8 md:p-10 shadow-card border-none bg-surface/80 backdrop-blur-sm mx-auto animate-fade-in-up">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold font-heading text-primary">Join BrewSpot</h1>
-        <p className="text-neutral/60 mt-2">Start discovering amazing coffee spots</p>
+        <h1 className="text-3xl font-bold font-heading text-primary">Join Lokali</h1>
+        <p className="text-neutral/60 mt-2">Mulai temukan tempat-tempat hits di sekitarmu</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

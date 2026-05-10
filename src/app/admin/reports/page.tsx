@@ -33,7 +33,7 @@ export default function AdminReportsPage() {
                 text: 'Failed to load reports',
                 customClass: {
                     popup: 'rounded-3xl shadow-2xl border border-neutral-100',
-                    title: 'text-2xl font-bold font-heading text-neutral-800'
+                    title: 'text-2xl font-bold font-heading text-primary'
                 }
             })
         } finally {
@@ -56,7 +56,7 @@ export default function AdminReportsPage() {
                 confirmButton: `px-6 py-3 rounded-xl font-bold text-white shadow-lg transition-transform active:scale-95 mx-2 ${status === 'reviewed' ? 'bg-green-600 hover:bg-green-700' : 'bg-neutral-500 hover:bg-neutral-600'}`,
                 cancelButton: 'px-6 py-3 rounded-xl font-bold text-neutral-500 bg-neutral-100 hover:bg-neutral-200 transition-transform active:scale-95 mx-2',
                 popup: 'rounded-3xl shadow-2xl border border-neutral-100',
-                title: 'text-2xl font-bold font-heading text-neutral-800',
+                title: 'text-2xl font-bold font-heading text-primary',
                 input: 'rounded-xl border-neutral-300 focus:ring-primary focus:border-primary mt-4'
             }
         })
@@ -86,7 +86,7 @@ export default function AdminReportsPage() {
         <div className="space-y-8 animate-fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold font-heading text-neutral-800">Content Reports</h1>
+                    <h1 className="text-3xl font-bold font-heading text-primary">Content Reports</h1>
                     <p className="text-neutral-500 mt-1">Review and manage user-reported content violations</p>
                 </div>
 
@@ -96,8 +96,8 @@ export default function AdminReportsPage() {
                             key={status}
                             onClick={() => setFilter(status)}
                             className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${filter === status
-                                ? 'bg-white text-primary shadow-sm ring-1 ring-black/5'
-                                : 'text-neutral-500 hover:text-neutral-700 hover:bg-neutral-200/50'
+                                ? 'bg-surface text-primary shadow-sm ring-1 ring-black/5'
+                                : 'text-neutral-500 hover:text-neutral/70 hover:bg-neutral-200/50'
                                 }`}
                         >
                             {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -108,20 +108,20 @@ export default function AdminReportsPage() {
 
             {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3].map(i => <div key={i} className="h-64 bg-white rounded-3xl animate-pulse shadow-sm border border-neutral-100" />)}
+                    {[1, 2, 3].map(i => <div key={i} className="h-64 bg-surface rounded-3xl animate-pulse shadow-sm border border-neutral-100" />)}
                 </div>
             ) : reports.length === 0 ? (
-                <div className="rounded-3xl bg-white p-16 text-center border-2 border-dashed border-neutral-200">
+                <div className="rounded-3xl bg-surface p-16 text-center border-2 border-dashed border-border">
                     <div className="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <CheckCircleIcon className="w-8 h-8" />
                     </div>
-                    <h3 className="text-xl font-bold text-neutral-800">All clear!</h3>
+                    <h3 className="text-xl font-bold text-primary">All clear!</h3>
                     <p className="text-neutral-500 max-w-sm mx-auto mt-2">No reports found for the selected filter. The community is looking safe.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-6">
                     {reports.map((report) => (
-                        <div key={report.id} className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm border border-neutral-100 hover:shadow-lg transition-all duration-300">
+                        <div key={report.id} className="group relative overflow-hidden rounded-2xl bg-surface p-6 shadow-sm border border-neutral-100 hover:shadow-lg transition-all duration-300">
                             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
 
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pl-4">
@@ -137,7 +137,7 @@ export default function AdminReportsPage() {
                                     </div>
 
                                     <div>
-                                        <h3 className="text-lg font-bold text-neutral-900 group-hover:text-primary transition-colors">
+                                        <h3 className="text-lg font-bold text-primary group-hover:text-primary transition-colors">
                                             {getReasonLabel(report.reason)}
                                         </h3>
                                         <p className="text-neutral-600 mt-2 text-sm leading-relaxed bg-neutral-50 p-3 rounded-lg border border-neutral-100 inline-block max-w-3xl">
@@ -150,7 +150,7 @@ export default function AdminReportsPage() {
                                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                                     <Link
                                         href={
-                                            report.targetType === 'brewspot' ? `/brewspot/${report.targetId}` :
+                                            report.targetType === 'brewspot' ? `/spot/${report.targetId}` :
                                                 report.targetType === 'user' ? `/admin/users/${report.targetId}` :
                                                     `/admin/reviews?id=${report.targetId}`
                                         }
@@ -171,7 +171,7 @@ export default function AdminReportsPage() {
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => handleResolve(report.id, 'dismissed')}
-                                            className="px-4 py-2 text-sm font-bold text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors flex items-center"
+                                            className="px-4 py-2 text-sm font-bold text-neutral-500 hover:text-neutral/70 hover:bg-neutral-100 rounded-lg transition-colors flex items-center"
                                         >
                                             <XCircleIcon className="w-4 h-4 mr-2" />
                                             Dismiss
@@ -193,3 +193,4 @@ export default function AdminReportsPage() {
         </div>
     )
 }
+

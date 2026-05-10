@@ -10,10 +10,10 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, endIcon, ...props }, ref) => {
     return (
-      <div className="w-full space-y-2">
+      <div className="w-full space-y-2.5 group">
         {label && (
           <label
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-neutral"
+            className="text-xs font-black uppercase tracking-[0.2em] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-neutral-light group-focus-within:text-accent transition-colors"
             htmlFor={props.id}
           >
             {label}
@@ -22,21 +22,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           <input
             className={cn(
-              'flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-all',
-              error && 'border-red-500 focus:ring-red-500',
-              endIcon && 'pr-10',
+              'flex h-14 w-full rounded-2xl border border-neutral/5 bg-secondary/30 px-5 py-3 text-sm font-medium placeholder:text-neutral-light/50 outline-none ring-2 ring-transparent focus:ring-accent/20 focus:border-accent/50 focus:bg-surface disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 shadow-sm',
+              error && 'border-danger/50 focus:ring-danger/20',
+              endIcon && 'pr-12',
               className
             )}
             ref={ref}
             {...props}
           />
           {endIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-light group-focus-within:text-accent transition-colors">
               {endIcon}
             </div>
           )}
         </div>
-        {error && <p className="text-xs text-red-500">{error}</p>}
+        {error && <p className="text-[10px] font-bold uppercase tracking-widest text-danger animate-in fade-in slide-in-from-top-1">{error}</p>}
       </div>
     )
   }
@@ -44,3 +44,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = 'Input'
 
 export { Input }
+

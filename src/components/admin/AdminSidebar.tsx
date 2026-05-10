@@ -1,18 +1,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeIcon, ClipboardDocumentCheckIcon, ChatBubbleLeftRightIcon, UserGroupIcon, ExclamationTriangleIcon, SparklesIcon, ChartBarIcon, CpuChipIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ClipboardDocumentCheckIcon, ChatBubbleLeftRightIcon, UserGroupIcon, ExclamationTriangleIcon, ChartBarIcon, CpuChipIcon, XMarkIcon, KeyIcon, IdentificationIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils/cn';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { Fragment } from 'react';
+import { LokaliLogo } from '@/components/ui/LokaliLogo';
 
 const navigation = [
     { name: 'Dashboard', href: '/admin', icon: HomeIcon },
-    { name: 'Pending Reviews', href: '/admin/brewspots', icon: ClipboardDocumentCheckIcon },
-    { name: 'Reviews', href: '/admin/reviews', icon: ChatBubbleLeftRightIcon },
-    { name: 'Reports', href: '/admin/reports', icon: ExclamationTriangleIcon },
-    { name: 'Users', href: '/admin/users', icon: UserGroupIcon },
-    { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
-    { name: 'AI Tools', href: '/admin/ai-tools', icon: CpuChipIcon },
+    { name: 'Persetujuan Spot', href: '/admin/spots', icon: ClipboardDocumentCheckIcon },
+    { name: 'Klaim Hak Kelola', href: '/admin/claims', icon: KeyIcon },
+    { name: 'Verifikasi Owner', href: '/admin/verifications', icon: IdentificationIcon },
+    { name: 'Review', href: '/admin/reviews', icon: ChatBubbleLeftRightIcon },
+    { name: 'Laporan', href: '/admin/reports', icon: ExclamationTriangleIcon },
+    { name: 'Pengguna', href: '/admin/users', icon: UserGroupIcon },
+    { name: 'Analitik', href: '/admin/analytics', icon: ChartBarIcon },
+    { name: 'Alat AI', href: '/admin/ai-tools', icon: CpuChipIcon },
 ];
 
 interface AdminSidebarProps {
@@ -24,19 +27,20 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
     const pathname = usePathname();
 
     const NavContent = () => (
-        <>
-            {/* Logo Area */}
-            <div className="flex items-center h-16 flex-shrink-0 px-6 bg-black/20 backdrop-blur-sm border-b border-white/5 mx-4 mt-4 rounded-2xl mb-4">
-                <SparklesIcon className="w-8 h-8 text-secondary mr-3" />
-                <div className="flex flex-col">
-                    <span className="text-xl font-bold font-heading text-secondary tracking-tight">BrewSpot</span>
-                    <span className="text-xs text-secondary/60 uppercase tracking-widest font-medium">Administration</span>
+        <div className="flex flex-col h-full bg-[#1a1a2e] overflow-hidden">
+            {/* Logo Area - Refined & Branded */}
+            <div className="flex items-center h-28 flex-shrink-0 px-8">
+                <LokaliLogo size="md" theme="dark" />
+                <div className="ml-4 flex flex-col">
+                    <div className="px-2 py-0.5 bg-[#E8A87C]/20 rounded-md">
+                        <span className="text-[10px] text-[#E8A87C] uppercase font-black tracking-[0.2em]">Admin</span>
+                    </div>
                 </div>
             </div>
 
             {/* Navigation */}
-            <div className="flex-1 flex flex-col overflow-y-auto px-4">
-                <nav className="flex-1 space-y-2">
+            <div className="flex-1 flex flex-col overflow-y-auto px-4 pb-4">
+                <nav className="flex-1 space-y-1.5">
                     {navigation.map((item) => {
                         const isActive = item.href === '/admin'
                             ? pathname === '/admin'
@@ -47,30 +51,39 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                                 href={item.href}
                                 className={cn(
                                     isActive
-                                        ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/20'
-                                        : 'text-secondary/60 hover:bg-white/5 hover:text-white',
-                                    'group flex items-center px-4 py-3.5 text-sm font-medium rounded-xl transition-all duration-200 ease-in-out'
+                                        ? 'bg-surface/10 text-[#F5E6D3] shadow-sm ring-1 ring-white/10'
+                                        : 'text-[#8B5E3C] hover:bg-surface/5 hover:text-[#F5E6D3]',
+                                    'group flex items-center px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 ease-in-out'
                                 )}
                             >
                                 <item.icon
                                     className={cn(
-                                        isActive ? 'text-white' : 'text-secondary/50 group-hover:text-white',
-                                        'mr-3 flex-shrink-0 h-5 w-5 transition-colors duration-200'
+                                        isActive ? 'text-[#E8A87C]' : 'text-[#8B5E3C]/60 group-hover:text-[#E8A87C]',
+                                        'mr-4 flex-shrink-0 h-5 w-5 transition-colors duration-300'
                                     )}
                                     aria-hidden="true"
                                 />
-                                {item.name}
+                                <span className="tracking-wide">{item.name}</span>
+                                {isActive && (
+                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_12px_rgba(255,107,53,0.8)]" />
+                                )}
                             </Link>
                         )
                     })}
                 </nav>
             </div>
 
-            {/* Footer / Version */}
-            <div className="p-6 border-t border-white/5 bg-black/10 mx-4 mb-4 rounded-2xl mt-auto">
-                <p className="text-xs text-secondary/40 text-center font-mono">v1.2.0 &bull; Secure Mode</p>
+            {/* Footer / Version - Clean & Premium */}
+            <div className="p-8 border-t border-white/5 mt-auto bg-black/20">
+                <div className="flex items-center justify-between opacity-40 hover:opacity-80 transition-opacity duration-300">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">v1.2.0</p>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Mode Aman</span>
+                    </div>
+                </div>
             </div>
-        </>
+        </div>
     );
 
     return (
@@ -87,7 +100,7 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-gray-900/80" />
+                        <div className="fixed inset-0 bg-secondary/80 backdrop-blur-sm" />
                     </TransitionChild>
 
                     <div className="fixed inset-0 flex">
@@ -100,7 +113,7 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                             leaveFrom="translate-x-0"
                             leaveTo="-translate-x-full"
                         >
-                            <DialogPanel className="relative mr-16 flex w-full max-w-xs flex-1 flex-col bg-neutral-900/95 backdrop-blur-xl text-secondary/90 border-r border-white/10">
+                            <DialogPanel className="relative flex w-full max-w-xs flex-1 flex-col bg-secondary shadow-2xl border-r border-white/5">
                                 <TransitionChild
                                     as={Fragment}
                                     enter="ease-in-out duration-300"
@@ -110,8 +123,8 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                                        <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen?.(false)}>
+                                    <div className="absolute right-0 top-0 -mr-12 pt-6">
+                                        <button type="button" className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" onClick={() => setSidebarOpen?.(false)}>
                                             <span className="sr-only">Close sidebar</span>
                                             <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                                         </button>
@@ -125,9 +138,10 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
             </Transition>
 
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex md:w-72 md:flex-col fixed inset-y-0 z-50 bg-neutral-900 text-secondary/90 border-r border-white/5 shadow-2xl">
+            <aside className="hidden md:flex md:w-80 md:flex-col fixed inset-y-0 z-50 shadow-2xl border-r border-white/5">
                 <NavContent />
             </aside>
         </>
     );
 }
+

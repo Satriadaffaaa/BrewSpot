@@ -136,7 +136,7 @@ export async function executeAISafe<T>(request: AIRequest): Promise<AIResult<T>>
  */
 export async function generateTagsFromText(description: string, existingTags: string[] = []): Promise<string[]> {
     const prompt = `
-        Analyze the following coffee shop description and suggest 5-8 relevant tags like "Cozy", "WiFi", "Outdoor", "Specialty Coffee".
+        Analyze the following local spot description and suggest 5-8 relevant tags like "Cozy", "WiFi", "Outdoor", "Instagrammable".
         Return ONLY a JSON object: { "tags": ["Tag1", "Tag2"] }
         
         Description: "${description}"
@@ -171,7 +171,7 @@ export async function generateTagsFromReviews(description: string, reviews: stri
     `;
 
     const prompt = `
-        Based on the description and recent customer reviews, identify the top 5 most mentioned strengths or characteristics of this coffee shop.
+        Based on the description and recent customer reviews, identify the top 5 most mentioned strengths or characteristics of this local spot.
         Prioritize what users say in reviews (e.g. if many say "Noisy", add "Lively" or "Noisy" appropriately).
         Return ONLY a JSON object: { "tags": ["Tag1", "Tag2"] }
     `;

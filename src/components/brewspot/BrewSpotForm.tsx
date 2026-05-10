@@ -1,14 +1,17 @@
 'use client'
 
+import { PRICE_OPTIONS } from '@/utils/price'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Button } from '@/components/common/Button'
 import { Input } from '@/components/common/Input'
 import { Card } from '@/components/common/Card'
-import { AddBrewSpotInput, BrewSpot } from '@/features/brewspot/types'
-import { BREWSPOT_FACILITIES } from '@/features/brewspot/constants'
-import { MapPinIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { AddBrewSpotInput, BrewSpot, getCategoryOrDefault } from '@/features/brewspot/types'
+import { BREWSPOT_FACILITIES, CATEGORIZED_FACILITIES } from '@/features/brewspot/constants'
+import { MapPinIcon, PhotoIcon, XMarkIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { SPOT_CATEGORIES } from '@/features/brewspot/types'
 import { uploadToCloudinary } from '@/lib/cloudinary'
 import { SocialVideoEmbed } from '@/components/common/SocialVideoEmbed'
 
@@ -32,22 +35,24 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
     const [success, setSuccess] = useState(false)
 
     const [formData, setFormData] = useState<AddBrewSpotInput>({
-        name: '',
-        address: '',
-        city: '',
-        latitude: 0,
-        longitude: 0,
-        price_range: 'moderate',
-        facilities: [],
-        photos: [], // URLs
-        description: '',
-        tags: [],
-        videoUrl: '',
+        name: initialData?.name || '',
+        address: initialData?.address || '',
+        city: initialData?.city || '',
+        latitude: initialData?.latitude || 0,
+        longitude: initialData?.longitude || 0,
+        price_range: initialData?.price_range || 'moderate',
+        facilities: initialData?.facilities || [],
+        photos: initialData?.photos || [],
+        description: initialData?.description || '',
+        tags: initialData?.tags || [],
+        videoUrl: initialData?.videoUrl || '',
+        category: getCategoryOrDefault(initialData || { category: 'cafe' }),
         ...initialData
     })
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [previewUrls, setPreviewUrls] = useState<string[]>([])
+
 
     // Temporary container for location until user confirms
     const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(
@@ -77,13 +82,26 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
     const fetchAddress = async (lat: number, lng: number) => {
         setIsFetchingAddress(true)
         try {
+            // Using a specific User-Agent as required by Nominatim usage policy
             const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+                {
+                    headers: {
+                        'User-Agent': 'Lokali-App/1.0 (https://lokali.web.app)'
+                    }
+                }
             )
             const data = await response.json()
 
             if (data && data.address) {
-                const city = data.address.city || data.address.town || data.address.village || data.address.county || ''
+                // Better city detection for Indonesian structure
+                const city = data.address.city || 
+                             data.address.town || 
+                             data.address.village || 
+                             data.address.city_district ||
+                             data.address.county || 
+                             ''
+                
                 const fullAddress = data.display_name
 
                 setFormData(prev => ({
@@ -94,12 +112,10 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     longitude: lng
                 }))
             } else {
-                // Fallback if no address found
                 setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }))
             }
         } catch (error) {
             console.error("Error fetching address:", error)
-            // Still update coordinates on error
             setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }))
         } finally {
             setIsFetchingAddress(false)
@@ -139,6 +155,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
             setPreviewUrls(prev => [...prev, ...newPreviews])
         }
     }
+
 
     const removeFile = (index: number) => {
         const totalExisting = initialData?.photos?.length || 0;
@@ -230,7 +247,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                 <div>
                     <h2 className="text-2xl font-bold font-heading text-primary mb-2">Terima Kasih!</h2>
                     <p className="text-lg text-neutral/80">
-                        BrewSpot yang kamu tambahkan akan ditinjau admin sebelum tampil ke publik.
+                        Lokasi yang kamu tambahkan akan ditinjau admin sebelum tampil ke publik.
                     </p>
                     <p className="text-sm text-neutral/50 mt-4">
                         Mengalihkan ke halaman Explore dalam 5 detik...
@@ -243,127 +260,284 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
         )
     }
 
-    // Helper to apply one day's schedule to all days
-    const applyToAll = (sourceDaySchedule: { isOpen: boolean; openTime: string; closeTime: string }) => {
-        const newHours: any = { ...formData.weekly_hours };
-        (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).forEach(d => {
-            newHours[d] = { ...sourceDaySchedule };
-        });
-        setFormData(prev => ({ ...prev, weekly_hours: newHours }));
-    };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <form onSubmit={handleSubmit} className="space-y-6 min-w-0">
+        <div className="max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Step 1: Category Selection */}
+                <Card className="p-6 border-b-4" style={{ borderBottomColor: SPOT_CATEGORIES[formData.category || 'cafe'].color }}>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-heading font-bold text-primary">
+                            Langkah 1: Pilih Kategori
+                        </h2>
+                        <span className="text-xs font-bold px-2 py-1 bg-primary/5 text-primary rounded-full uppercase tracking-wider">Wajib</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {(Object.entries(SPOT_CATEGORIES) as [any, typeof SPOT_CATEGORIES['cafe']][]).map(([key, data]) => {
+                            const isSelected = formData.category === key
+                            return (
+                                <button
+                                    key={key}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, category: key })}
+                                    className={`relative p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-3 group ${
+                                        isSelected
+                                            ? 'bg-primary/5 border-primary shadow-md ring-4 ring-primary/10'
+                                            : 'bg-surface border-border hover:border-primary/30 hover:shadow-sm'
+                                    }`}
+                                >
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-3xl transition-transform group-hover:scale-110 ${isSelected ? 'bg-primary text-white' : 'bg-gray-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
+                                        {data.icon}
+                                    </div>
+                                    <span className={`text-xs font-bold text-center leading-tight ${isSelected ? 'text-primary' : 'text-gray-500'}`}>
+                                        {data.label}
+                                    </span>
+                                    {isSelected && (
+                                        <div className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full animate-pulse" />
+                                    )}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </Card>
+
                 <Card className="p-6">
-                    <h2 className="text-xl font-heading font-bold mb-4 text-primary">
-                        {mode === 'create' ? 'Details' : 'Edit Details'}
-                    </h2>
-                    <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-6 border-b border-border pb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                            <MapPinIcon className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 flex items-center justify-between">
+                            <h2 className="text-xl font-heading font-bold text-primary">
+                                Langkah 2: Lokasi
+                            </h2>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleGeolocation}
+                                className="hidden sm:flex"
+                            >
+                                <MapPinIcon className="w-4 h-4 mr-1" />
+                                Gunakan Lokasi Saya
+                            </Button>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                            <div className="md:col-span-4">
+                                <Input
+                                    label="Kota"
+                                    value={formData.city}
+                                    onChange={e => setFormData({ ...formData, city: e.target.value })}
+                                    required
+                                    placeholder="misal: Jakarta Selatan"
+                                />
+                            </div>
+                            <div className="md:col-span-8 relative">
+                                <Input
+                                    label="Alamat"
+                                    value={formData.address}
+                                    onChange={e => setFormData({ ...formData, address: e.target.value })}
+                                    required
+                                    placeholder={isFetchingAddress ? "Mengambil alamat..." : "Alamat lengkap jalan"}
+                                    disabled={isFetchingAddress}
+                                />
+                                {isFetchingAddress && (
+                                    <div className="absolute right-3 top-[38px] w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="sm:hidden">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full"
+                                size="sm"
+                                onClick={handleGeolocation}
+                            >
+                                <MapPinIcon className="w-4 h-4 mr-1" />
+                                Gunakan Lokasi Saya
+                            </Button>
+                        </div>
+
+                        {/* Integrated Map */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-bold text-neutral">Verifikasi di Peta</label>
+                                <span className="text-[10px] text-neutral/40 font-bold uppercase tracking-widest">
+                                    Lat: {formData.latitude.toFixed(4)} • Lng: {formData.longitude.toFixed(4)}
+                                </span>
+                            </div>
+                            <div className="h-[300px] relative rounded-2xl overflow-hidden border border-border shadow-sm">
+                                <BrewSpotMap
+                                    spots={[]}
+                                    interactive={true}
+                                    selectedLocation={selectedLocation}
+                                    onLocationSelect={handleLocationSelect}
+                                    className="w-full h-full absolute inset-0"
+                                />
+                                {!selectedLocation && (
+                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[400] bg-surface/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg text-xs font-bold text-primary border border-primary/10 flex items-center gap-2">
+                                        <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
+                                        Ketuk peta untuk menandai lokasi
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-[10px] text-neutral/50 text-center italic">
+                                *Geser penanda jika lokasi kurang akurat.
+                            </p>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card className="p-6">
+                    <div className="flex items-center gap-2 mb-6 border-b border-border pb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                            </svg>
+                        </div>
+                        <h2 className="text-xl font-heading font-bold text-primary">
+                            Langkah 3: Detail & Klasifikasi
+                        </h2>
+                    </div>
+                    <div className="space-y-6">
                         <Input
-                            label="Name"
+                            label="Nama Tempat / Lokasi"
                             value={formData.name}
                             onChange={e => setFormData({ ...formData, name: e.target.value })}
                             required
-                            placeholder="e.g. Kopi Kenangan Mantan"
+                            placeholder="misal: Kopi Kenangan Mantan"
                         />
 
                         {/* Description / Founder's Note */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-neutral">Founder&apos;s Note / Description</label>
+                            <label className="text-sm font-medium text-neutral">Apa yang Spesial dari Tempat Ini? (Opsional)</label>
                             <textarea
-                                className="w-full min-h-[100px] rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                placeholder="Tell us what makes this spot special..."
+                                className="w-full min-h-[120px] rounded-xl border border-gray-300 bg-surface px-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder:text-gray-400"
+                                placeholder="Ceritakan suasana, menu jagoan, atau alasan kenapa orang harus ke sini..."
                                 value={formData.description}
                                 onChange={e => setFormData({ ...formData, description: e.target.value })}
                             />
                         </div>
 
-
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <Input
-                                label="City"
-                                value={formData.city}
-                                onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                required
-                                placeholder="e.g. Jakarta South"
-                            />
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-neutral">Price Range</label>
-                                <select
-                                    className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    value={formData.price_range}
-                                    onChange={e => setFormData({ ...formData, price_range: e.target.value as any })}
-                                >
-                                    <option value="cheap">Cheap ($)</option>
-                                    <option value="moderate">Moderate ($$)</option>
-                                    <option value="expensive">Expensive ($$$)</option>
-                                </select>
+                        <div className="space-y-3 pt-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-bold text-neutral">Rentang Harga</label>
+                                <span className="text-[10px] bg-neutral-100 text-neutral/60 px-2 py-0.5 rounded-full uppercase tracking-widest font-bold">Estimasi per orang</span>
                             </div>
-                        </div>
-                        <div className="relative">
-                            <Input
-                                label="Address"
-                                value={formData.address}
-                                onChange={e => setFormData({ ...formData, address: e.target.value })}
-                                required
-                                placeholder={isFetchingAddress ? "Fetching address..." : "Full street address"}
-                                disabled={isFetchingAddress}
-                            />
-                            {isFetchingAddress && (
-                                <div className="absolute right-3 top-[38px] w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                            )}
+                            
+                            <div className="flex p-1.5 bg-gray-50 rounded-2xl border border-border shadow-inner">
+                                {PRICE_OPTIONS.map((option, idx) => {
+                                    const isSelected = formData.price_range === option.value;
+                                    const symbols = ["$", "$$", "$$$"];
+                                    
+                                    return (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, price_range: option.value as any })}
+                                            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl transition-all duration-300 ${isSelected
+                                                ? 'bg-surface text-primary shadow-sm border border-border'
+                                                : 'text-neutral-500 hover:text-primary hover:bg-surface/50'
+                                                }`}
+                                        >
+                                            <span className={`text-xs font-black ${isSelected ? 'text-primary' : 'text-primary/40'}`}>
+                                                {symbols[idx]}
+                                            </span>
+                                            <div className="flex flex-col items-start">
+                                                <span className="text-xs font-bold leading-none">
+                                                    {option.label.split(' (')[0]}
+                                                </span>
+                                                <span className="text-[9px] opacity-60 leading-tight">
+                                                    {option.label.match(/\((.*?)\)/)?.[1] || ''}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         {/* Facilities */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-neutral">Facilities</label>
-                            <div className="flex flex-wrap gap-2">
-                                {BREWSPOT_FACILITIES.map(facility => (
-                                    <button
-                                        key={facility}
-                                        type="button"
-                                        onClick={() => {
-                                            setFormData(prev => {
-                                                const facilities = prev.facilities || [];
-                                                return {
-                                                    ...prev,
-                                                    facilities: facilities.includes(facility)
-                                                        ? facilities.filter(f => f !== facility)
-                                                        : [...facilities, facility]
-                                                };
-                                            });
-                                        }}
-                                        className={`px-3 py-1 text-sm rounded-full border transition-all ${formData.facilities?.includes(facility)
-                                            ? 'bg-primary text-white border-primary'
-                                            : 'bg-white text-gray-600 border-gray-200 hover:border-primary/50'
-                                            }`}
-                                    >
-                                        {facility}
-                                    </button>
+                        <div className="space-y-4 pt-4 border-t border-border">
+                            <label className="text-sm font-bold text-neutral flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
+                                <span>Pilih Fasilitas yang Tersedia</span>
+                            </label>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {Object.entries(CATEGORIZED_FACILITIES).map(([group, facilities]) => (
+                                    <div key={group} className="space-y-3 bg-gray-50/50 p-4 rounded-xl border border-border">
+                                        <h3 className="text-[10px] font-bold uppercase tracking-widest text-neutral/40 flex items-center gap-2">
+                                            <span className="w-1 h-1 bg-primary/40 rounded-full" />
+                                            {group}
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {facilities.map(facility => {
+                                                const isSelected = formData.facilities?.includes(facility)
+                                                return (
+                                                    <button
+                                                        key={facility}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setFormData(prev => {
+                                                                const current = prev.facilities || [];
+                                                                return {
+                                                                    ...prev,
+                                                                    facilities: current.includes(facility)
+                                                                        ? current.filter(f => f !== facility)
+                                                                        : [...current, facility]
+                                                                };
+                                                            });
+                                                        }}
+                                                        className={`px-3 py-1.5 text-[11px] font-medium rounded-lg border transition-all duration-200 flex items-center gap-1.5 ${isSelected
+                                                            ? 'bg-primary text-white border-primary shadow-sm scale-[1.02]'
+                                                            : 'bg-surface text-gray-500 border-border hover:border-primary/30 hover:text-primary hover:bg-primary/5'
+                                                            }`}
+                                                    >
+                                                        {isSelected ? (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                                                                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                                                            </svg>
+                                                        ) : (
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-gray-200" />
+                                                        )}
+                                                        {facility}
+                                                    </button>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </div>
-
-
                     </div>
                 </Card>
 
                 {/* Media Section (Photos & Video) */}
                 <Card className="p-6">
-                    <h2 className="text-xl font-heading font-bold mb-4 text-primary">Media</h2>
+                    <div className="flex items-center gap-2 mb-6 border-b border-border pb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                            <PhotoIcon className="w-5 h-5" />
+                        </div>
+                        <h2 className="text-xl font-heading font-bold text-primary">Langkah 4: Media Foto & Video</h2>
+                    </div>
                     <div className="space-y-6">
                         {/* Video Input */}
                         <div className="space-y-3">
                             <Input
-                                label="Social Media Video (Optional)"
+                                label="Video Media Sosial (Opsional)"
                                 value={formData.videoUrl || ''}
                                 onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
-                                placeholder="Paste link from TikTok, Instagram Reels, or YouTube"
+                                placeholder="Tempel link dari TikTok, Instagram Reels, atau YouTube"
                             />
                             {formData.videoUrl && (
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <div className="bg-gray-50 p-4 rounded-xl border border-border">
                                     <label className="text-xs font-medium text-gray-400 mb-2 block uppercase tracking-wider">Preview</label>
                                     <SocialVideoEmbed url={formData.videoUrl} />
                                 </div>
@@ -373,7 +547,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                         <div className="h-px bg-gray-100" />
 
                         <div className="space-y-4">
-                            <label className="text-sm font-medium text-neutral">Photos</label>
+                            <label className="text-sm font-medium text-neutral">Foto Lokasi</label>
                             <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
                                 <input
                                     type="file"
@@ -383,8 +557,8 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                 />
                                 <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                <p className="text-sm text-gray-500">Click to upload photos</p>
-                                <p className="text-xs text-gray-400 mt-1">JPG, PNG supported</p>
+                                <p className="text-sm text-gray-500">Klik untuk unggah foto</p>
+                                <p className="text-xs text-gray-400 mt-1">Mendukung format JPG, PNG</p>
                             </div>
 
                             {previewUrls.length > 0 && (
@@ -395,7 +569,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                                             <button
                                                 type="button"
                                                 onClick={() => removeFile(idx)}
-                                                className="absolute top-1 right-1 bg-white/90 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-red-500"
+                                                className="absolute top-1 right-1 bg-surface/90 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-red-500"
                                             >
                                                 <XMarkIcon className="w-4 h-4" />
                                             </button>
@@ -407,145 +581,21 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     </div>
                 </Card>
 
-                {/* Operational Hours Section */}
-                <Card className="p-4 sm:p-6 overflow-hidden">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-                        <h2 className="text-lg sm:text-xl font-heading font-bold text-primary">Operational Hours</h2>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                                const defaultSchedule = { isOpen: true, openTime: '08:00', closeTime: '22:00' };
-                                const newHours: any = {};
-                                (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).forEach(day => {
-                                    newHours[day] = { ...defaultSchedule };
-                                });
-                                setFormData(prev => ({ ...prev, weekly_hours: newHours }));
-                            }}
-                            className="self-start text-xs"
-                        >
-                            Set Standard (8AM - 10PM)
-                        </Button>
-                    </div>
 
-                    <div className="space-y-2">
-                        {(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const).map((day) => {
-                            const daySchedule = formData.weekly_hours?.[day] || { isOpen: false, openTime: '09:00', closeTime: '21:00' };
-
-                            return (
-                                <div
-                                    key={day}
-                                    className={`rounded-lg border p-3 transition-all ${daySchedule.isOpen ? 'bg-white border-gray-200 shadow-sm' : 'bg-gray-50/80 border-transparent'}`}
-                                >
-                                    {/* Row 1: Day name + toggle (always) */}
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="font-medium capitalize text-sm text-neutral-700">{day}</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                            <input
-                                                type="checkbox"
-                                                className="sr-only peer"
-                                                checked={daySchedule.isOpen}
-                                                onChange={(e) => {
-                                                    const newHours = { ...formData.weekly_hours };
-                                                    newHours[day] = { ...daySchedule, isOpen: e.target.checked };
-                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
-                                                }}
-                                            />
-                                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                                        </label>
-                                    </div>
-
-                                    {/* Row 2: Time inputs OR "Closed" label */}
-                                    {daySchedule.isOpen ? (
-                                        <div className="flex items-center gap-2">
-                                            <input
-                                                type="time"
-                                                value={daySchedule.openTime}
-                                                onChange={(e) => {
-                                                    const newHours = { ...formData.weekly_hours };
-                                                    newHours[day] = { ...daySchedule, openTime: e.target.value };
-                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
-                                                }}
-                                                className="flex-1 min-w-0 border border-gray-300 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none bg-white"
-                                            />
-                                            <span className="text-gray-400 text-xs shrink-0">–</span>
-                                            <input
-                                                type="time"
-                                                value={daySchedule.closeTime}
-                                                onChange={(e) => {
-                                                    const newHours = { ...formData.weekly_hours };
-                                                    newHours[day] = { ...daySchedule, closeTime: e.target.value };
-                                                    setFormData(prev => ({ ...prev, weekly_hours: newHours }));
-                                                }}
-                                                className="flex-1 min-w-0 border border-gray-300 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none bg-white"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => applyToAll(daySchedule)}
-                                                className="p-1.5 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-colors shrink-0"
-                                                title="Apply to all days"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs text-neutral/40 italic">Closed</span>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </Card>
-
-                <Button type="submit" className="w-full" isLoading={isLoading || uploading}>
-                    {uploading ? 'Uploading Photos...' : (mode === 'create' ? 'Submit for Approval' : 'Save Changes')}
+                <Button type="submit" className="w-full py-6 text-lg shadow-xl shadow-primary/20 rounded-2xl font-bold tracking-wide" isLoading={isLoading || uploading}>
+                    {uploading ? 'Sedang Mengunggah...' : (mode === 'create' ? 'Ajukan Lokasi Baru' : 'Simpan Perubahan')}
                 </Button>
 
                 {error && (
-                    <div className="p-3 bg-red-50 text-red-600 rounded-md text-sm">
+                    <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                        </svg>
                         {error}
                     </div>
                 )}
             </form>
-
-            <div className="space-y-4">
-                <Card className="p-6 h-full flex flex-col">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-heading font-bold text-primary">Location</h2>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={handleGeolocation}
-                        >
-                            <MapPinIcon className="w-4 h-4 mr-1" />
-                            Use My Location
-                        </Button>
-                    </div>
-
-                    <div className="flex-1 min-h-[300px] relative rounded-xl overflow-hidden border border-gray-200">
-                        <BrewSpotMap
-                            spots={[]} // No other spots needed here
-                            interactive={true}
-                            selectedLocation={selectedLocation}
-                            onLocationSelect={handleLocationSelect}
-                            className="w-full h-full absolute inset-0"
-                        />
-                        {!selectedLocation && (
-                            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[400] bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-sm text-xs font-medium text-neutral">
-                                Tap on map to select location
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="mt-4 text-xs text-neutral/50 text-center">
-                        Latitude: {formData.latitude.toFixed(6)}, Longitude: {formData.longitude.toFixed(6)}
-                    </div>
-                </Card>
-            </div>
         </div >
     )
 }
+

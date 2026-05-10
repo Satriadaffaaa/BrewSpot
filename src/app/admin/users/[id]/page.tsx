@@ -55,8 +55,8 @@ export default function AdminUserDetailPage() {
         const { value: reason } = await MySwal.fire({
             title: newStatus ? 'Grant Contributor Status?' : 'Revoke Contributor Status?',
             text: newStatus
-                ? "This user will be able to auto-approve BrewSpots. Please provide a reason."
-                : "This user will no longer be able to auto-approve BrewSpots.",
+                ? "This user will be able to auto-approve spots. Please provide a reason."
+                : "This user will no longer be able to auto-approve spots.",
             input: 'text',
             inputPlaceholder: 'Reason for override...',
             icon: 'warning',
@@ -207,7 +207,7 @@ export default function AdminUserDetailPage() {
                 </Card>
 
                 <Card className="p-6 border-l-4 border-purple-500">
-                    <h3 className="text-sm font-medium text-gray-500 uppercase">BrewSpot Approvals</h3>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase">Spot Approvals</h3>
                     <div className="mt-2 text-3xl font-bold text-gray-900">{user?.stats?.brewspotApproved || 0}</div>
                     <div className="text-sm text-red-500">Rejected: {user?.stats?.brewspotRejected || 0}</div>
                 </Card>
@@ -288,7 +288,7 @@ export default function AdminUserDetailPage() {
                                 </div>
                             </div>
                             <p className="text-xs text-gray-600 mb-4 leading-relaxed">
-                                Contributors are "Top Brewers" whose submissions are automatically approved.
+                                Contributors are "Top Explorers" whose submissions are automatically approved.
                             </p>
                             <Button
                                 size="sm"

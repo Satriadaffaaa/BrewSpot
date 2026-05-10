@@ -51,7 +51,7 @@ export async function addReview(brewspotId: string, input: ReviewInput, brewspot
 
             // Validate spot existence
             const spotSnap = await transaction.get(spotRef);
-            if (!spotSnap.exists()) throw new Error("BrewSpot not found");
+            if (!spotSnap.exists()) throw new Error("Spot not found");
 
             // READ FIRST: Validate User Stats & Limits
             const userSnap = await transaction.get(userRef);

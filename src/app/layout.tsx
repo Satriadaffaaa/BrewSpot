@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, Geist } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { BannedUserGuard } from "@/components/common/BannedUserGuard";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,8 +23,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "BrewSpot",
-  description: "Discover the best coffee spots.",
+  title: "Lokali | Spot Lokal, Cerita Nyata",
+  description: "Temukan UMKM pilihan, hidden gems terbaik, dan komunitas yang mencintai keaslian setiap tempat di sekitarmu. Dukung bisnis lokal, jelajahi cerita nyata.",
 };
 
 export default function RootLayout({
@@ -30,9 +33,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable, inter.variable, poppins.variable)} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${poppins.variable} antialiased bg-background text-neutral flex flex-col min-h-screen`}
+        className="antialiased bg-background text-neutral flex flex-col min-h-screen"
       >
         <AuthProvider>
           <BannedUserGuard>

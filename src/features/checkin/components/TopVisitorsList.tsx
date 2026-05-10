@@ -63,7 +63,7 @@ export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {
         return (
             <Card className="p-6 text-center text-neutral/60">
                 <TrophyIcon className="w-12 h-12 mx-auto mb-2 opacity-50 text-yellow-500" />
-                <p>Be the first to check in and become a Local Legend!</p>
+                <p>Jadi yang pertama check-in dan jadilah Legenda Lokal!</p>
             </Card>
         )
     }
@@ -72,7 +72,7 @@ export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {
         <Card className="p-6">
             <h3 className="text-lg font-bold font-heading mb-4 flex items-center gap-2">
                 <TrophyIcon className="w-5 h-5 text-yellow-500" />
-                Top Visitors (Local Legends)
+                Pengunjung Setia (Legenda Lokal)
             </h3>
             <div className="space-y-3">
                 {stats.topVisitors.slice(0, 5).map((visitor, index) => {
@@ -104,7 +104,7 @@ export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {
                                     </div>
 
                                     {/* Avatar */}
-                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 border border-gray-100">
+                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 border border-border">
                                         {photoURL ? (
                                             <img src={photoURL} alt={displayName} className="w-full h-full object-cover" />
                                         ) : (
@@ -116,16 +116,16 @@ export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-bold text-neutral-800">
+                                    <span className="text-sm font-bold text-primary">
                                         {displayName}
                                     </span>
                                     <span className="text-xs text-neutral/50">
-                                        Last visited: {visitor.lastVisit.toDate().toLocaleDateString()}
+                                        Kunjungan terakhir: {visitor.lastVisit.toDate().toLocaleDateString('id-ID')}
                                     </span>
                                 </div>
                             </div>
                             <div className="text-sm font-bold text-primary bg-primary/5 px-3 py-1 rounded-full">
-                                {visitor.count} visits
+                                {visitor.count} kunjungan
                             </div>
                         </div>
                     )
@@ -134,3 +134,4 @@ export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {
         </Card>
     )
 }
+

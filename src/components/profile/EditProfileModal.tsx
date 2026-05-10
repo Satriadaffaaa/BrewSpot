@@ -105,7 +105,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <DialogPanel
                     transition
-                    className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden transition duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 mx-4"
+                    className="w-full max-w-md bg-surface rounded-2xl shadow-xl overflow-hidden transition duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 mx-4"
                 >
                     <div className="flex items-center justify-between p-4 border-b">
                         <DialogTitle className="text-lg font-bold">Edit Profile</DialogTitle>
@@ -117,7 +117,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                     <form onSubmit={handleSubmit} className="p-6 space-y-6">
                         {/* Photo Upload */}
                         <div className="flex flex-col items-center gap-4">
-                            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-gray-100 shadow-inner group cursor-pointer"
+                            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-border shadow-inner group cursor-pointer"
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 {previewUrl ? (
@@ -174,3 +174,4 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
         </Dialog>
     );
 }
+

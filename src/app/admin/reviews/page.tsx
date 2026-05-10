@@ -78,26 +78,26 @@ export default function AdminReviewsPage() {
         <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold font-heading text-neutral-800">Review Moderation</h1>
+                    <h1 className="text-3xl font-bold font-heading text-primary">Review Moderation</h1>
                     <p className="text-neutral-500 mt-1">Manage public perception and hide inappropriate content</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-xl shadow-neutral-100/50 border border-neutral-100 overflow-hidden">
+            <div className="bg-surface rounded-3xl shadow-xl shadow-neutral-100/50 border border-neutral-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-neutral-100">
                         <thead className="bg-neutral-50/50">
                             <tr>
                                 <th scope="col" className="px-8 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Date</th>
                                 <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Author</th>
-                                <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">BrewSpot</th>
+                                <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Spot</th>
                                 <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Rating</th>
                                 <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Content</th>
                                 <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">Status</th>
                                 <th scope="col" className="relative px-6 py-5"><span className="sr-only">Actions</span></th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-neutral-100">
+                        <tbody className="bg-surface divide-y divide-neutral-100">
                             {isLoading ? (
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}>
@@ -124,7 +124,7 @@ export default function AdminReviewsPage() {
                                                     {review.userAvatar ? <img src={review.userAvatar} className="w-full h-full object-cover" /> : (review.userName?.[0] || 'U')}
                                                 </div>
                                                 <div className="ml-3">
-                                                    <div className="text-sm font-bold text-neutral-800">{review.userName}</div>
+                                                    <div className="text-sm font-bold text-primary">{review.userName}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -166,8 +166,8 @@ export default function AdminReviewsPage() {
                                             <button
                                                 onClick={() => handleToggleVisibility(review)}
                                                 className={`transition-colors flex items-center gap-2 ml-auto px-3 py-1.5 rounded-lg border shadow-sm ${review.isHidden
-                                                    ? 'bg-white border-neutral-200 text-neutral-600 hover:text-green-600 hover:border-green-200 hover:bg-green-50'
-                                                    : 'bg-white border-neutral-200 text-neutral-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50'
+                                                    ? 'bg-surface border-border text-neutral-600 hover:text-green-600 hover:border-green-200 hover:bg-green-50'
+                                                    : 'bg-surface border-border text-neutral-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50'
                                                     }`}
                                             >
                                                 {review.isHidden ? (
@@ -193,3 +193,4 @@ export default function AdminReviewsPage() {
         </div>
     )
 }
+

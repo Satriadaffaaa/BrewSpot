@@ -20,6 +20,7 @@ function mapToBrewSpot(id: string, data: any): BrewSpot {
         photos: data.photos || [],
         description: data.description || '',
         tags: data.tags || [],
+        menuUrl: data.menuUrl, // New
         user_id: data.createdBy || '',
         status: data.status,
         created_at: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
@@ -34,7 +35,14 @@ function mapToBrewSpot(id: string, data: any): BrewSpot {
         authorIsContributor: data.authorIsContributor,
         aiMeta: data.aiMeta,
         ai_summary: data.ai_summary,
-        videoUrl: data.videoUrl
+        videoUrl: data.videoUrl,
+        
+        // Ownership & Verification
+        ownerId: data.ownerId || null,
+        isOfficial: data.isOfficial || false,
+        verificationStatus: data.verificationStatus || 'unclaimed',
+        officialMenuUrl: data.officialMenuUrl || null,
+        officialPhotos: data.officialPhotos || []
     }
 }
 
@@ -54,7 +62,7 @@ export async function getBrewSpotById(id: string): Promise<BrewSpot> {
     const snap = await getDoc(docRef);
 
     if (!snap.exists()) {
-        throw new Error('BrewSpot not found');
+        throw new Error('Spot not found');
     }
 
     const data = snap.data();
@@ -85,7 +93,7 @@ export async function getBrewSpotById(id: string): Promise<BrewSpot> {
 export async function createBrewSpot(input: AddBrewSpotInput): Promise<BrewSpot> {
     const user = auth.currentUser;
     if (!user) {
-        throw new Error('User must be authenticated to add a BrewSpot');
+        throw new Error('User must be authenticated to add a spot');
     }
 
     // Phase 2: Auto-Approval for Contributors
@@ -122,6 +130,8 @@ export async function createBrewSpot(input: AddBrewSpotInput): Promise<BrewSpot>
         photos: input.photos,
         description: input.description,
         tags: input.tags,
+        menuUrl: input.menuUrl || null, // New
+        imageUrl: input.photos[0] || null, // Deprecated but helpful
         videoUrl: input.videoUrl || null,
         weekly_hours: input.weekly_hours || null, // Added saving
         createdBy: user.uid,
@@ -143,7 +153,7 @@ export async function createBrewSpot(input: AddBrewSpotInput): Promise<BrewSpot>
     );
     const duplicateSnap = await getDocs(duplicateQuery);
     if (!duplicateSnap.empty) {
-        throw new Error('A BrewSpot with this exact address already exists.');
+        throw new Error('A spot with this exact address already exists.');
     }
 
     const docRef = await addDoc(collection(db, 'brewspots'), data);
@@ -189,6 +199,13 @@ export async function updateBrewSpot(id: string, data: Partial<AddBrewSpotInput>
     delete updateData.approvedBy;
     delete updateData.authorName; // Keep original author info? Or update if user matches? 
     // Usually author doesn't change on edit.
+
+    // Replace undefined values with null to prevent Firestore errors
+    Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined) {
+            updateData[key] = null;
+        }
+    });
 
     await updateDoc(docRef, updateData);
 }
@@ -323,6 +340,19 @@ export async function getTrendingBrewSpots(limitCount: number = 5): Promise<Brew
         return snapshot.docs.map(doc => mapToBrewSpot(doc.id, doc.data()));
     } catch (error) {
         console.error("Error fetching trending brewspots:", error);
+        return [];
+    }
+}
+
+export async function getOwnedSpots(ownerId: string): Promise<BrewSpot[]> {
+    const spotsRef = collection(db, 'brewspots');
+    const q = query(spotsRef, where("ownerId", "==", ownerId), orderBy("createdAt", "desc"));
+
+    try {
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(d => mapToBrewSpot(d.id, d.data()));
+    } catch (error) {
+        console.error("Error fetching owned brewspots:", error);
         return [];
     }
 }

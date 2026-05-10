@@ -13,10 +13,12 @@ import { BrewSpotCard } from '@/components/brewspot/BrewSpotCard'
 import { TrendingSection } from '@/components/brewspot/TrendingSection'
 import { calculateDistance } from '@/lib/locationUtils'
 import { useUserLocation } from '@/hooks/useUserLocation'
+import { CategoryPills } from '@/components/spots/CategoryPills'
+import { SpotCategory } from '@/features/brewspot/types'
 
 const BrewSpotMap = dynamic(() => import('@/components/brewspot/BrewSpotMap'), {
     ssr: false,
-    loading: () => <div className="h-[400px] w-full bg-neutral/10 animate-pulse rounded-xl flex items-center justify-center text-neutral/40">Loading Map...</div>
+    loading: () => <div className="h-[400px] w-full bg-neutral/10 animate-pulse rounded-xl flex items-center justify-center text-neutral/40">Memuat Peta...</div>
 })
 
 export function ExploreView() {
@@ -33,7 +35,9 @@ export function ExploreView() {
     const [priceFilter, setPriceFilter] = useState('')
     const [ratingFilter, setRatingFilter] = useState('')
     const [facilityFilters, setFacilityFilters] = useState<string[]>([])
-    const [tagFilter, setTagFilter] = useState('')
+    const [tagFilters, setTagFilters] = useState<string[]>([])
+    const [isOpenNowFilter, setIsOpenNowFilter] = useState(false)
+    const [categoryFilter, setCategoryFilter] = useState<SpotCategory | 'all'>('all')
     const [sortOption, setSortOption] = useState('default')
 
     // Derived Lists
@@ -68,6 +72,10 @@ export function ExploreView() {
             result = result.filter(spot => spot.city === cityFilter)
         }
 
+        if (categoryFilter !== 'all') {
+            result = result.filter(spot => spot.category === categoryFilter)
+        }
+
         if (priceFilter) {
             result = result.filter(spot => spot.price_range === priceFilter)
         }
@@ -83,10 +91,32 @@ export function ExploreView() {
             )
         }
 
-        if (tagFilter) {
+        if (tagFilters.length > 0) {
             result = result.filter(spot => {
                 const spotTags = [...(spot.tags || []), ...(spot.aiMeta?.tags || [])];
-                return spotTags.some(t => t === tagFilter);
+                return tagFilters.some(tag => spotTags.includes(tag));
+            });
+        }
+
+        if (isOpenNowFilter) {
+            const now = new Date();
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const currentDay = days[now.getDay()];
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            result = result.filter(spot => {
+                if (!spot.weekly_hours) return false;
+                // @ts-ignore - weekly_hours is typed but indexing might be tricky
+                const schedule = spot.weekly_hours[currentDay];
+
+                if (!schedule || !schedule.isOpen) return false;
+
+                const [openH, openM] = schedule.openTime.split(':').map(Number);
+                const [closeH, closeM] = schedule.closeTime.split(':').map(Number);
+                const openTime = openH * 60 + openM;
+                const closeTime = closeH * 60 + closeM;
+
+                return currentTime >= openTime && currentTime < closeTime;
             });
         }
 
@@ -97,10 +127,12 @@ export function ExploreView() {
                 const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
                 return distA - distB;
             });
+        } else if (sortOption === 'rating') {
+            result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
         }
 
         setFilteredSpots(result)
-    }, [brewSpots, searchQuery, cityFilter, priceFilter, ratingFilter, facilityFilters, tagFilter, sortOption, userLocation])
+    }, [brewSpots, searchQuery, cityFilter, categoryFilter, priceFilter, ratingFilter, facilityFilters, tagFilters, isOpenNowFilter, sortOption, userLocation])
 
     // ... analytics effect
 
@@ -112,13 +144,23 @@ export function ExploreView() {
         )
     }
 
+    const handleTagChange = (tag: string) => {
+        setTagFilters(prev =>
+            prev.includes(tag)
+                ? prev.filter(t => t !== tag)
+                : [...prev, tag]
+        )
+    }
+
     const clearFilters = () => {
         setSearchQuery('')
         setCityFilter('')
         setPriceFilter('')
         setRatingFilter('')
         setFacilityFilters([])
-        setTagFilter('')
+        setTagFilters([])
+        setIsOpenNowFilter(false)
+        setCategoryFilter('all')
         setSortOption('default')
     }
 
@@ -140,13 +182,21 @@ export function ExploreView() {
         <div className="space-y-8">
             <TrendingSection />
 
+            <div className="pt-2">
+                <CategoryPills
+                    activeCategory={categoryFilter}
+                    onCategoryChange={setCategoryFilter}
+                />
+            </div>
+
             <FilterBar
                 onSearch={setSearchQuery}
                 onCityChange={setCityFilter}
                 onPriceChange={setPriceFilter}
                 onFacilitiesChange={handleFacilityChange}
                 onRatingChange={setRatingFilter}
-                onTagChange={setTagFilter}
+                onTagChange={handleTagChange}
+                onIsOpenNowChange={setIsOpenNowFilter}
                 onSortChange={setSortOption}
                 availableCities={availableCities}
                 availableFacilities={availableFacilities}
@@ -157,32 +207,41 @@ export function ExploreView() {
                     price: priceFilter,
                     rating: ratingFilter,
                     facilities: facilityFilters,
-                    tag: tagFilter,
+                    tags: tagFilters,
+                    isOpenNow: isOpenNowFilter,
                     sort: sortOption
                 }}
                 onClearFilters={clearFilters}
             />
 
-            <div className="w-full h-[400px] z-0 relative">
+            <div className="w-full h-[500px] z-0 relative rounded-[3rem] overflow-hidden shadow-premium border border-white/20 group">
                 <BrewSpotMap
                     spots={filteredSpots}
                     interactive={true}
                     center={mapCenter}
                     zoom={filteredSpots.length === 1 ? 15 : undefined}
                 />
+                <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/5 rounded-[3rem]" />
             </div>
 
-            <div>
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-heading font-bold text-primary">
-                        {loading ? 'Loading...' : `${filteredSpots.length} BrewSpots Found`}
-                    </h2>
+            <div className="pt-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+                    <div className="space-y-1">
+                        <h2 className="text-3xl md:text-5xl font-black font-heading text-primary tracking-tighter">
+                            {loading ? 'Discovering...' : (
+                                <>
+                                    {filteredSpots.length} <span className="text-accent italic">Tempat</span> Ditemukan
+                                </>
+                            )}
+                        </h2>
+                        <p className="text-neutral-light font-medium uppercase tracking-[0.2em] text-[10px]">Spot viral & hidden gem pilihan komunitas</p>
+                    </div>
 
                     <div className="flex gap-4">
                         <div className="flex bg-gray-100 p-1 rounded-lg">
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-surface shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -190,17 +249,17 @@ export function ExploreView() {
                             </button>
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-surface shadow-sm text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                                 </svg>
                             </button>
                         </div>
-                        <Link href="/add-brewspot">
+                        <Link href="/add-spot">
                             <Button>
                                 <PlusIcon className="w-4 h-4 mr-2" />
-                                Add BrewSpot
+                                Tambah Lokasi
                             </Button>
                         </Link>
                     </div>
@@ -215,3 +274,4 @@ export function ExploreView() {
         </div>
     )
 }
+

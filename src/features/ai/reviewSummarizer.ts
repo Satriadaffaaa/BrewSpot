@@ -20,7 +20,7 @@ export async function generateReviewSummary(brewSpotId: string, force: boolean =
     const spotSnap = await spotRef.get();
 
     if (!spotSnap.exists) {
-        throw new Error("BrewSpot not found");
+        throw new Error("Spot not found");
     }
 
     const data = spotSnap.data();
@@ -49,7 +49,7 @@ export async function generateReviewSummary(brewSpotId: string, force: boolean =
     }
 
     const prompt = `
-    Analyze the following reviews for a coffee shop named "${data?.name}".
+    Analyze the following reviews for a local spot named "${data?.name}".
     
     Reviews:
     ${reviews.join('\n')}

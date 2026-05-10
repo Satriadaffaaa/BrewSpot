@@ -1,0 +1,14 @@
+<svg width="160" height="180" viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M124 0H36C16.1177 0 0 16.1177 0 36V144C0 163.882 16.1177 180 36 180H124C143.882 180 160 163.882 160 144V36C160 16.1177 143.882 0 124 0Z" fill="#FF6B35"/>
+<path d="M80 144C109.823 144 134 119.823 134 90C134 60.1766 109.823 36 80 36C50.1766 36 26 60.1766 26 90C26 119.823 50.1766 144 80 144Z" stroke="#F0EDE8" stroke-width="7.5"/>
+<path d="M80 36V51" stroke="#F0EDE8" stroke-width="5" stroke-linecap="round"/>
+<path d="M80 129V144" stroke="#F0EDE8" stroke-width="5" stroke-linecap="round"/>
+<path d="M26 90H41" stroke="#F0EDE8" stroke-width="5" stroke-linecap="round"/>
+<path d="M119 90H134" stroke="#F0EDE8" stroke-width="5" stroke-linecap="round"/>
+<path opacity="0.5" d="M41 52L50 61" stroke="#F0EDE8" stroke-width="2.5" stroke-linecap="round"/>
+<path opacity="0.5" d="M110 52L119 61" stroke="#F0EDE8" stroke-width="2.5" stroke-linecap="round"/>
+<path opacity="0.5" d="M41 128L50 119" stroke="#F0EDE8" stroke-width="2.5" stroke-linecap="round"/>
+<path opacity="0.5" d="M110 128L119 119" stroke="#F0EDE8" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M80 60C66 60 54 72 54 86C54 103 80 122 80 122C80 122 106 103 106 86C106 72 94 60 80 60Z" fill="#0F0F1A"/>
+<path d="M80 94C85.5228 94 90 89.5228 90 84C90 78.4772 85.5228 74 80 74C74.4772 74 70 78.4772 70 84C70 89.5228 74.4772 94 80 94Z" fill="#FF6B35"/>
+</svg>

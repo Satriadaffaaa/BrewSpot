@@ -30,12 +30,12 @@ export default function AdminUsersPage() {
         <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold font-heading text-neutral-800">User Management</h1>
+                    <h1 className="text-3xl font-bold font-heading text-primary">User Management</h1>
                     <p className="text-neutral-500 mt-1">Monitor user activity and enforce platform standards</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-xl shadow-neutral-100/50 border border-neutral-100 overflow-hidden">
+            <div className="bg-surface rounded-3xl shadow-xl shadow-neutral-100/50 border border-neutral-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-neutral-100">
                         <thead className="bg-neutral-50/50">
@@ -47,7 +47,7 @@ export default function AdminUsersPage() {
                                 <th scope="col" className="relative px-6 py-5"><span className="sr-only">Actions</span></th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-neutral-100">
+                        <tbody className="bg-surface divide-y divide-neutral-100">
                             {isLoading ? (
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}>
@@ -77,14 +77,14 @@ export default function AdminUsersPage() {
                                                     {user.photoURL ? <img src={user.photoURL} className="w-full h-full object-cover" /> : (user.displayName?.[0] || 'U')}
                                                 </div>
                                                 <div className="ml-5">
-                                                    <div className="text-sm font-bold text-neutral-900">{user.displayName}</div>
+                                                    <div className="text-sm font-bold text-primary">{user.displayName}</div>
                                                     <div className="text-xs font-medium text-neutral-400 font-mono mt-0.5">{user.email}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-5 whitespace-nowrap">
                                             <div className="flex flex-col">
-                                                <span className="text-sm font-bold text-neutral-800">Lvl {user.level || 1}</span>
+                                                <span className="text-sm font-bold text-primary">Lvl {user.level || 1}</span>
                                                 <span className="text-xs text-neutral-500">{user.xp || 0} XP</span>
 
                                                 {/* Anomaly Indicator */}
@@ -97,14 +97,14 @@ export default function AdminUsersPage() {
                                         </td>
                                         <td className="px-6 py-5 whitespace-nowrap">
                                             <div className="space-y-1">
-                                                <div className="text-xs font-medium text-neutral-500">Trust Score: <span className="font-bold text-neutral-800">{user.trustLevel || 0}</span></div>
+                                                <div className="text-xs font-medium text-neutral-500">Trust Score: <span className="font-bold text-primary">{user.trustLevel || 0}</span></div>
                                                 <div>
                                                     {user.isContributor ? (
                                                         <span className="px-2.5 py-0.5 inline-flex text-[10px] uppercase tracking-wide font-bold rounded-md bg-amber-50 text-amber-700 border border-amber-100 items-center gap-1">
                                                             <SparklesSolid className="w-3 h-3" /> Contributor
                                                         </span>
                                                     ) : (
-                                                        <span className="px-2.5 py-0.5 inline-flex text-[10px] uppercase tracking-wide font-bold rounded-md bg-neutral-100 text-neutral-600 border border-neutral-200">
+                                                        <span className="px-2.5 py-0.5 inline-flex text-[10px] uppercase tracking-wide font-bold rounded-md bg-neutral-100 text-neutral-600 border border-border">
                                                             Member
                                                         </span>
                                                     )}
@@ -114,7 +114,7 @@ export default function AdminUsersPage() {
                                         <td className="px-6 py-5 whitespace-nowrap text-sm text-neutral-500">
                                             <div className="flex items-center gap-4">
                                                 <div className="text-center">
-                                                    <div className="font-bold text-neutral-800">{user.stats?.totalReviews || 0}</div>
+                                                    <div className="font-bold text-primary">{user.stats?.totalReviews || 0}</div>
                                                     <div className="text-[10px] uppercase text-neutral-400 font-bold">Reviews</div>
                                                 </div>
                                                 <div className="w-px h-8 bg-neutral-200"></div>
@@ -141,3 +141,4 @@ export default function AdminUsersPage() {
         </div>
     )
 }
+

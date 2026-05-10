@@ -7,7 +7,7 @@ import { deleteReview } from '@/features/reviews/api'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { CoffeeBeanCustom } from '@/components/common/CoffeeBeanIcon'
+import { StarIcon } from '@heroicons/react/24/solid'
 import { ReportDialog } from '@/components/common/ReportDialog'
 import { SocialVideoEmbed } from '@/components/common/SocialVideoEmbed'
 
@@ -88,7 +88,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                     className={`p-4 sm:p-6 transition-all hover:shadow-md relative group ${variant === 'user' ? 'cursor-pointer hover:border-primary/50' : ''}`}
                     onClick={() => {
                         if (variant === 'user') {
-                            router.push(`/brewspot/${review.brewspotId}`)
+                            router.push(`/spot/${review.brewspotId}`)
                         }
                     }}
                 >
@@ -96,7 +96,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden shadow-sm">
                                 {variant === 'user' ? (
-                                    <span className="text-xl">☕</span>
+                                    <span className="text-xl">📍</span>
                                 ) : (
                                     review.userAvatar ? (
                                         <img src={review.userAvatar} alt={review.userName} className="w-full h-full object-cover" />
@@ -109,15 +109,14 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                                 <h4 className="font-bold text-neutral truncate max-w-[120px] sm:max-w-none">
                                     {variant === 'user'
                                         ? (review.brewspotName || 'Unknown Spot')
-                                        : (review.userName || 'Pengguna BrewSpot')
+                                        : (review.userName || 'Pengguna Lokali')
                                     }
                                 </h4>
                                 <div className="flex items-center gap-1 mt-1">
                                     {[...Array(5)].map((_, i) => (
-                                        <CoffeeBeanCustom
+                                        <StarIcon
                                             key={i}
-                                            className={`w-4 h-4 ${i < review.rating ? 'text-amber-700' : 'text-neutral/20'}`}
-                                            filled={i < review.rating}
+                                            className={`w-4 h-4 ${i < review.rating ? 'text-amber-500' : 'text-neutral/20'}`}
                                         />
                                     ))}
                                     <span className="ml-2 text-neutral/40 text-xs text-medium">
@@ -180,7 +179,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                     </div>
 
                     {review.videoUrl && (
-                        <div className="mt-4 rounded-xl overflow-hidden border border-gray-100 max-w-md">
+                        <div className="mt-4 rounded-xl overflow-hidden border border-border max-w-md">
                             <SocialVideoEmbed url={review.videoUrl} />
                         </div>
                     )}
@@ -192,7 +191,7 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                                     key={idx}
                                     src={photo}
                                     alt={`Review by ${review.userName}`}
-                                    className="h-24 w-24 object-cover rounded-lg border border-gray-100 flex-shrink-0"
+                                    className="h-24 w-24 object-cover rounded-lg border border-border flex-shrink-0"
                                 />
                             ))}
                         </div>
@@ -213,3 +212,4 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
         </div>
     )
 }
+
