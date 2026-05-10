@@ -157,7 +157,7 @@ export default function BrewSpotMap({
                                 <MapPinIcon className="w-8 h-8 text-accent drop-shadow-md transition-all duration-300 group-hover:scale-110" />
                             </Link>
                         </MarkerContent>
-                        <MarkerTooltip position="top" className="font-bold">
+                        <MarkerTooltip className="font-bold">
                             {spot.name}
                         </MarkerTooltip>
                     </MapMarker>

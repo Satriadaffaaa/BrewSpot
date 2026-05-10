@@ -542,7 +542,7 @@ export default function BrewSpotDetailPage() {
                 onClose={() => setIsClaimModalOpen(false)}
                 spotId={brewSpot.id}
                 spotName={brewSpot.name}
-                userId={user?.uid}
+                userId={user?.uid || ''}
             />
         </Container>
     )

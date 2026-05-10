@@ -143,7 +143,7 @@ type MapProps = {
   /** Show a loading indicator on the map */
   loading?: boolean;
   /** Callback fired when the map is clicked */
-  onClick?: (event: MapLibreGL.MapMouseEvent & MapLibreGL.EventData) => void;
+  onClick?: (event: MapLibreGL.MapMouseEvent) => void;
 } & Omit<MapLibreGL.MapOptions, "container" | "style">;
 
 function DefaultLoader() {

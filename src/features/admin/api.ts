@@ -170,7 +170,7 @@ export async function overrideContributorStatus(userId: string, isContributor: b
     }
 }
 
-export async function updateUserRole(userId: string, role: 'user' | 'admin', reason?: string): Promise<void> {
+export async function updateUserRole(userId: string, role: 'user' | 'admin' | 'owner', reason?: string): Promise<void> {
     const user = auth.currentUser;
     if (!user) throw new Error("Unauthorized");
 

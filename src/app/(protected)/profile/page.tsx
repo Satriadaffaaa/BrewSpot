@@ -348,7 +348,6 @@ export default function ProfilePage() {
       <EditProfileModal 
         isOpen={isEditProfileOpen} 
         onClose={() => setIsEditProfileOpen(false)} 
-        user={user}
       />
 
       <BusinessVerificationModal

@@ -14,7 +14,7 @@ export interface UserProfile {
     email: string | null
     displayName: string | null
     photoURL: string | null
-    role: 'user' | 'admin'
+    role: 'user' | 'admin' | 'owner'
 
     // Gamification
     xp: number
