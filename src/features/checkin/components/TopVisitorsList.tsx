@@ -12,9 +12,9 @@ interface TopVisitorsListProps {
 }
 
 interface VisitorProfile {
-    displayName?: string
-    photoURL?: string
-    email?: string
+    displayName?: string | null
+    photoURL?: string | null
+    email?: string | null
 }
 
 export const TopVisitorsList = ({ brewSpotId }: TopVisitorsListProps) => {

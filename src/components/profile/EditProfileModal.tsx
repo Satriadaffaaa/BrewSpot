@@ -34,8 +34,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
 
             // Check username change limit
             if (profile?.lastUsernameChange) {
-                // Handle different Timestamp types if needed (Firestore vs Date)
-                const lastChange = profile.lastUsernameChange.toDate ? profile.lastUsernameChange.toDate() : new Date(profile.lastUsernameChange as any);
+                const lastChange = new Date(profile.lastUsernameChange);
                 const nextAllowed = new Date(lastChange.getTime() + (3 * 24 * 60 * 60 * 1000));
                 const now = new Date();
 

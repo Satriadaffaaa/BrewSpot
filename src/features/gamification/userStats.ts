@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase/client';
-import { doc, runTransaction, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { doc, runTransaction, serverTimestamp, Timestamp, FieldValue } from 'firebase/firestore';
 import { UserStats, UserProfile } from './types';
 import { mapToUserProfile } from './mappers';
 
@@ -13,7 +13,7 @@ export interface UserStatsSnapshot {
     badgesCount: number;
     approvedBrewSpots: number;
     isContributor: boolean;
-    updatedAt: Timestamp | Date | string | null;
+    updatedAt: Timestamp | Date | string | null | FieldValue;
 }
 
 // Update Snapshot atomically

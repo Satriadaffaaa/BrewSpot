@@ -12,7 +12,7 @@ interface DetailsStepProps {
     facilities: string[]
     onNameChange: (name: string) => void
     onDescriptionChange: (desc: string) => void
-    onPriceRangeChange: (price: 'budget' | 'moderate' | 'premium') => void
+    onPriceRangeChange: (price: 'cheap' | 'moderate' | 'expensive') => void
     onFacilitiesChange: (facilities: string[]) => void
 }
 
@@ -72,7 +72,7 @@ export function DetailsStep({
                                 <button
                                     key={option.value}
                                     type="button"
-                                    onClick={() => onPriceRangeChange(option.value as any)}
+                                    onClick={() => onPriceRangeChange(option.value as 'cheap' | 'moderate' | 'expensive')}
                                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl transition-all duration-300 ${isSelected
                                         ? 'bg-surface text-primary shadow-sm border border-border'
                                         : 'text-neutral-500 hover:text-primary hover:bg-surface/50'

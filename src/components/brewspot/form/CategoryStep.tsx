@@ -1,11 +1,11 @@
 'use client'
 
 import { Card } from '@/components/common/Card'
-import { SPOT_CATEGORIES, AddBrewSpotInput } from '@/features/brewspot/types'
+import { SPOT_CATEGORIES, AddBrewSpotInput, SpotCategory } from '@/features/brewspot/types'
 
 interface CategoryStepProps {
-    value: string
-    onChange: (category: string) => void
+    value?: SpotCategory
+    onChange: (category: SpotCategory) => void
 }
 
 export function CategoryStep({ value, onChange }: CategoryStepProps) {
@@ -18,7 +18,7 @@ export function CategoryStep({ value, onChange }: CategoryStepProps) {
                 <span className="text-xs font-bold px-2 py-1 bg-primary/5 text-primary rounded-full uppercase tracking-wider">Wajib</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {(Object.entries(SPOT_CATEGORIES) as [any, typeof SPOT_CATEGORIES['cafe']][]).map(([key, data]) => {
+                {(Object.entries(SPOT_CATEGORIES) as [SpotCategory, typeof SPOT_CATEGORIES['cafe']][]).map(([key, data]) => {
                     const isSelected = value === key
                     return (
                         <button
