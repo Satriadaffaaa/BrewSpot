@@ -13,6 +13,7 @@ interface MediaStepProps {
     onMenuUrlChange: (url: string) => void
     onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
     onRemoveFile: (index: number) => void
+    showMenuInput?: boolean
 }
 
 export function MediaStep({
@@ -22,7 +23,8 @@ export function MediaStep({
     onVideoUrlChange,
     onMenuUrlChange,
     onFileSelect,
-    onRemoveFile
+    onRemoveFile,
+    showMenuInput = false
 }: MediaStepProps) {
     return (
         <Card className="p-6">
@@ -33,20 +35,23 @@ export function MediaStep({
                 <h2 className="text-xl font-heading font-bold text-primary">Langkah 4: Media & Informasi Tambahan</h2>
             </div>
             <div className="space-y-6">
-                {/* Menu Input */}
-                <div className="space-y-3">
-                    <Input
-                        label="Link Menu (Opsional)"
-                        value={menuUrl || ''}
-                        onChange={e => onMenuUrlChange(e.target.value)}
-                        placeholder="Tempel link menu (Google Drive, Dropbox, atau link foto/PDF)"
-                    />
-                    <p className="text-xs text-neutral/50">
-                        Tips: Jika menu dalam bentuk foto, kamu bisa mengunggahnya ke Google Drive atau link lainnya lalu tempelkan linknya di sini.
-                    </p>
-                </div>
-
-                <div className="h-px bg-gray-100" />
+                {/* Menu Input - Only for Admins or Owners */}
+                {showMenuInput && (
+                    <>
+                        <div className="space-y-3">
+                            <Input
+                                label="Link Menu (Opsional)"
+                                value={menuUrl || ''}
+                                onChange={e => onMenuUrlChange(e.target.value)}
+                                placeholder="Tempel link menu (Google Drive, Dropbox, atau link foto/PDF)"
+                            />
+                            <p className="text-xs text-neutral/50">
+                                Tips: Jika menu dalam bentuk foto, kamu bisa mengunggahnya ke Google Drive atau link lainnya lalu tempelkan linknya di sini.
+                            </p>
+                        </div>
+                        <div className="h-px bg-gray-100" />
+                    </>
+                )}
 
                 {/* Video Input */}
                 <div className="space-y-3">

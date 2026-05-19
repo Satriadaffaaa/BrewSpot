@@ -4,16 +4,21 @@ import { Card } from '@/components/common/Card'
 import { Input } from '@/components/common/Input'
 import { PRICE_OPTIONS } from '@/utils/price'
 import { CATEGORIZED_FACILITIES } from '@/features/brewspot/constants'
+import { BusinessHoursInput } from './BusinessHoursInput'
+import { WeeklyHours } from '@/features/brewspot/types'
 
 interface DetailsStepProps {
     name: string
     description: string
     priceRange: string
     facilities: string[]
+    weeklyHours?: WeeklyHours
     onNameChange: (name: string) => void
     onDescriptionChange: (desc: string) => void
     onPriceRangeChange: (price: 'cheap' | 'moderate' | 'expensive') => void
     onFacilitiesChange: (facilities: string[]) => void
+    onWeeklyHoursChange: (hours: WeeklyHours) => void
+    showBusinessHours?: boolean
 }
 
 export function DetailsStep({
@@ -21,10 +26,13 @@ export function DetailsStep({
     description,
     priceRange,
     facilities,
+    weeklyHours,
     onNameChange,
     onDescriptionChange,
     onPriceRangeChange,
-    onFacilitiesChange
+    onFacilitiesChange,
+    onWeeklyHoursChange,
+    showBusinessHours = false
 }: DetailsStepProps) {
     return (
         <Card className="p-6">
@@ -57,7 +65,16 @@ export function DetailsStep({
                     />
                 </div>
 
-                <div className="space-y-3 pt-2">
+                {showBusinessHours && (
+                    <div className="pt-4 border-t border-border">
+                        <BusinessHoursInput 
+                            value={weeklyHours}
+                            onChange={onWeeklyHoursChange}
+                        />
+                    </div>
+                )}
+
+                <div className="space-y-3 pt-2 border-t border-border">
                     <div className="flex items-center justify-between">
                         <label className="text-sm font-bold text-neutral">Rentang Harga</label>
                         <span className="text-[10px] bg-neutral-100 text-neutral/60 px-2 py-0.5 rounded-full uppercase tracking-widest font-bold">Estimasi per orang</span>

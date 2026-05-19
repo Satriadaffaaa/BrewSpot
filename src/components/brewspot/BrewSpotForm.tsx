@@ -8,6 +8,7 @@ import { CategoryStep } from './form/CategoryStep'
 import { LocationStep } from './form/LocationStep'
 import { DetailsStep } from './form/DetailsStep'
 import { MediaStep } from './form/MediaStep'
+import { useAuth } from '@/providers/AuthProvider'
 
 interface BrewSpotFormProps {
     initialData?: Partial<AddBrewSpotInput>
@@ -18,6 +19,11 @@ interface BrewSpotFormProps {
 }
 
 export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: BrewSpotFormProps) {
+    const { profile } = useAuth()
+    
+    // Explicitly check for Business Owner or Admin role
+    const hasBusinessAccess = profile?.role === 'owner' || profile?.role === 'admin'
+
     const {
         formData,
         setFormData,
@@ -63,10 +69,13 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     description={formData.description}
                     priceRange={formData.price_range}
                     facilities={formData.facilities || []}
+                    weeklyHours={formData.weekly_hours}
                     onNameChange={(name) => setFormData({ ...formData, name })}
                     onDescriptionChange={(description) => setFormData({ ...formData, description })}
                     onPriceRangeChange={(price_range) => setFormData({ ...formData, price_range })}
                     onFacilitiesChange={(facilities) => setFormData({ ...formData, facilities })}
+                    onWeeklyHoursChange={(weekly_hours) => setFormData({ ...formData, weekly_hours })}
+                    showBusinessHours={hasBusinessAccess}
                 />
 
                 <MediaStep
@@ -77,6 +86,7 @@ export function BrewSpotForm({ initialData, onSubmit, isLoading, error, mode }: 
                     onMenuUrlChange={(url) => setFormData(prev => ({ ...prev, menuUrl: url }))}
                     onFileSelect={handleFileSelect}
                     onRemoveFile={removeFile}
+                    showMenuInput={hasBusinessAccess}
                 />
 
 

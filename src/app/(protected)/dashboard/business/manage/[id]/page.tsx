@@ -10,9 +10,11 @@ import { Button } from '@/components/common/Button'
 import { Input } from '@/components/common/Input'
 import { useAuth } from '@/providers/AuthProvider'
 import { getBrewSpotById, updateBrewSpot } from '@/features/brewspot/api'
-import { BrewSpot } from '@/features/brewspot/types'
+import { BrewSpot, WeeklyHours } from '@/features/brewspot/types'
 import { uploadToCloudinary } from '@/lib/cloudinary'
 import { AdminSwal, Toast } from '@/components/common/SweetAlert'
+import { BusinessHoursInput } from '@/components/brewspot/form/BusinessHoursInput'
+import { CATEGORIZED_FACILITIES } from '@/features/brewspot/constants'
 import { 
     ArrowLeftIcon, 
     PhotoIcon, 
@@ -22,7 +24,8 @@ import {
     CloudArrowUpIcon,
     CheckBadgeIcon,
     TrashIcon,
-    PlusIcon
+    PlusIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline'
 
 export default function BusinessSpotManagerPage({ params }: { params: Promise<{ id: string }> }) {
@@ -39,6 +42,8 @@ export default function BusinessSpotManagerPage({ params }: { params: Promise<{ 
     const [officialMenuUrl, setOfficialMenuUrl] = useState('')
     const [newPhotos, setNewPhotos] = useState<File[]>([])
     const [existingPhotos, setExistingPhotos] = useState<string[]>([])
+    const [facilities, setFacilities] = useState<string[]>([])
+    const [weeklyHours, setWeeklyHours] = useState<WeeklyHours>({})
 
     useEffect(() => {
         async function fetchSpot() {
@@ -52,6 +57,8 @@ export default function BusinessSpotManagerPage({ params }: { params: Promise<{ 
                 setSpot(data)
                 setOfficialMenuUrl(data.officialMenuUrl || '')
                 setExistingPhotos(data.officialPhotos || [])
+                setFacilities(data.facilities || [])
+                setWeeklyHours(data.weekly_hours || {})
                 setLoading(false)
             } catch (error) {
                 console.error(error)
@@ -87,7 +94,9 @@ export default function BusinessSpotManagerPage({ params }: { params: Promise<{ 
             // The API handles generic updates.
             await updateBrewSpot(spot.id, {
                 officialMenuUrl: menuUrl,
-                officialPhotos: updatedOfficialPhotos
+                officialPhotos: updatedOfficialPhotos,
+                facilities: facilities,
+                weekly_hours: weeklyHours
             } as any)
 
             await Toast.fire({ icon: 'success', title: 'Data resmi berhasil diperbarui!' })
@@ -125,12 +134,12 @@ export default function BusinessSpotManagerPage({ params }: { params: Promise<{ 
             <div className="space-y-2">
                 <h1 className="text-4xl font-black font-heading text-neutral-900 tracking-tight">{spot.name}</h1>
                 <p className="text-neutral-500 flex items-center gap-2">
-                    <ClockIcon className="w-4 h-4" /> Manajemen Konten Resmi & Respon Ulasan
+                    <ClockIcon className="w-4 h-4" /> Manajemen Konten Resmi & Informasi Lokasi
                 </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Column: Official Content */}
+                {/* Left Column: Official Content & Info */}
                 <div className="lg:col-span-2 space-y-8">
                     {/* Official Menu Section */}
                     <Card className="p-8 shadow-soft border-none space-y-6">
@@ -184,6 +193,65 @@ export default function BusinessSpotManagerPage({ params }: { params: Promise<{ 
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    </Card>
+
+                    {/* Official Business Hours */}
+                    <Card className="p-8 shadow-soft border-none space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
+                            <ClockIcon className="w-6 h-6 text-primary" />
+                            <h2 className="text-xl font-bold font-heading text-neutral-800">Jam Operasional</h2>
+                        </div>
+                        <BusinessHoursInput 
+                            value={weeklyHours}
+                            onChange={setWeeklyHours}
+                        />
+                    </Card>
+
+                    {/* Official Facilities Management */}
+                    <Card className="p-8 shadow-soft border-none space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
+                            <SparklesIcon className="w-6 h-6 text-primary" />
+                            <h2 className="text-xl font-bold font-heading text-neutral-800">Fasilitas Resmi</h2>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {Object.entries(CATEGORIZED_FACILITIES).map(([group, groupFacilities]) => (
+                                <div key={group} className="space-y-3 bg-gray-50/50 p-4 rounded-xl border border-border">
+                                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-neutral/40 flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-primary/40 rounded-full" />
+                                        {group}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {groupFacilities.map(facility => {
+                                            const isSelected = facilities.includes(facility)
+                                            return (
+                                                <button
+                                                    key={facility}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newFacilities = isSelected
+                                                            ? facilities.filter(f => f !== facility)
+                                                            : [...facilities, facility]
+                                                        setFacilities(newFacilities)
+                                                    }}
+                                                    className={`px-3 py-1.5 text-[11px] font-medium rounded-lg border transition-all duration-200 flex items-center gap-1.5 ${isSelected
+                                                        ? 'bg-primary text-white border-primary shadow-sm scale-[1.02]'
+                                                        : 'bg-surface text-gray-500 border-border hover:border-primary/30 hover:text-primary hover:bg-primary/5'
+                                                        }`}
+                                                >
+                                                    {isSelected && (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                                                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                                                        </svg>
+                                                    )}
+                                                    {facility}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </Card>
 
