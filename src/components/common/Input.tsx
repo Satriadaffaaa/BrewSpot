@@ -10,7 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, endIcon, ...props }, ref) => {
     return (
-      <div className="w-full space-y-2.5 group">
+      <div className="w-full space-y-1.5 group">
         {label && (
           <label
             className="text-xs font-black uppercase tracking-[0.2em] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-neutral-light group-focus-within:text-accent transition-colors"
@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           <input
             className={cn(
-              'flex h-14 w-full rounded-2xl border border-neutral/5 bg-secondary/30 px-5 py-3 text-sm font-medium placeholder:text-neutral-light/50 outline-none ring-2 ring-transparent focus:ring-accent/20 focus:border-accent/50 focus:bg-surface disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 shadow-sm',
+              'flex h-12 w-full rounded-xl border border-neutral/5 bg-secondary/30 px-5 py-3 text-sm font-medium placeholder:text-neutral-light/50 outline-none ring-2 ring-transparent focus:ring-accent/20 focus:border-accent/50 focus:bg-surface disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 shadow-sm',
               error && 'border-danger/50 focus:ring-danger/20',
               endIcon && 'pr-12',
               className

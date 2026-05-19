@@ -352,7 +352,7 @@ export default function AdminUserDetailPage() {
                                     <div className="flex flex-col items-end">
                                         <span className="text-green-600 font-bold">+{log.amount} XP</span>
                                         <span className="text-xs text-gray-400">
-                                            {new Date(log.createdAt).toLocaleDateString()}
+                                            {new Date(log.createdAt).toLocaleDateString('id-ID')}
                                         </span>
                                     </div>
                                 </div>

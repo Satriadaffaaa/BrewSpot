@@ -58,12 +58,11 @@ export async function getRecommendedSpots(userId: string): Promise<BrewSpot[]> {
 
     if (deduplicate(spots).length >= LIMIT) return deduplicate(spots).slice(0, LIMIT);
 
-    // 3. Trending (Most liked/reviewed recently) - Simulating with 'rating' or 'reviews_count'
-    // Phase 4 simplification: "Top Rated"
+    // 3. Trending (Most viewed recently)
     const trendingQ = query(
         collection(db, 'brewspots'),
         where('status', '==', 'approved'),
-        orderBy('rating', 'desc'),
+        orderBy('viewsCount', 'desc'),
         limit(LIMIT)
     );
     const trendingSnap = await getDocs(trendingQ);

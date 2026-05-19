@@ -44,11 +44,12 @@ function getSystemTheme(): Theme {
 }
 
 function useResolvedTheme(themeProp?: "light" | "dark"): Theme {
-  const [detectedTheme, setDetectedTheme] = useState<Theme>(
-    () => getDocumentTheme() ?? getSystemTheme(),
-  );
+  const [detectedTheme, setDetectedTheme] = useState<Theme>("light");
 
   useEffect(() => {
+    // Set initial theme on mount
+    setDetectedTheme(getDocumentTheme() ?? getSystemTheme());
+
     if (themeProp) return; // Skip detection if theme is provided via prop
 
     // Watch for document class changes (e.g., next-themes toggling dark class)

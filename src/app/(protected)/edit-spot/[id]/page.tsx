@@ -56,12 +56,16 @@ export default function EditBrewSpotPage({ params }: { params: Promise<{ id: str
                     city: data.city,
                     latitude: data.latitude,
                     longitude: data.longitude,
-                    price_range: data.priceRange, // Field name mapping drift
+                    price_range: data.price_range || data.priceRange, // Handle both naming conventions
                     facilities: data.facilities,
-                    photos: data.photos,
+                    photos: (data.photos && data.photos.length > 0) ? data.photos : (data.officialPhotos || []),
                     description: data.description,
                     tags: data.tags,
-                    weekly_hours: data.weekly_hours
+                    weekly_hours: data.weekly_hours,
+                    menuUrl: data.menuUrl || data.officialMenuUrl || '',
+                    videoUrl: data.videoUrl,
+                    category: data.category,
+                    subcategory: data.subcategory
                 })
             } catch (err) {
                 console.error('Error fetching spot:', err)

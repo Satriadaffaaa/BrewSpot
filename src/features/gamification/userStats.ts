@@ -1,6 +1,7 @@
 import { db } from '@/lib/firebase/client';
-import { doc, runTransaction, serverTimestamp, setDoc, getDoc } from 'firebase/firestore';
-import { UserStats } from './types';
+import { doc, runTransaction, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { UserStats, UserProfile } from './types';
+import { mapToUserProfile } from './mappers';
 
 // Denormalized structure for fast reads
 export interface UserStatsSnapshot {
@@ -12,7 +13,7 @@ export interface UserStatsSnapshot {
     badgesCount: number;
     approvedBrewSpots: number;
     isContributor: boolean;
-    updatedAt: any;
+    updatedAt: Timestamp | Date | string | null;
 }
 
 // Update Snapshot atomically
@@ -25,8 +26,8 @@ export async function updateUserStatsSnapshot(userId: string): Promise<void> {
             const userSnap = await transaction.get(userRef);
             if (!userSnap.exists()) return;
 
-            const userData = userSnap.data();
-            const stats = userData.stats as UserStats;
+            const userData = mapToUserProfile(userSnap);
+            const stats = userData.stats;
             const badges = userData.badges || [];
 
             const snapshot: UserStatsSnapshot = {

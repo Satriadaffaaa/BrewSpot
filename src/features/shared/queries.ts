@@ -1,6 +1,7 @@
 import { db } from '@/lib/firebase/client';
 import { collection, query, where, orderBy, getDocs, doc, getDoc, DocumentData } from 'firebase/firestore';
 import { Review, BrewSpot } from '@/features/brewspot/types';
+import { mapToBrewSpot } from '@/features/brewspot/mappers';
 
 /**
  * Global Read Consistency Helpers
@@ -33,7 +34,7 @@ export async function getPublicBrewSpots(filters?: { city?: string, limit?: numb
 
     const q = query(spotsRef, ...constraints);
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() } as BrewSpot));
+    return snap.docs.map(d => mapToBrewSpot(d.id, d.data()));
 }
 
 export async function getPublicReviews(brewspotId: string): Promise<Review[]> {

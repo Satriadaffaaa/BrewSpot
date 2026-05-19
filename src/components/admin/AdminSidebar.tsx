@@ -52,13 +52,13 @@ export function AdminSidebar({ sidebarOpen = false, setSidebarOpen }: AdminSideb
                                 className={cn(
                                     isActive
                                         ? 'bg-surface/10 text-[#F5E6D3] shadow-sm ring-1 ring-white/10'
-                                        : 'text-[#8B5E3C] hover:bg-surface/5 hover:text-[#F5E6D3]',
+                                        : 'text-slate-400 hover:bg-surface/5 hover:text-[#F5E6D3]',
                                     'group flex items-center px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 ease-in-out'
                                 )}
                             >
                                 <item.icon
                                     className={cn(
-                                        isActive ? 'text-[#E8A87C]' : 'text-[#8B5E3C]/60 group-hover:text-[#E8A87C]',
+                                        isActive ? 'text-[#E8A87C]' : 'text-slate-500 group-hover:text-[#E8A87C]',
                                         'mr-4 flex-shrink-0 h-5 w-5 transition-colors duration-300'
                                     )}
                                     aria-hidden="true"

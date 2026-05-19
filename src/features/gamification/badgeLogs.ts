@@ -1,10 +1,10 @@
 import { db } from '@/lib/firebase/client';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 export interface BadgeLog {
     userId: string;
     badgeId: string;
-    awardedAt: any; // Timestamp
+    awardedAt: Timestamp | Date | string | null;
     triggerEvent: string;
 }
 

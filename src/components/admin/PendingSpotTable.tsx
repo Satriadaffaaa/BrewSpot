@@ -15,7 +15,7 @@ export function PendingSpotTable({ spots }: PendingSpotTableProps) {
             {/* Mobile Card View (< md) */}
             <div className="md:hidden space-y-4">
                 {spots.map((spot) => (
-                    <div key={spot.id} className="bg-surface p-4 rounded-xl shadow-sm border border-neutral/10 flex flex-col gap-3">
+                    <div key={spot.id} className="bg-surface p-4 rounded-2xl shadow-sm border border-neutral/10 flex flex-col gap-3">
                         <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="h-10 w-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-lg border border-orange-100 shrink-0">
@@ -23,20 +23,20 @@ export function PendingSpotTable({ spots }: PendingSpotTableProps) {
                                 </div>
                                 <div>
                                     <div className="font-bold text-primary line-clamp-1">{spot.name}</div>
-                                    <div className="text-xs text-neutral/50 flex items-center mt-0.5">
+                                    <div className="text-xs text-neutral-600 flex items-center mt-0.5">
                                         <MapPinIcon className="w-3 h-3 mr-1" />
                                         {spot.city}
                                     </div>
                                 </div>
                             </div>
-                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-100 capitalize">
+                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-amber-50 text-amber-700 border border-amber-100 capitalize">
                                 {spot.status}
                             </span>
                         </div>
 
-                        <div className="flex items-center text-xs text-neutral/50 border-t border-neutral/5 pt-2">
+                        <div className="flex items-center text-xs text-neutral-600 border-t border-neutral/5 pt-2">
                             <ClockIcon className="w-3.5 h-3.5 mr-1.5" />
-                            Submitted on {new Date(spot.created_at).toLocaleDateString()}
+                            Submitted on {new Date(spot.created_at).toLocaleDateString('id-ID')}
                         </div>
 
                         <Link href={`/admin/spots/${spot.id}`} className="w-full">
@@ -52,20 +52,20 @@ export function PendingSpotTable({ spots }: PendingSpotTableProps) {
             </div>
 
             {/* Desktop Table View (>= md) */}
-            <div className="hidden md:block overflow-x-auto rounded-xl border border-neutral/10 shadow-sm bg-surface">
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-neutral/10 shadow-sm bg-surface">
                 <table className="min-w-full divide-y divide-neutral-100">
                     <thead className="bg-neutral-50/50">
                         <tr>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
                                 Spot Details
                             </th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
                                 Location
                             </th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
                                 Submitted
                             </th>
-                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-400 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
                                 Status
                             </th>
                             <th scope="col" className="relative px-6 py-4">
@@ -83,7 +83,7 @@ export function PendingSpotTable({ spots }: PendingSpotTableProps) {
                                         </div>
                                         <div>
                                             <div className="text-sm font-bold text-primary group-hover:text-primary transition-colors">{spot.name}</div>
-                                            <div className="text-xs text-neutral-400 font-medium flex items-center mt-0.5">
+                                            <div className="text-xs text-neutral-500 font-medium flex items-center mt-0.5">
                                                 <MapPinIcon className="w-3 h-3 mr-1" />
                                                 {spot.address.substring(0, 30)}{spot.address.length > 30 ? '...' : ''}
                                             </div>
@@ -98,11 +98,11 @@ export function PendingSpotTable({ spots }: PendingSpotTableProps) {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center text-sm text-neutral-500">
                                         <ClockIcon className="w-4 h-4 mr-1.5 text-neutral-400" />
-                                        {new Date(spot.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                        {new Date(spot.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' })}
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-bold rounded-md bg-amber-50 text-amber-700 border border-amber-100 capitalize">
+                                    <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-amber-50 text-amber-700 border border-amber-100 capitalize">
                                         <span className="w-2 h-2 rounded-full bg-amber-400 mr-2 my-auto animate-pulse"></span>
                                         {spot.status}
                                     </span>

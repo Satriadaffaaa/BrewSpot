@@ -28,7 +28,7 @@ export interface UserProfile {
     // Phase 3: Safety & Enforcement
     accountStatus?: 'active' | 'warned' | 'suspended' | 'banned'
     suspensionUntil?: string | null // ISO Date string
-    lastUsernameChange?: any // Timestamp or Date
+    lastUsernameChange?: string | null // ISO Date string
 
     createdAt: string
     updatedAt: string

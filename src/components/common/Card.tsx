@@ -10,7 +10,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        'rounded-3xl border border-white/5 bg-surface shadow-premium text-neutral overflow-hidden transition-all duration-300',
+        'rounded-2xl border border-white/5 bg-surface shadow-premium text-neutral overflow-hidden transition-all duration-300',
         hover && 'hover:shadow-xl hover:-translate-y-1 hover:border-accent/10',
         className
       )}

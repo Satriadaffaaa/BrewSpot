@@ -150,7 +150,7 @@ export default function AdminVerificationQueuePage() {
                                         </div>
                                         <div className="flex items-center gap-2 text-sm text-neutral-600">
                                           <CalendarIcon className="w-4 h-4" />
-                                          <span>{new Date(req.createdAt).toLocaleDateString()}</span>
+                                          <span>{new Date(req.createdAt).toLocaleDateString('id-ID')}</span>
                                         </div>
                                     </div>
                                 </div>

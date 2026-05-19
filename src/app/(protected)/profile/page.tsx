@@ -300,8 +300,8 @@ export default function ProfilePage() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as ProfileTab)}
             className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all whitespace-nowrap ${activeTab === tab.id
-              ? 'bg-primary text-white shadow-premium'
-              : 'bg-secondary/50 text-neutral-light hover:bg-secondary hover:text-primary'
+              ? 'bg-primary text-white shadow-premium ring-2 ring-primary/5'
+              : 'bg-surface/40 text-neutral-light hover:bg-surface/80 hover:text-primary border border-white/50'
               }`}
           >
             <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-accent' : ''}`} />
@@ -360,4 +360,3 @@ export default function ProfilePage() {
     </Container>
   )
 }
-

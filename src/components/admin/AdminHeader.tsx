@@ -37,7 +37,7 @@ export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
 
                 <div className="ml-4 flex items-center md:ml-6 gap-6">
                     {/* Notifications (Mock) */}
-                    <button className="relative p-2 text-neutral-400 hover:text-primary transition-colors">
+                    <button className="relative p-2 text-neutral-500 hover:text-primary transition-colors">
                         <BellIcon className="h-6 w-6" />
                         <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
                     </button>
@@ -47,7 +47,7 @@ export function AdminHeader({ setSidebarOpen }: AdminHeaderProps) {
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-end hidden sm:flex">
                             <span className="text-sm font-bold text-primary">{user?.displayName || 'Administrator'}</span>
-                            <span className="text-xs text-mid">{user?.email}</span>
+                            <span className="text-xs text-neutral-600">{user?.email}</span>
                         </div>
                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20">
                             {user?.email?.[0].toUpperCase() || 'A'}

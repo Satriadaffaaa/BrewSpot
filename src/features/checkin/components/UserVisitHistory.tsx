@@ -76,7 +76,7 @@ export const UserVisitHistory = ({ userId }: UserVisitHistoryProps) => {
                                         {spotNames[spot.brewSpotId] || `Spot ${spot.brewSpotId.slice(0, 6)}...`}
                                     </span>
                                     <span className="text-xs text-neutral/50">
-                                        Last visited: {spot.lastVisit.toDate().toLocaleDateString()}
+                                        Last visited: {spot.lastVisit.toDate().toLocaleDateString('id-ID')}
                                     </span>
                                 </div>
                             </div>

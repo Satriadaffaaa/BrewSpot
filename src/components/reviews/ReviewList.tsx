@@ -120,7 +120,11 @@ export function ReviewList({ reviews, isLoading, onReviewDeleted, onEdit, varian
                                         />
                                     ))}
                                     <span className="ml-2 text-neutral/40 text-xs text-medium">
-                                        {new Date(review.createdAt).toLocaleDateString()}
+                                        {new Date(review.createdAt).toLocaleDateString('id-ID', {
+                                            day: 'numeric',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        })}
                                     </span>
                                 </div>
                             </div>

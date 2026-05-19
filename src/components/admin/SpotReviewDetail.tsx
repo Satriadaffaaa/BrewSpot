@@ -35,7 +35,7 @@ export function SpotReviewDetail({ spot }: { spot: AdminBrewSpot }) {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
             <div className="flex justify-between items-start">
                 <div>
                     <h1 className="text-2xl font-bold text-primary">{spot.name}</h1>
@@ -71,13 +71,13 @@ export function SpotReviewDetail({ spot }: { spot: AdminBrewSpot }) {
             {/* Content Sections */}
             <div className="grid grid-cols-1 gap-6">
                 {/* Description & Tags */}
-                <Card className="p-6 space-y-4">
+                <Card className="p-5 space-y-4">
                     <h3 className="text-lg font-medium text-primary">About this Spot</h3>
 
                     {spot.description ? (
                         <div>
                             <label className="text-sm font-medium text-gray-500">Founder's Note</label>
-                            <p className="mt-2 text-sm text-primary whitespace-pre-wrap leading-relaxed bg-gray-50 p-4 rounded-lg border border-border">
+                            <p className="mt-2 text-sm text-primary whitespace-pre-wrap leading-relaxed bg-gray-50 p-4 rounded-xl border border-border">
                                 {spot.description}
                             </p>
                         </div>
@@ -100,12 +100,12 @@ export function SpotReviewDetail({ spot }: { spot: AdminBrewSpot }) {
                 </Card>
 
                 {/* Photos Gallery */}
-                <Card className="p-6">
+                <Card className="p-5">
                     <h3 className="text-lg font-medium text-primary mb-4">Photo Gallery ({spot.photos?.length || 0})</h3>
                     {spot.photos && spot.photos.length > 0 ? (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             {spot.photos.map((photo, index) => (
-                                <div key={index} className="aspect-square relative rounded-lg overflow-hidden border border-border group">
+                                <div key={index} className="aspect-square relative rounded-xl overflow-hidden border border-border group">
                                     <img
                                         src={photo}
                                         alt={`${spot.name} photo ${index + 1}`}
@@ -118,7 +118,7 @@ export function SpotReviewDetail({ spot }: { spot: AdminBrewSpot }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-border">
+                        <div className="text-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-border">
                             <p className="text-gray-500">No photos uploaded</p>
                         </div>
                     )}
@@ -126,7 +126,7 @@ export function SpotReviewDetail({ spot }: { spot: AdminBrewSpot }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="p-6 space-y-4">
+                <Card className="p-5 space-y-4">
                     <h3 className="text-lg font-medium text-primary">Location & Amenities</h3>
                     <div>
                         <label className="text-sm font-medium text-gray-500">Address</label>

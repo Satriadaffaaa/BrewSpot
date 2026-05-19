@@ -147,10 +147,18 @@ export default function BrewSpotDetailPage() {
         )
     }
 
-    const displayPhotos = brewSpot.photos && brewSpot.photos.length > 0 ? brewSpot.photos : (brewSpot.image_url ? [brewSpot.image_url] : [])
+    const isVerified = brewSpot.isOfficial || brewSpot.verificationStatus === 'verified'
+    const displayPhotos = (isVerified && brewSpot.officialPhotos && brewSpot.officialPhotos.length > 0)
+        ? brewSpot.officialPhotos
+        : (brewSpot.photos && brewSpot.photos.length > 0 ? brewSpot.photos : (brewSpot.image_url ? [brewSpot.image_url] : []))
+    
+    // Explicitly check for truthy strings to avoid "" or null issues
+    const activeMenuUrl = (brewSpot.officialMenuUrl && brewSpot.officialMenuUrl.trim() !== "") 
+        ? brewSpot.officialMenuUrl 
+        : (brewSpot.menuUrl && brewSpot.menuUrl.trim() !== "" ? brewSpot.menuUrl : null);
 
     return (
-        <Container className="py-8 space-y-8">
+        <Container className="pt-28 pb-8 space-y-8">
             <div>
                 <Link href="/explore" className="inline-flex items-center text-sm text-neutral/50 hover:text-primary mb-4 transition-colors">
                     <ArrowLeftIcon className="w-4 h-4 mr-1" />
@@ -160,7 +168,7 @@ export default function BrewSpotDetailPage() {
                     <div>
                         <div className="flex items-center gap-2">
                             <h1 className="text-2xl md:text-4xl font-heading font-bold text-primary">{brewSpot.name}</h1>
-                            {brewSpot.isOfficial && (
+                            {(brewSpot.isOfficial || brewSpot.verificationStatus === 'verified') && (
                                 <div className="mt-1 flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-600 rounded-full border border-blue-100 animate-fade-in" title="Halaman Resmi Terverifikasi">
                                     <CheckBadgeIcon className="w-5 h-5" />
                                     <span className="text-xs font-black uppercase tracking-widest hidden md:inline">Terverifikasi</span>
@@ -195,33 +203,48 @@ export default function BrewSpotDetailPage() {
                         )}
 
                         {/* Menu Button */}
-                        {brewSpot.menuUrl && (
+                        {activeMenuUrl && (
                             <button
                                 onClick={() => {
-                                    const url = brewSpot.menuUrl || '';
+                                    const url = activeMenuUrl || '';
                                     const isCloudinary = url.includes('cloudinary');
+                                    const isPdf = url.toLowerCase().endsWith('.pdf');
 
-                                    if (isCloudinary) {
-                                        const isPdf = url.toLowerCase().endsWith('.pdf');
-                                        if (isPdf) {
-                                            // PDF: open directly in new tab (browser PDF viewer handles all pages)
-                                            window.open(url, '_blank');
-                                        } else {
-                                            // Image: show in lightbox
-                                            AdminSwal.fire({
-                                                imageUrl: url,
-                                                imageAlt: `${brewSpot.name} Menu`,
-                                                showConfirmButton: false,
-                                                showCloseButton: true,
-                                                width: '90%',
-                                                padding: '1em',
-                                                background: '#fff',
-                                                backdrop: 'rgba(0,0,0,0.8)'
-                                            })
-                                        }
+                                    if (isCloudinary && !isPdf) {
+                                        // Image: show in lightbox
+                                        AdminSwal.fire({
+                                            imageUrl: url,
+                                            imageAlt: `${brewSpot.name} Menu`,
+                                            showConfirmButton: false,
+                                            showCloseButton: true,
+                                            width: '90%',
+                                            padding: '1em',
+                                            background: '#fff',
+                                            backdrop: 'rgba(0,0,0,0.8)'
+                                        });
                                     } else {
-                                        // External link (Google Drive, website, etc.) - open directly
-                                        window.open(url, '_blank');
+                                        // PDF or External link: show iframe in modal
+                                        AdminSwal.fire({
+                                            title: `Menu - ${brewSpot.name}`,
+                                            html: `
+                                                <div style="width: 100%; height: 75vh; position: relative;">
+                                                    <iframe src="${url}" style="width: 100%; height: 100%; border: none; border-radius: 8px;"></iframe>
+                                                </div>
+                                                <div style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                                                    Jika menu tidak muncul, <a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #4f46e5; font-weight: 500; text-decoration: underline;">klik di sini untuk membuka di tab baru</a>.
+                                                </div>
+                                            `,
+                                            showConfirmButton: false,
+                                            showCloseButton: true,
+                                            width: '90%',
+                                            padding: '1.5em',
+                                            background: '#ffffff',
+                                            backdrop: 'rgba(0,0,0,0.8)',
+                                            customClass: {
+                                                popup: 'rounded-2xl',
+                                                title: 'text-xl font-bold font-heading mb-4 text-left'
+                                            }
+                                        });
                                     }
                                 }}
                                 className="flex items-center gap-2 bg-orange-50 text-orange-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-orange-100 transition-colors border border-orange-100"

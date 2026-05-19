@@ -11,6 +11,7 @@ import { Button } from '@/components/common/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { BrewSpotCard } from '@/components/brewspot/BrewSpotCard'
 import { TrendingSection } from '@/components/brewspot/TrendingSection'
+import { PopularViewsSection } from '@/components/brewspot/PopularViewsSection'
 import { calculateDistance } from '@/lib/locationUtils'
 import { useUserLocation } from '@/hooks/useUserLocation'
 import { CategoryPills } from '@/components/spots/CategoryPills'
@@ -181,6 +182,7 @@ export function ExploreView() {
     return (
         <div className="space-y-8">
             <TrendingSection />
+            <PopularViewsSection />
 
             <div className="pt-2">
                 <CategoryPills
