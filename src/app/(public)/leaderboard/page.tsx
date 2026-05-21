@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
     }, [activeTab])
 
     return (
-        <Container className="py-12 max-w-4xl mx-auto">
+        <Container className="pt-28 pb-12 md:pt-36 md:pb-24 max-w-4xl mx-auto">
             <div className="text-center mb-10">
                 <h1 className="text-4xl font-heading font-bold text-primary mb-2">
                     Community Leaderboard

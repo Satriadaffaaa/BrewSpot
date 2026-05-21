@@ -3,7 +3,7 @@ import { ExploreView } from '@/components/brewspot/ExploreView'
 
 export default function ExplorePage() {
     return (
-    <Container className="py-16 md:py-24 space-y-16">
+    <Container className="pt-28 pb-16 md:pt-36 md:pb-24 space-y-16">
       <div className="flex flex-col gap-4 max-w-3xl">
         <p className="text-accent font-black uppercase tracking-[0.3em] text-xs">Spot lokal, cerita nyata</p>
         <h1 className="text-4xl md:text-7xl font-black font-heading text-primary tracking-tighter leading-none">
