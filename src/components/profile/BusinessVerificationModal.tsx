@@ -149,7 +149,7 @@ export function BusinessVerificationModal({ isOpen, onClose, userId, userName, u
                         </div>
                         <Input
                             label="Nama Bisnis (Legal/Brand)"
-                            placeholder="Contoh: Kopi Senja Roastery"
+                            placeholder="Contoh: Kopi Senja, Restoran Padang, atau Dufan"
                             value={businessName}
                             onChange={(e) => setBusinessName(e.target.value)}
                             required

@@ -1,6 +1,54 @@
 # System Architecture & Design - Lokali 📍
 *SA Perspective: Designing the "How"*
 
+## 📊 Visual System Architecture
+
+```mermaid
+graph TD
+    subgraph Client Layer (Vercel & Cloudflare CDN)
+        UI[Next.js Frontend / Vibe Check UI]
+        CSS[Tailwind & Shadcn UI]
+        CF[Cloudflare WAF & Turnstile Bot Protection]
+    end
+
+    subgraph Service & AI Layer (Vercel Edge & Cloud)
+        NextJS[Next.js Server Actions & API Routes]
+        Gemini[Gemini Pro API - AI Vibe Check]
+    end
+
+    subgraph Storage & DB Layer (Firebase & Cloudinary)
+        Auth[Firebase Authentication]
+        Firestore[(Firestore Database)]
+        Cloudinary[Cloudinary Media Storage]
+    end
+
+    UI --> CF
+    CF --> NextJS
+    NextJS --> Auth : "Validate Tokens"
+    NextJS --> Firestore : "Read/Write data (Spots, Reviews, XP, Logs)"
+    NextJS --> Gemini : "Send reviews for auto-summarization"
+    NextJS --> Cloudinary : "Upload / Retrieve Photos & Videos"
+```
+
+## 🔄 BrewSpot & Claim Document Lifecycle (State Machine)
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending : Submitted by Member (Level < 5)
+    [*] --> Approved : Submitted by Member (Level >= 5 / Owner / Admin)
+    Pending --> Approved : Approved by Admin (UC-09)
+    Pending --> Rejected : Rejected by Admin (UC-09)
+    
+    Approved --> ClaimPending : Claim requested by Member (UC-07)
+    ClaimPending --> Claimed_Verified : Claim approved by Admin (UC-18)
+    ClaimPending --> Approved : Claim rejected by Admin (UC-18)
+    
+    Claimed_Verified --> Approved : Claim revoked by Admin / Owner deleted
+    
+    Rejected --> [*] : Deleted (Auto-cleanup after 30 days)
+```
+
+
 ## 1. High-Level Tech Stack
 | Layer | Technology | Reason |
 | :--- | :--- | :--- |

@@ -77,7 +77,7 @@ export function FilterModal({
                                         <Dialog.Title as="h3" className="text-2xl md:text-3xl font-black text-primary font-heading tracking-tight">
                                             Filter <span className="text-accent italic">Pencarian</span>
                                         </Dialog.Title>
-                                        <p className="text-neutral-light text-xs font-bold uppercase tracking-widest mt-1">Personalisasikan petualangan kopimu</p>
+                                        <p className="text-neutral-light text-xs font-bold uppercase tracking-widest mt-1">Personalisasikan pencarian spot favoritmu</p>
                                     </div>
                                     <button onClick={onClose} className="p-3 rounded-full bg-secondary/50 text-neutral-light hover:bg-neutral/10 transition-all">
                                         <XMarkIcon className="w-6 h-6" />

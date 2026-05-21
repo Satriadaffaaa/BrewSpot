@@ -2,6 +2,83 @@
 
 This document outlines the Firestore collection structures and field definitions for the Lokali platform.
 
+## 📊 Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    users {
+        string uid PK
+        string email
+        string displayName
+        string photoURL
+        string role
+        number xp
+        number level
+        number trustLevel
+        boolean isContributor
+        array_string badges
+        timestamp createdAt
+    }
+    brewspots {
+        string id PK
+        string name
+        string category
+        string address
+        number latitude
+        number longitude
+        string priceRange
+        array_string facilities
+        array_string photos
+        string description
+        string status
+        string createdBy FK
+        string ownerId FK
+        map weekly_hours
+        string menuUrl
+        string videoUrl
+        boolean isOfficial
+        string officialMenuUrl
+        array_string officialPhotos
+        map vibeCheck
+    }
+    reviews {
+        string id PK
+        string brewspotId FK
+        string userId FK
+        number rating
+        string opinion
+        array_string photos
+        string videoUrl
+        timestamp createdAt
+    }
+    checkins {
+        string id PK
+        string userId FK
+        string spotId FK
+        timestamp timestamp
+        geopoint location
+    }
+    claims {
+        string id PK
+        string spotId FK
+        string userId FK
+        string proofUrl
+        string status
+        string adminNotes
+    }
+
+    users ||--o{ brewspots : "creates"
+    users ||--o{ brewspots : "owns"
+    users ||--o{ reviews : "writes"
+    users ||--o{ checkins : "performs"
+    users ||--o{ claims : "submits"
+
+    brewspots ||--o{ reviews : "has"
+    brewspots ||--o{ checkins : "receives"
+    brewspots ||--o{ claims : "subject of"
+```
+
+
 ## 1. Collection: `users`
 | Field | Type | Description |
 | :--- | :--- | :--- |

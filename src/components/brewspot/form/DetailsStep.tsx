@@ -52,14 +52,14 @@ export function DetailsStep({
                     value={name}
                     onChange={e => onNameChange(e.target.value)}
                     required
-                    placeholder="misal: Kopi Kenangan Mantan"
+                    placeholder="misal: Kopi Kenangan, Dufan, atau Museum Macan"
                 />
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium text-neutral">Apa yang Spesial dari Tempat Ini? (Opsional)</label>
                     <textarea
                         className="w-full min-h-[120px] rounded-xl border border-gray-300 bg-surface px-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder:text-gray-400"
-                        placeholder="Ceritakan suasana, menu jagoan, atau alasan kenapa orang harus ke sini..."
+                        placeholder="Ceritakan suasana, daya tarik utama, atau alasan kenapa orang harus ke sini..."
                         value={description}
                         onChange={e => onDescriptionChange(e.target.value)}
                     />

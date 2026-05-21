@@ -22,7 +22,7 @@ Jika kita menyediakan platform dengan fitur "AI Vibe Check" (ringkasan suasana o
 ---
 
 ## 3. Lean Canvas (Summary)
-*   **Customer Segments**: Digital Nomads, Mahasiswa, Coffee Shop Enthusiasts.
+*   **Customer Segments**: Digital Nomads, Mahasiswa, Local Spot & Culinary Seekers (Tempat Viral & Hidden Gems).
 *   **Unique Value Proposition**: "Find your perfect vibe, verified by the community and summarized by AI."
 *   **Channels**: Social Media (TikTok/IG), Community Partnerships.
 *   **Revenue Streams**: Untuk saat ini, revenue stream mungkin bisa dikembangkan dikemudian hari, karena project ini ditujukan untuk tujuan belajar. (Teoritis: Featured Listings, Premium Analytics).
@@ -31,14 +31,14 @@ Jika kita menyediakan platform dengan fitur "AI Vibe Check" (ringkasan suasana o
 
 ## 4. User Personas
 ### Persona A: "Andi, The Digital Nomad"
-*   **Bio**: Freelancer programmer yang bekerja berpindah-pindah cafe.
-*   **Pain Points**: Sering datang ke cafe yang ternyata berisik atau wifi-nya mati.
-*   **Goals**: Menemukan cafe yang "Quiet" dan "Work-friendly" dengan cepat.
+*   **Bio**: Freelancer programmer yang bekerja berpindah-pindah tempat (cafe, co-working space, perpustakaan, dll.).
+*   **Pain Points**: Sering datang ke spot yang ternyata bising atau koneksi internet/stopkontak tidak memadai.
+*   **Goals**: Menemukan spot tenang, kondusif, dan nyaman untuk bekerja dengan cepat.
 
 ### Persona B: "Siska, The Social Butterfly"
-*   **Bio**: Mahasiswi yang hobi mencoba tempat baru yang sedang viral.
-*   **Pain Points**: Sering kecewa karena tempat yang viral ternyata tidak sepadan dengan ekspektasi.
-*   **Goals**: Melihat foto autentik dan review jujur dari komunitas.
+*   **Bio**: Mahasiswi yang hobi mencoba tempat-tempat baru yang sedang viral (aesthetic spots, culinary pop-ups, hidden gems).
+*   **Pain Points**: Kecewa jika tempat yang sedang tren di media sosial tidak sepadan dengan ekspektasi atau ulasannya bias.
+*   **Goals**: Melihat foto autentik dan review jujur dari komunitas sebelum mengunjungi spot viral/aesthetic.
 
 ---
 

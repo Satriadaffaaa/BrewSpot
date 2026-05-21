@@ -69,7 +69,7 @@ export default function LandingPage() {
               {/* Quick Search Mocks */}
               <div className="flex flex-wrap gap-3 pt-8">
                 <span className="text-[10px] font-black text-mid uppercase tracking-[0.3em] self-center mr-4">Trending:</span>
-                {['Cold Brew', 'Specialty', 'Quiet Space', 'Open Late'].map(tag => (
+                {['Viral', 'Hidden Gem', 'Aesthetic', 'Quiet Space', 'Open Late'].map(tag => (
                   <button key={tag} className="px-5 py-2.5 bg-white/50 backdrop-blur-sm shadow-sm border border-primary/5 rounded-2xl text-xs font-bold hover:shadow-premium hover:border-accent hover:text-accent transition-all duration-300 text-primary">
                     {tag}
                   </button>
@@ -182,7 +182,7 @@ export default function LandingPage() {
                   <ChatBubbleLeftRightIcon className="w-6 h-6 text-[#1a1a2e]" />
                 </div>
                 <p className="text-primary font-bold italic text-xl leading-relaxed">
-                  &quot;Lokali changed how I see my city. Every corner now has a story and a perfect cup.&quot;
+                  &quot;Lokali changed how I see my city. Every corner now has a story and a perfect spot.&quot;
                 </p>
                 <div className="mt-6 pt-6 border-t border-primary/5">
                   <p className="text-primary font-black text-sm tracking-tight">Sarah Jenkins</p>
@@ -238,7 +238,7 @@ export default function LandingPage() {
               Ready to Discover <br /> Your Next <span className="text-accent underline decoration-[12px] underline-offset-[12px]">Obsession?</span>
             </h2>
             <p className="text-xl md:text-2xl !text-background/60 font-medium max-w-2xl mx-auto leading-relaxed">
-              Join for free today and start your journey through the finest coffee spots in the world.
+              Join for free today and start your journey through the finest local spots in the world.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-6 pt-10">
               <Link href="/register">

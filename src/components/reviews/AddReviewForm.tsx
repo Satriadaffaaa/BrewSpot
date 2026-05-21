@@ -178,7 +178,7 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (rating === 0) return alert("Pilih rating kopi 1-5")
+        if (rating === 0) return alert("Pilih rating tempat 1-5")
 
         let success = false
         if (isEditing && initialData) {
@@ -256,7 +256,7 @@ export function AddReviewForm({ brewspotId, brewspotName, onSuccess, initialData
                 {/* Opinion */}
                 <textarea
                     className="w-full min-h-[100px] p-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/50 outline-none resize-none"
-                    placeholder="Bagikan pengalaman ngopi kamu di sini..."
+                    placeholder="Bagikan pengalaman kunjunganmu di sini..."
                     value={opinion}
                     onChange={(e) => setOpinion(e.target.value)}
                     required

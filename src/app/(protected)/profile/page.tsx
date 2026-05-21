@@ -275,7 +275,7 @@ export default function ProfilePage() {
                   <h3 className="text-3xl md:text-5xl font-black font-heading text-white leading-[1.1] tracking-tighter">
                     You&apos;ve guided <span className="text-accent italic"> {userProfile.stats.totalViews.toLocaleString()} </span> explorers <br className="hidden md:block" /> to their next favorite spot.
                   </h3>
-                  <p className="text-white/50 text-lg font-medium">Your contributions are shaping the future of coffee discovery.</p>
+                  <p className="text-white/50 text-lg font-medium">Your contributions are shaping the future of local spot discovery.</p>
                 </div>
 
                 <div className="bg-surface/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] min-w-[200px] text-center shadow-2xl group-hover:scale-105 transition-transform">

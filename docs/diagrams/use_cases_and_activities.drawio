@@ -1,0 +1,546 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-05-20T07:18:00.000Z" agent="Mozilla/5.0" version="20.0.0" type="device">
+  <diagram id="page_uc_lvl0" name="Use Case Level 0 (System Context)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sys_b_0" value="Lokali Platform" style="swimlane;html=1;startSize=20;horizontal=1;container=1;collapsible=0;recursiveResize=0;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="240" y="80" width="400" height="540" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_v0" value="Visitor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="130" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_m0" value="Member" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_o0" value="Business Owner" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="390" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_a0" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="700" y="260" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_s0" value="System Scheduler" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="700" y="480" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="gen_m_v0" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="act_m0" target="act_v0">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gen_o_m0" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="act_o0" target="act_m0">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_search_mod" value="Search &amp; Discovery Module&lt;br/&gt;(UC-01, UC-02, UC-03, UC-16)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="140" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_contrib_mod" value="Community Contributions&lt;br/&gt;(UC-04, UC-05, UC-06, UC-10..15)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="230" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_biz_mod" value="Business Profile &amp; Management&lt;br/&gt;(UC-07, UC-08, UC-17)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="320" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_mod_mod" value="Moderation &amp; System Admin&lt;br/&gt;(UC-09, UC-18, UC-19..21)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="410" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_agg_mod" value="Data Aggregation Scheduler&lt;br/&gt;(UC-22)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="500" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc_v_s" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_v0" target="uc_search_mod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc_m_c" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m0" target="uc_contrib_mod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc_o_b" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_o0" target="uc_biz_mod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc_a_m" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a0" target="uc_mod_mod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc_s_a" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_s0" target="uc_agg_mod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page_uc_lvl1_vm" name="Use Case Level 1 (Visitor &amp; Member)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sys_b_1_vm" value="Lokali - Discovery &amp; Community Module" style="swimlane;html=1;startSize=20;horizontal=1;container=1;collapsible=0;recursiveResize=0;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="460" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_v1" value="Visitor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_m1" value="Member" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="620" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="gen_m_v1" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="act_m1" target="act_v1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_01" value="UC-01: Search for Spots" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_02" value="UC-02: Filter Content" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="160" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_03" value="UC-03: AI Vibe Check" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_16" value="UC-16: Explore Trending" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="320" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_04" value="UC-04: Add New Spot" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="410" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_05" value="UC-05: Write Review" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="490" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_06" value="UC-06: Geolocation Check-in" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="570" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_10" value="UC-10: Report Content" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="650" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_11" value="UC-11: Manage Profile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="730" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_12" value="UC-12: View Activity History" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="810" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_13" value="UC-13: View Leaderboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="890" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_14" value="UC-14: Save Favorites" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="970" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_15" value="UC-15: Edit/Delete Content" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="1050" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_v_01" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_v1" target="uc_01">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_v_02" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_v1" target="uc_02">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_v_03" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_v1" target="uc_03">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_v_16" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_v1" target="uc_16">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_04" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_04">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_05" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_05">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_06" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_06">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_10" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_11" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_11">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_12" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_12">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_13" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_14" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_14">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_m_15" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_m1" target="uc_15">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page_uc_lvl1_oas" name="Use Case Level 1 (Owner &amp; Admin &amp; System)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sys_b_1_oas" value="Lokali - Admin &amp; Business Module" style="swimlane;html=1;startSize=20;horizontal=1;container=1;collapsible=0;recursiveResize=0;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="460" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_o1" value="Business Owner" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_a1" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="740" y="380" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_s1" value="System" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="740" y="680" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_07" value="UC-07: Claim Spot" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_08" value="UC-08: Manage Official Content" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="160" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_17" value="UC-17: View Business Analytics" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_09" value="UC-09: Content Moderation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="340" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_18" value="UC-18: Verify Business Claim" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="430" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_19" value="UC-19: AI Control Panel" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="520" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_20" value="UC-20: Platform Monitoring" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="610" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_21" value="UC-21: Search Insights" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="700" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc_22" value="UC-22: Snapshot Statistik Harian" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="780" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_o_07" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_o1" target="uc_07">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_o_08" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_o1" target="uc_08">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_o_17" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_o1" target="uc_17">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_a_09" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a1" target="uc_09">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_a_18" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a1" target="uc_18">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_a_19" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a1" target="uc_19">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_a_20" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a1" target="uc_20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_a_21" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_a1" target="uc_21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_s_22" value="" style="endArrow=none;html=1;rounded=0;endSize=8;" edge="1" parent="1" source="act_s1" target="uc_22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page_act_checkin" name="Activity - Check-in Geolocation (UC-06)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="swim_m4" value="Member" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="220" height="830" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_s4" value="System (Frontend/API)" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="220" height="830" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_d4" value="Database (Firestore)" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="220" height="830" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_start" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="180" y="80" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_a1" value="Member clicks Check-in&lt;br/&gt;on Spot Detail page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="130" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_a2" value="Fetch current GPS coordinates&lt;br/&gt;from browser/device" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="190" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_d1" value="GPS Permission&lt;br/&gt;Granted?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="260" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_err1" value="Show GPS Error Alert" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="275" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_end1" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="345" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_d2" value="Within 100 meters&lt;br/&gt;radius?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="380" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_err2" value="Show Out-of-Range Message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="125" y="395" width="130" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_end2" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="465" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_d3" value="Cooldown active?&lt;br/&gt;(18 hours / spot)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="500" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_err3" value="Show Cooldown Alert" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="515" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_end3" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="585" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_a3" value="Write checkin document to&lt;br/&gt;Firestore &amp; award 20 XP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="630" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_a4" value="Refresh UI, update state&lt;br/&gt;&amp; show badge animation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="710" width="150" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4_end_success" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="795" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_1" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_start" target="c4_a1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_2" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_a1" target="c4_a2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_3" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_a2" target="c4_d1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_4" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d1" target="c4_err1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_5" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_err1" target="c4_end1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_6" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d1" target="c4_d2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_7" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d2" target="c4_err2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_8" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_err2" target="c4_end2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_9" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d2" target="c4_d3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_10" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d3" target="c4_err3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_11" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_err3" target="c4_end3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_12" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_d3" target="c4_a3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_13" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_a3" target="c4_a4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4_14" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c4_a4" target="c4_end_success">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page_act_ai_summary" name="Activity - AI Vibe Check Auto-Summarizer (UC-03 / UC-19)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="swim_u5" value="Admin / User" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="220" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_s5" value="System (Core Engine)" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="220" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_g5" value="Gemini AI Service" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="200" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_d5" value="Database (Firestore)" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="720" y="40" width="200" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_start" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="180" y="80" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a1" value="Trigger: New review posted (UC-05)&lt;br/&gt;or Admin manual sync (UC-19)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="110" y="130" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a2" value="Query Firestore reviews on target spot&lt;br/&gt;from the last 6 months" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="200" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_d1" value="Total Reviews&lt;br/&gt;&gt;= 3?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="270" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_err1" value="Do nothing (Maintain empty/&lt;br/&gt;existing AI Vibe state)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="360" width="150" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_end1" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="390" y="435" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a3" value="Compile review texts &amp;&lt;br/&gt;system instructions prompt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="470" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a4" value="Call Gemini AI Pro API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="550" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a_gemini" value="Process reviews &amp; generate&lt;br/&gt;Pros, Cons, and Verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="550" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_d2" value="API Success?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="630" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_err2" value="Log API error &amp; Alert Admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="710" width="150" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_end2" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="390" y="785" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a5" value="Parse response JSON&lt;br/&gt;(Pros, Cons, Verdict)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="335" y="820" width="150" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a6" value="Update spot document in Firestore&lt;br/&gt;(vibeCheck &amp; timestamp)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="820" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_a7" value="Trigger Frontend ISR cache validation&lt;br/&gt;to display new vibe summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="890" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5_end_success" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="905" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_1" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_start" target="c5_a1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_2" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a1" target="c5_a2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_3" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a2" target="c5_d1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_4" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_d1" target="c5_err1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_5" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_err1" target="c5_end1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_6" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_d1" target="c5_a3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_7" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a3" target="c5_a4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_8" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a4" target="c5_a_gemini">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_9" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a_gemini" target="c5_d2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_10" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_d2" target="c5_err2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_11" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_err2" target="c5_end2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_12" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_d2" target="c5_a5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_13" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a5" target="c5_a6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_14" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a6" target="c5_a7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f5_15" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c5_a7" target="c5_end_success">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page_act_claim" name="Activity - Claim Verification (UC-07 / UC-18)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="swim_m6" value="Member (Owner Candidate)" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="220" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_a6" value="Administrator" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="220" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim_s6" value="System &amp; Database" style="swimlane;html=1;startSize=30;horizontal=1;collapsible=0;recursiveResize=0;fillColor=#f9f9f9;strokeColor=#cccccc;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="240" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_start" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="180" y="80" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a1" value="Member submits Claim request&lt;br/&gt;with legal proof documents (UC-07)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="110" y="130" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a2" value="Create claim document in Firestore&lt;br/&gt;with status = 'pending'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="130" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a3" value="Admin views pending claim requests&lt;br/&gt;in Admin Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="210" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a4" value="Admin cross-checks uploaded proof&lt;br/&gt;vs spot business details (UC-18)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="290" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_d1" value="Claim proof&lt;br/&gt;valid?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="370" width="80" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_err1" value="Update Claim status = 'rejected'&lt;br/&gt;&amp; save Admin rejection reason" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="370" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_err2" value="Send failure notification to user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="570" y="450" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_end_fail" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="465" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a5" value="Update Claim status = 'approved'&lt;br/&gt;&amp; assign ownerId to Spot document" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="530" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a6" value="Update User role = 'owner'&lt;br/&gt;in users collection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="610" width="150" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_a7" value="Send success claim verification&lt;br/&gt;notification to user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="695" width="160" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6_end_success" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="710" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_1" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_start" target="c6_a1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_2" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a1" target="c6_a2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_3" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a2" target="c6_a3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_4" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a3" target="c6_a4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_5" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a4" target="c6_d1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_6" value="No" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_d1" target="c6_err1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_7" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_err1" target="c6_err2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_8" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_err2" target="c6_end_fail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_9" value="Yes" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_d1" target="c6_a5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_10" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a5" target="c6_a6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_11" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a6" target="c6_a7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f6_12" value="" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=8;" edge="1" parent="1" source="c6_a7" target="c6_end_success">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
