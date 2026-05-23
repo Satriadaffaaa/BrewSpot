@@ -24,9 +24,11 @@ interface AIResult<T> {
     error?: string;
 }
 
-// MOCK AI PROVIDER (Since we are in controlled enablement with no real keys yet)
-// Phase 5 will implement real Gemini calls here.
-const GEN_AI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "your_gemini_api_key");
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+    console.warn("WARNING: GEMINI_API_KEY is not defined in the environment variables.");
+}
+const GEN_AI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
 const MODEL = GEN_AI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 // REAL AI PROVIDER (Gemini Free Tier)
